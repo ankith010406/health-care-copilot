@@ -1,636 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PulseAI — Next-Gen AI Healthcare Copilot & Clinical Triage</title>
-  <meta name="description" content="AI-Powered Healthcare Copilot for real-time symptom triage, clinical diagnostic decision support, lab report analysis, drug-interaction safety, and ambient SOAP scribing.">
-  <meta name="keywords" content="healthcare ai, clinical copilot, medical ai, triage assistant, lab analyzer, drug interaction, ambient scribe, hackathon">
-  <meta name="author" content="PulseAI Health Labs">
-  <meta name="theme-color" content="#07090e">
-
-  <!-- Open Graph / Meta -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="PulseAI — Intelligent Healthcare Copilot">
-  <meta property="og:description" content="Hackathon-winning AI Medical Assistant with real-time ECG telemetry, vision lab report analyzer, and clinical triage.">
-  <meta property="og:image" content="assets/hero-badge.jpg">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="assets/hero-badge.jpg">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CareCompass – AI Health Copilot</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4faf9;--card:#fff;--tx:#12303a;--mu:#5b7580;--pr:#0f9d9a;--pr2:#2563eb;--bd:#dbe9e8;--rd:#c62828;--rdbg:#fdecec;--ok:#1b8a4b}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1b20;--card:#14282f;--tx:#e6f2f2;--mu:#93aab2;--pr:#2fc4c0;--pr2:#6c9bff;--bd:#25414a;--rd:#ff8a80;--rdbg:#3a1c1c;--ok:#5fd68e}}
+:root[data-theme="dark"]{--bg:#0d1b20;--card:#14282f;--tx:#e6f2f2;--mu:#93aab2;--pr:#2fc4c0;--pr2:#6c9bff;--bd:#25414a;--rd:#ff8a80;--rdbg:#3a1c1c;--ok:#5fd68e}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--pr2)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:10px 16px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:1.15rem;cursor:pointer;margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button,.btn{font:inherit;border:1px solid var(--bd);background:transparent;color:var(--tx);padding:7px 12px;border-radius:10px;cursor:pointer}
+nav button.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.btn.p{background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border:0;font-weight:600}
+.btn:focus-visible,nav button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--pr2);outline-offset:1px}
+.ban{background:var(--rdbg);color:var(--rd);text-align:center;font-size:.85rem;padding:6px 12px}
+main{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+.v{display:none}.v.on{display:block}
+.hero{text-align:center;padding:36px 8px}
+.hero h1{font-size:clamp(1.9rem,6vw,3rem);margin:0 0 10px;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mu);max-width:560px;margin:0 auto 20px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.card h3{margin:.2rem 0 .4rem}.card p{margin:0;color:var(--mu);font-size:.93rem}
+.ic{font-size:1.8rem}
+.clk{cursor:pointer}.clk:hover{border-color:var(--pr)}
+label{display:block;font-weight:600;font-size:.88rem;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+.auth{max-width:400px;margin:20px auto}
+.chat{height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:6px}
+.m{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap}
+.m.u{align-self:flex-end;background:var(--pr);color:#fff}
+.m.b{align-self:flex-start;background:var(--bg);border:1px solid var(--bd)}
+.m.e{align-self:stretch;max-width:100%;background:var(--rdbg);color:var(--rd);border:2px solid var(--rd);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{border:1px solid var(--pr);color:var(--pr);background:transparent;border-radius:99px;padding:5px 12px;cursor:pointer;font:inherit;font-size:.85rem}
+.row{display:flex;gap:8px;margin-top:10px}
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem}
+.tbl th,.tbl td{text-align:left;padding:8px;border-bottom:1px solid var(--bd);vertical-align:top}
+.tag{padding:2px 8px;border-radius:99px;font-size:.78rem;font-weight:700}
+.t-ok{background:rgba(27,138,75,.15);color:var(--ok)}.t-hi{background:var(--rdbg);color:var(--rd)}
+.sm{font-size:.82rem;color:var(--mu)}
+.two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.hide-sm{}
+@media print{header,.ban,.noprint,nav{display:none!important}}
+</style>
 </head>
 <body>
+<div class="ban">Educational information only. Not medical advice. In an emergency call 112 (India) / 911 (US) / 999 (UK).</div>
+<header>
+  <span class="logo" onclick="go('home')">🩺 CareCompass</span>
+  <nav id="nav"></nav>
+  <button class="btn" id="tgl" aria-label="Toggle theme">🌓</button>
+  <button class="btn p" id="authBtn"></button>
+</header>
+<main>
 
-  <!-- Site Navigation Header -->
-  <header class="site-header" id="siteHeader">
-    <div class="header-container">
-      <div class="brand-section">
-        <img src="assets/hero-badge.jpg" alt="PulseAI Hologram Logo" class="brand-logo-img" id="brandLogo">
-        <div>
-          <div class="brand-title">
-            <span>Pulse<span class="gradient-text">AI</span></span>
-            <span class="brand-badge">Clinical Copilot</span>
-          </div>
-          <div style="font-size: 0.72rem; color: var(--text-dim);">AI-Powered Clinical Decision Support</div>
-        </div>
-      </div>
-
-      <!-- Live Engine Status -->
-      <div class="system-status-pill">
-        <span class="status-dot"></span>
-        <span id="systemStatusText">Clinical Intelligence Engine Online • Latency 18ms</span>
-      </div>
-
-      <!-- Header Action Controls -->
-      <div class="header-actions">
-        <!-- Persona Mode Switcher -->
-        <div class="persona-toggle-container" title="Switch between Patient Friendly Mode and Clinician Scribe Mode">
-          <button class="persona-btn active" id="personaPatientBtn" onclick="setPersonaMode('patient')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Patient Mode
-          </button>
-          <button class="persona-btn" id="personaDoctorBtn" onclick="setPersonaMode('doctor')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            Clinician / MD
-          </button>
-        </div>
-
-        <!-- Emergency SOS Button -->
-        <button class="btn-emergency" id="sosTriggerBtn" onclick="openModal('emergencyModal')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Emergency SOS
-        </button>
-
-        <!-- Settings Modal Trigger -->
-        <button class="btn-icon" id="settingsBtn" onclick="openModal('settingsModal')" title="System Settings & Gemini API Key">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Real-Time ECG & Biometric Telemetry Banner -->
-  <section class="telemetry-banner" id="telemetryBanner">
-    <div class="telemetry-grid">
-      <!-- Animated Canvas ECG Monitor -->
-      <div class="ecg-card">
-        <div class="ecg-header">
-          <div class="ecg-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            Lead II Live Rhythm
-            <span class="ecg-lead-tag" id="currentRhythmLabel">NSR • 72 BPM</span>
-          </div>
-          <div class="ecg-controls">
-            <button class="ecg-btn-sm active" onclick="setECGRhythm('normal')" id="ecgNormalBtn">Normal</button>
-            <button class="ecg-btn-sm" onclick="setECGRhythm('tachycardia')" id="ecgTachyBtn">Tachycardia</button>
-            <button class="ecg-btn-sm" onclick="setECGRhythm('arrhythmia')" id="ecgArrhythmiaBtn">Arrhythmia</button>
-            <button class="ecg-btn-sm" onclick="toggleECGSound()" id="ecgSoundBtn" title="Toggle Beep Tone">🔊</button>
-          </div>
-        </div>
-        <canvas id="ecgCanvas" width="600" height="90"></canvas>
-      </div>
-
-      <!-- Real-Time Vitals Cards -->
-      <div class="vitals-row">
-        <div class="vital-metric-card heart">
-          <div class="vital-label">
-            <span>Heart Rate</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-          <div class="vital-value-wrap">
-            <span class="vital-val" id="vitalHR">72</span>
-            <span class="vital-unit">BPM</span>
-          </div>
-          <div class="vital-status normal" id="vitalHRStatus">Normal Sinus Rhythm</div>
-        </div>
-
-        <div class="vital-metric-card spo2">
-          <div class="vital-label">
-            <span>Oxygen Saturation</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-          </div>
-          <div class="vital-value-wrap">
-            <span class="vital-val" id="vitalSpO2">98</span>
-            <span class="vital-unit">% SpO2</span>
-          </div>
-          <div class="vital-status normal">Adequate Perfusion</div>
-        </div>
-
-        <div class="vital-metric-card bp">
-          <div class="vital-label">
-            <span>Blood Pressure</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div class="vital-value-wrap">
-            <span class="vital-val" id="vitalBP">118/76</span>
-            <span class="vital-unit">mmHg</span>
-          </div>
-          <div class="vital-status normal">Optimal MAP</div>
-        </div>
-
-        <div class="vital-metric-card temp">
-          <div class="vital-label">
-            <span>Core Temp</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
-          </div>
-          <div class="vital-value-wrap">
-            <span class="vital-val" id="vitalTemp">98.6</span>
-            <span class="vital-unit">°F</span>
-          </div>
-          <div class="vital-status normal">Normothermic</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Main Application Body -->
-  <main class="main-wrapper">
-    <!-- Primary Navigation Tabs -->
-    <nav class="module-tabs-nav" id="moduleNav">
-      <button class="nav-tab-btn active" onclick="switchTab('triageTab')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        AI Triage & Clinical Chat
-      </button>
-
-      <button class="nav-tab-btn" onclick="switchTab('labsTab')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.2 18.2a2 2 0 0 0 1.6 2.8h12.4a2 2 0 0 0 1.6-2.8L14 9.31V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
-        Lab & Report Vision Analyzer
-      </button>
-
-      <button class="nav-tab-btn" onclick="switchTab('rxTab')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
-        Drug Interaction & Rx Safety
-      </button>
-
-      <button class="nav-tab-btn" onclick="switchTab('scribeTab')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-        Ambient AI Clinical Scribe
-      </button>
-
-      <button class="nav-tab-btn" onclick="switchTab('handoverTab')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Doctor Handover Packet
-      </button>
-    </nav>
-
-    <!-- ====================================================================
-         MODULE 1: AI Clinical Triage & Conversational Diagnostic Assistant
-         ==================================================================== -->
-    <section class="tab-panel active" id="triageTab">
-      <div class="chat-layout-grid">
-        <!-- Main Chat Box -->
-        <div class="chat-card">
-          <div class="chat-card-header">
-            <div class="chat-header-info">
-              <div class="chat-bot-avatar">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-              </div>
-              <div>
-                <div class="chat-header-title" id="chatTitle">PulseAI Clinical Diagnostic Copilot</div>
-                <div class="chat-header-subtitle" id="chatSubtitle">Emergency Severity Index (ESI) Triage Engine</div>
-              </div>
-            </div>
-            <div style="display: flex; gap: 0.5rem;">
-              <button class="btn-icon" onclick="clearChatHistory()" title="Restart Conversation">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-              </button>
-              <button class="btn-icon" onclick="exportChatTranscript()" title="Download Consultation Transcript">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Quick Scenario Prompt Chips -->
-          <div class="prompt-chips-wrap">
-            <span class="chips-label">Quick Scenarios:</span>
-            <button class="chip-btn" onclick="sendQuickPrompt('I have crushing chest tightness and pain radiating down my left arm')">🚨 Chest Pressure & Arm Pain</button>
-            <button class="chip-btn" onclick="sendQuickPrompt('Severe throbbing migraine with flashing lights in my vision and nausea')">⚡ Migraine with Aura</button>
-            <button class="chip-btn" onclick="sendQuickPrompt('My 4-year-old has a 102.8°F fever, lethargy, and a red rash')">👶 Pediatric High Fever</button>
-            <button class="chip-btn" onclick="sendQuickPrompt('Acute right lower abdomen pain that hurts when I press or walk')">🩺 RLQ Abdominal Pain</button>
-            <button class="chip-btn" onclick="sendQuickPrompt('Fasting blood sugar is 260 mg/dL and feeling extreme thirst')">🩸 Hyperglycemia Episode</button>
-          </div>
-
-          <!-- Chat Conversation Stream -->
-          <div class="chat-messages-container" id="chatMessages">
-            <div class="chat-msg bot">
-              <div class="msg-avatar">AI</div>
-              <div class="msg-bubble">
-                <h4>Welcome to PulseAI Clinical Copilot</h4>
-                <p>Hello! I am your AI clinical triage assistant. Describe your symptoms, when they started, and any existing medical conditions or medications you take.</p>
-                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #94a3b8;">
-                  💡 <em>You can speak naturally, type your symptoms, or click one of the quick scenario chips above for immediate clinical triage evaluation.</em>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Input Bar -->
-          <form class="chat-input-bar" id="chatForm" onsubmit="handleUserChatSubmit(event)">
-            <input type="text" id="chatInput" class="chat-input-field" placeholder="Describe symptoms, severity (1-10), duration, medical history..." autocomplete="off">
-            <button type="button" class="btn-icon" id="chatMicBtn" onclick="toggleChatVoiceInput()" title="Voice Dictation">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-            </button>
-            <button type="submit" class="btn-send" id="chatSubmitBtn">
-              <span>Analyze</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </button>
-          </form>
-        </div>
-
-        <!-- Right Side: Real-Time Clinical Triage & Differential Decision Matrix -->
-        <aside class="triage-side-panel">
-          <!-- Triage Assessment Card -->
-          <div class="triage-card">
-            <div class="triage-header">
-              <h3 style="font-size: 1rem;">Clinical Risk Triage</h3>
-              <span class="triage-badge badge-low" id="triageBadge">Routine Care</span>
-            </div>
-
-            <div class="triage-gauge-box">
-              <div class="triage-score-num" id="triageScoreVal">12</div>
-              <div class="triage-score-sub" id="triageScoreDesc">Clinical Urgency Index (0-100)</div>
-              <div class="triage-meter-bar">
-                <div class="triage-meter-fill" id="triageMeterFill" style="width: 12%;"></div>
-              </div>
-            </div>
-
-            <div style="font-size: 0.82rem; margin-top: 0.5rem; line-height: 1.5;" id="triageSummaryBox">
-              Awaiting symptoms input for automated triage stratification.
-            </div>
-          </div>
-
-          <!-- Differential Diagnosis Prediction -->
-          <div class="triage-card">
-            <div class="triage-header">
-              <h3 style="font-size: 1rem;">Differential Diagnosis</h3>
-              <span style="font-size: 0.72rem; color: var(--cyan-primary); font-family: var(--font-mono);">AI Model Match</span>
-            </div>
-            <ul class="differential-list" id="differentialList">
-              <li class="diff-item">
-                <span class="diff-name">General Symptom Triage</span>
-                <span class="diff-prob">Baseline</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Recommended Next Clinical Questions -->
-          <div class="triage-card">
-            <div class="triage-header">
-              <h3 style="font-size: 1rem;">Suggested Probing Questions</h3>
-            </div>
-            <div id="suggestedQuestionsList" style="display: flex; flex-direction: column; gap: 0.5rem;">
-              <div style="font-size: 0.8rem; color: var(--text-muted);">
-                Ask: How long have you felt this? Have you taken any medications today?
-              </div>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         MODULE 2: AI Lab Report & Biomarker Vision Analyzer
-         ==================================================================== -->
-    <section class="tab-panel" id="labsTab">
-      <div class="lab-analyzer-grid">
-        <!-- Upload & Presets Panel -->
-        <div class="lab-upload-card">
-          <div>
-            <h2 style="font-size: 1.25rem; margin-bottom: 0.35rem;">Lab & Imaging OCR Analyzer</h2>
-            <p style="font-size: 0.82rem; color: var(--text-muted);">
-              Upload blood tests, pathology sheets, or scan reports for automated biomarker extraction, abnormal value flagging, and plain-English medical translation.
-            </p>
-          </div>
-
-          <!-- Interactive Dropzone -->
-          <div class="dropzone-box" id="labDropzone" onclick="document.getElementById('labFileInput').click()">
-            <input type="file" id="labFileInput" accept=".pdf,image/*,.txt" style="display: none;" onchange="handleLabFileUpload(event)">
-            <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <div class="dropzone-text">Drop Lab Report / Pathology Scan Here</div>
-            <div class="dropzone-hint">Supports PDF, PNG, JPG scans (or click to browse)</div>
-          </div>
-
-          <!-- One-Click Hackathon Presets -->
-          <div>
-            <div class="presets-section-title">Or load pre-authenticated clinical reports:</div>
-            <div class="presets-btn-group">
-              <div class="preset-card-btn active" onclick="loadLabPreset('cbc')" id="presetBtn_cbc">
-                <div>
-                  <div class="preset-btn-name">Complete Blood Count (CBC)</div>
-                  <div class="preset-btn-meta">Microcytic Anemia & Reactive Platelets</div>
-                </div>
-                <span style="font-size: 0.75rem; color: #f59e0b; font-weight: 700;">Moderate Risk</span>
-              </div>
-
-              <div class="preset-card-btn" onclick="loadLabPreset('lipid')" id="presetBtn_lipid">
-                <div>
-                  <div class="preset-btn-name">Advanced Lipid Cardio Panel</div>
-                  <div class="preset-btn-meta">Severe Hyperlipidemia (LDL 178 mg/dL)</div>
-                </div>
-                <span style="font-size: 0.75rem; color: #ef4444; font-weight: 700;">High Risk</span>
-              </div>
-
-              <div class="preset-card-btn" onclick="loadLabPreset('metabolic')" id="presetBtn_metabolic">
-                <div>
-                  <div class="preset-btn-name">Metabolic & Renal Panel (CMP)</div>
-                  <div class="preset-btn-meta">Fasting Hyperglycemia (158 mg/dL)</div>
-                </div>
-                <span style="font-size: 0.75rem; color: #f59e0b; font-weight: 700;">Moderate Risk</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Lab Results Display Card -->
-        <div class="lab-results-card" id="labReportDisplayArea">
-          <!-- Populated dynamically by app.js -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         MODULE 3: Drug Interaction & Medication Safety Checker
-         ==================================================================== -->
-    <section class="tab-panel" id="rxTab">
-      <div class="rx-checker-grid">
-        <!-- Drug Selector Input Card -->
-        <div class="rx-input-card">
-          <h2 style="font-size: 1.25rem; margin-bottom: 0.35rem;">Prescription Interaction Safety Check</h2>
-          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-            Add multiple medications to evaluate dangerous pharmacodynamic interactions, CYP450 enzyme conflicts, and dietary warnings.
-          </p>
-
-          <div class="form-group">
-            <label class="form-label">Add a medication to check:</label>
-            <div style="display: flex; gap: 0.5rem;">
-              <select id="rxSelectInput" class="form-input" style="flex: 1;">
-                <option value="Warfarin">Warfarin (Anticoagulant / Blood thinner)</option>
-                <option value="Aspirin">Aspirin (Antiplatelet / Salicylate)</option>
-                <option value="Ibuprofen">Ibuprofen (NSAID pain relief)</option>
-                <option value="Lisinopril">Lisinopril (ACE inhibitor / Blood pressure)</option>
-                <option value="Metformin">Metformin (Antidiabetic)</option>
-                <option value="Sertraline">Sertraline (SSRI Antidepressant)</option>
-                <option value="Atorvastatin">Atorvastatin (Cholesterol statin)</option>
-                <option value="Tramadol">Tramadol (Opioid analgesic)</option>
-                <option value="St. John's Wort">St. John's Wort (Herbal supplement)</option>
-              </select>
-              <button class="btn-primary" onclick="addSelectedMedication()">+ Add Rx</button>
-            </div>
-          </div>
-
-          <label class="form-label">Current Regimen for Conflict Analysis:</label>
-          <div class="rx-chips-container" id="currentRxChips">
-            <!-- Dynamically populated -->
-          </div>
-
-          <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
-            <button class="btn-primary" onclick="runDrugInteractionAnalysis()" style="flex: 1;">
-              ⚡ Run Interaction Analysis
-            </button>
-            <button class="btn-secondary" onclick="loadHighRiskRxPreset()">
-              Load Dangerous Combo Preset
-            </button>
-          </div>
-        </div>
-
-        <!-- Drug Results Card -->
-        <div class="rx-results-card" id="rxResultsArea">
-          <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
-            <h3>Ready for Interaction Screening</h3>
-            <p style="font-size: 0.85rem; margin-top: 0.4rem;">Select at least two medications on the left and click "Run Interaction Analysis".</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         MODULE 4: Ambient AI Clinical Scribe (Doctor SOAP Notes)
-         ==================================================================== -->
-    <section class="tab-panel" id="scribeTab">
-      <div class="scribe-container">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h2 style="font-size: 1.4rem; margin-bottom: 0.35rem;">Ambient AI Clinical Scribe & SOAP Generator</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">
-              Real-time ambient dictation transcribing patient-physician encounter directly into structured SOAP clinical documentation with automated ICD-10 suggestions.
-            </p>
-          </div>
-          <div style="display: flex; gap: 0.6rem;">
-            <button class="btn-secondary" onclick="loadSoapTemplate('cardio')">Preset: Cardiology SOAP</button>
-            <button class="btn-secondary" onclick="loadSoapTemplate('neuro')">Preset: Neurology SOAP</button>
-          </div>
-        </div>
-
-        <!-- Ambient Recording Audio Bar -->
-        <div class="scribe-controls-bar">
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <button class="btn-mic-record" id="scribeMicBtn" onclick="toggleScribeAudio()">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-              <span id="scribeMicBtnText">Start Ambient Listening</span>
-            </button>
-            <span id="scribeAudioStatus" style="font-size: 0.82rem; color: var(--text-muted);">Microphone idle. Ready to transcribe clinical speech.</span>
-          </div>
-
-          <div style="display: flex; gap: 0.5rem;">
-            <button class="btn-primary" onclick="generateSOAPFromTranscript()">
-              ✨ Synthesize SOAP Note
-            </button>
-            <button class="btn-secondary" onclick="copySOAPToClipboard()">
-              📋 Copy Note
-            </button>
-          </div>
-        </div>
-
-        <!-- Live Audio Transcript Box -->
-        <div style="margin-bottom: 1.5rem;">
-          <label class="form-label" style="display: flex; justify-content: space-between;">
-            <span>Live Encounter Audio Transcript:</span>
-            <span style="font-size: 0.72rem; color: var(--cyan-primary);">Web Speech API Enabled</span>
-          </label>
-          <textarea id="liveSpeechTranscript" class="form-input" style="height: 90px; resize: vertical;" placeholder="Spoken doctor-patient conversation will appear here in real-time, or type conversation notes to synthesize..."></textarea>
-        </div>
-
-        <!-- SOAP Structured Grid -->
-        <div class="soap-grid">
-          <!-- Subjective -->
-          <div class="soap-box">
-            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
-              <span class="soap-letter-badge">S</span> Subjective (History of Present Illness)
-            </h3>
-            <textarea id="soapSubjective" class="soap-text-area" placeholder="Patient's reported symptoms, onset, quality, severity, aggravating factors..."></textarea>
-          </div>
-
-          <!-- Objective -->
-          <div class="soap-box">
-            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
-              <span class="soap-letter-badge">O</span> Objective (Physical Exam & Telemetry)
-            </h3>
-            <textarea id="soapObjective" class="soap-text-area" placeholder="Vital signs, cardiovascular, pulmonary, abdominal exam findings..."></textarea>
-          </div>
-
-          <!-- Assessment -->
-          <div class="soap-box">
-            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
-              <span class="soap-letter-badge">A</span> Assessment & ICD-10 Diagnostics
-            </h3>
-            <textarea id="soapAssessment" class="soap-text-area" placeholder="Differential diagnosis, clinical impression, billing codes..."></textarea>
-          </div>
-
-          <!-- Plan -->
-          <div class="soap-box">
-            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
-              <span class="soap-letter-badge">P</span> Plan & Care Instructions
-            </h3>
-            <textarea id="soapPlan" class="soap-text-area" placeholder="Diagnostics ordered, pharmacological therapy, specialist referrals, red flag follow-up..."></textarea>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         MODULE 5: Doctor Handover Packet & Export Summary
-         ==================================================================== -->
-    <section class="tab-panel" id="handoverTab">
-      <div class="lab-results-card" style="max-width: 900px; margin: 0 auto;">
-        <div class="report-header-banner">
-          <div>
-            <h2 class="report-title-lg">Clinical Handover Summary Document</h2>
-            <div class="report-meta-text">Prepared by PulseAI Decision Support System for Attending Physician / ER</div>
-          </div>
-          <button class="btn-primary" onclick="window.print()">
-            🖨️ Print / Save PDF
-          </button>
-        </div>
-
-        <div style="background: rgba(10, 16, 30, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; font-size: 0.85rem;">
-            <div><strong>Patient Name:</strong> John Doe (Demo)</div>
-            <div><strong>Triage Severity:</strong> <span id="handoverTriageBadge" style="color: #38bdf8; font-weight: 700;">Level 3 - Urgent</span></div>
-            <div><strong>Timestamp:</strong> <span id="handoverTimestamp">October 12, 2026 13:20</span></div>
-            <div><strong>Telemetry HR:</strong> <span id="handoverHR">72 BPM (NSR)</span></div>
-            <div><strong>SpO2:</strong> <span id="handoverSpO2">98% on RA</span></div>
-            <div><strong>Blood Pressure:</strong> 118/76 mmHg</div>
-          </div>
-        </div>
-
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #38bdf8;">Chief Complaint & Triage Notes:</h3>
-        <p id="handoverChiefComplaint" style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
-          Patient initiated triage session with symptoms of chest heaviness and shortness of breath upon exertion.
-        </p>
-
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #38bdf8;">Top Differential Considerations:</h3>
-        <ul id="handoverDiffList" style="margin-left: 1.5rem; font-size: 0.88rem; margin-bottom: 1.5rem;">
-          <li>Acute Coronary Syndrome (Rule-out)</li>
-          <li>Hypertensive Episode</li>
-        </ul>
-
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #38bdf8;">Physician Action Items Recommended by AI:</h3>
-        <ul id="handoverActionsList" style="margin-left: 1.5rem; font-size: 0.88rem; margin-bottom: 1.5rem;">
-          <li>Obtain stat 12-lead Electrocardiogram</li>
-          <li>Serial Troponin I / T draw</li>
-        </ul>
-
-        <div style="border-top: 1px dashed var(--border-subtle); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-dim);">
-          <span>Digital Verification Hash: SHA256-7E9B41-PULSEAI-2026</span>
-          <span>HIPAA & GDPR Simulated Sandbox Ready</span>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ====================================================================
-       MODALS
-       ==================================================================== -->
-
-  <!-- Emergency SOS Modal -->
-  <div class="modal-overlay" id="emergencyModal">
-    <div class="modal-dialog" style="border-color: #ef4444; box-shadow: var(--shadow-red-glow);">
-      <div class="modal-header" style="background: rgba(239, 68, 68, 0.15);">
-        <h3 style="color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
-          🚨 Emergency Medical Dispatch Active
-        </h3>
-        <button class="btn-icon" onclick="closeModal('emergencyModal')">✕</button>
-      </div>
-      <div class="modal-body">
-        <p style="font-size: 0.95rem; margin-bottom: 1rem;">
-          If you are experiencing life-threatening symptoms (loss of consciousness, acute chest pain, severe stroke signs, uncontrollable bleeding):
-        </p>
-        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-md); padding: 1.25rem; text-align: center; margin-bottom: 1.25rem;">
-          <div style="font-size: 1.75rem; font-weight: 800; color: #ffffff; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
-            DIAL 911 / 112 NOW
-          </div>
-          <div style="font-size: 0.82rem; color: #fca5a5;">Your location GPS telemetry simulated: Lat 37.7749, Lng -122.4194</div>
-        </div>
-
-        <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem;">Nearest Emergency Care Facilities:</h4>
-        <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem;">
-          <div style="background: rgba(10, 16, 30, 0.7); padding: 0.75rem; border-radius: 6px; display: flex; justify-content: space-between;">
-            <span><strong>Metro General Hospital Trauma ER</strong> (0.8 miles)</span>
-            <span style="color: #34d399;">Wait Time: ~4 mins</span>
-          </div>
-          <div style="background: rgba(10, 16, 30, 0.7); padding: 0.75rem; border-radius: 6px; display: flex; justify-content: space-between;">
-            <span><strong>Apex Heart & Vascular Emergency Unit</strong> (2.1 miles)</span>
-            <span style="color: #34d399;">Wait Time: ~8 mins</span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('emergencyModal')">Dismiss</button>
-        <a href="tel:911" class="btn-emergency" style="text-decoration: none;">📞 Dial 911 Directly</a>
-      </div>
-    </div>
+<section class="v" id="v-home">
+  <div class="hero">
+    <h1>Your AI health copilot</h1>
+    <p>Understand lab reports, prepare for doctor visits, and track your wellness, in plain language. Private by design. Never a diagnosis.</p>
+    <button class="btn p" onclick="go('chat')">Try the Copilot</button>
+    <button class="btn" onclick="go('about')">How we keep you safe</button>
   </div>
-
-  <!-- Settings & API Key Modal -->
-  <div class="modal-overlay" id="settingsModal">
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <h3>PulseAI Configuration & LLM Settings</h3>
-        <button class="btn-icon" onclick="closeModal('settingsModal')">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">Google Gemini API Key (Optional for Live Cloud LLM):</label>
-          <input type="password" id="geminiApiKeyInput" class="form-input" placeholder="AIzaSy... (Leave empty to use built-in Offline Clinical Intelligence)">
-          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.35rem;">
-            When provided, requests query Google Gemini 2.0 / 1.5 Flash directly in the browser! When empty, the app runs offline with its built-in clinical triage rule engine.
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Clinical Reasoning Rigor:</label>
-          <select id="reasoningModelSelect" class="form-input">
-            <option value="high">High Rigor (Strict Emergency Screening)</option>
-            <option value="balanced" selected>Balanced (Standard Primary Care)</option>
-            <option value="patient">Empathetic (Patient-Friendly Plain English)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Simulated Patient Profile:</label>
-          <input type="text" id="patientNameInput" class="form-input" value="Alex Morgan (34 y/o, No Known Allergies)">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('settingsModal')">Cancel</button>
-        <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
-      </div>
-    </div>
+  <div class="grid">
+    <div class="card clk" onclick="go('chat')"><div class="ic">💬</div><h3>Chat Copilot</h3><p>Ask health questions and get clear, careful answers.</p></div>
+    <div class="card clk" onclick="go('explain')"><div class="ic">🧪</div><h3>Lab Explainer</h3><p>See what each value means and what to ask your doctor.</p></div>
+    <div class="card clk" onclick="go('visit')"><div class="ic">📋</div><h3>Visit Prep</h3><p>Turn your symptoms into a one-page summary for your appointment.</p></div>
+    <div class="card clk" onclick="go('journal')"><div class="ic">📈</div><h3>Wellness Journal</h3><p>Log symptoms, sleep, mood and water. Spot trends.</p></div>
   </div>
+  <div class="two" style="margin-top:22px">
+    <div class="card"><h3>🛡️ Safety first</h3><p>Emergency phrases like chest pain or self-harm are caught before any answer and routed to real help.</p></div>
+    <div class="card"><h3>🔒 Your data stays with you</h3><p>Journal and profile are kept on your device only.</p></div>
+  </div>
+</section>
 
-  <!-- Footer Disclaimer -->
-  <footer class="site-footer">
-    <div class="footer-disclaimer-box">
-      <strong>⚠️ Medical Disclaimer:</strong> PulseAI is an advanced AI clinical decision support tool developed for hackathons and educational demonstrations. It is not a certified medical device and does not replace professional clinical evaluation or emergency medical care. Always consult a licensed physician for acute health symptoms.
-    </div>
-    <div>
-      © 2026 PulseAI Health Labs. Built with HTML5, CSS3 & Modern JavaScript. Designed for instant deployment on Vercel.
-    </div>
-  </footer>
+<section class="v" id="v-login">
+  <div class="card auth">
+    <h2 style="margin-top:0" id="lt">Welcome back</h2>
+    <label for="nm" id="nml" style="display:none">Full name</label>
+    <input id="nm" placeholder="Your name" style="display:none">
+    <label for="em">Email</label><input id="em" type="email" placeholder="you@example.com">
+    <label for="pw">Password</label><input id="pw" type="password" placeholder="••••••••">
+    <p class="sm" id="lerr" style="color:var(--rd)"></p>
+    <button class="btn p" style="width:100%" id="lsub">Log in</button>
+    <button class="btn" style="width:100%;margin-top:8px" id="guest">Continue as guest</button>
+    <p class="sm" style="text-align:center"><a href="#" id="sw">New here? Create an account</a></p>
+    <p class="sm">Demo login: any email and a password of 6+ characters. Nothing is sent to a server.</p>
+  </div>
+</section>
 
-  <!-- Scripts -->
-  <script src="medical-data.js"></script>
-  <script src="app.js"></script>
+<section class="v" id="v-chat">
+  <h2>Chat Copilot</h2>
+  <div class="card">
+    <div class="chat" id="chat"><div class="m b">Hi! I'm CareCompass. Ask me about a symptom, lab value, medication, or healthy habit. I share general information, never a diagnosis.</div></div>
+    <div class="chips" id="chips"></div>
+    <div class="row"><input id="ci" placeholder="Type your question…" aria-label="Message"><button class="btn p" id="cs">Send</button></div>
+    <p class="sm">Demo mode: answers are pre-written samples with a live safety check.</p>
+  </div>
+</section>
+
+<section class="v" id="v-explain">
+  <h2>Lab Report Explainer</h2>
+  <div class="card">
+    <p class="sm">Load the sample report to see how values are explained in plain language.</p>
+    <button class="btn p" id="ld">Load sample report</button>
+    <div id="lab" style="overflow-x:auto;margin-top:12px"></div>
+  </div>
+</section>
+
+<section class="v" id="v-visit">
+  <h2>Doctor Visit Prep</h2>
+  <div class="two">
+    <div class="card">
+      <label for="vr">Reason for visit</label><input id="vr" placeholder="e.g. frequent headaches">
+      <label for="vs">Symptoms</label><textarea id="vs" rows="3"></textarea>
+      <label for="vd">How long?</label><input id="vd" placeholder="e.g. 2 weeks">
+      <label for="vm">Current medications</label><input id="vm">
+      <label for="vq">Questions for the doctor</label><textarea id="vq" rows="3"></textarea>
+      <button class="btn p" style="margin-top:12px" id="vg">Generate summary</button>
+    </div>
+    <div class="card" id="vout"><p class="sm">Your one-page summary will appear here.</p></div>
+  </div>
+</section>
+
+<section class="v" id="v-journal">
+  <h2>Wellness &amp; Symptom Journal</h2>
+  <div class="two">
+    <div class="card">
+      <label for="js">Symptom (or "none")</label><input id="js">
+      <label for="jv">Severity (1-10)</label><input id="jv" type="number" min="1" max="10" value="3">
+      <label for="jl">Sleep (hours)</label><input id="jl" type="number" min="0" max="16" step="0.5" value="7">
+      <label for="jm">Mood</label><select id="jm"><option>😄 Great</option><option selected>🙂 Okay</option><option>😕 Low</option><option>😣 Poor</option></select>
+      <label for="jw">Water (glasses)</label><input id="jw" type="number" min="0" max="20" value="6">
+      <div class="row"><button class="btn p" id="ja">Add entry</button><button class="btn" id="jd">Load demo data</button><button class="btn" id="jc">Clear</button></div>
+    </div>
+    <div class="card"><h3 style="margin-top:0">Trends</h3><div id="chart"></div><div id="jl2" class="sm" style="margin-top:8px"></div></div>
+  </div>
+</section>
+
+<section class="v" id="v-contact">
+  <h2>Contact us</h2>
+  <div class="two">
+    <div class="card">
+      <label for="cn">Name</label><input id="cn">
+      <label for="ce">Email</label><input id="ce" type="email">
+      <label for="cm">Message</label><textarea id="cm" rows="5"></textarea>
+      <button class="btn p" style="margin-top:12px" id="cb">Send message</button>
+      <p id="cok" class="sm" style="color:var(--ok)"></p>
+    </div>
+    <div class="card"><h3 style="margin-top:0">Get in touch</h3><p>📧 support@carecompass.example</p><p>🕘 Mon-Fri, 9am-6pm IST</p><p style="margin-top:12px"><b>Not for emergencies.</b> If you or someone else is in danger, call local emergency services now.</p><p class="sm" style="margin-top:12px">This is a hackathon demo form; messages are not sent anywhere.</p></div>
+  </div>
+</section>
+
+<section class="v" id="v-about">
+  <h2>Safety &amp; Privacy</h2>
+  <div class="grid">
+    <div class="card"><h3>🚨 Emergency detection</h3><p>Every message is scanned first. Chest pain, breathing trouble, stroke signs, overdose, severe bleeding or self-harm trigger an emergency card, not a chat answer.</p></div>
+    <div class="card"><h3>🚫 No diagnosis or dosing</h3><p>CareCompass explains and prepares. It does not diagnose, prescribe, or tell you to start or stop medication.</p></div>
+    <div class="card"><h3>🔒 On-device data</h3><p>Journal entries stay in your browser. Use "Clear" to remove them anytime.</p></div>
+    <div class="card"><h3>👩‍⚕️ Always see a clinician</h3><p>Every answer ends with when to see a doctor. Personal decisions belong with a licensed professional.</p></div>
+  </div>
+  <div class="card" style="margin-top:14px"><h3 style="margin-top:0">Crisis help</h3><p>India: Tele-MANAS 14416 · US: 988 · Emergency: 112 / 911 / 999</p></div>
+</section>
+
+</main>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var mem={},user=null,entries=[];
+function ls(k,v){try{if(v===undefined){var r=localStorage.getItem(k);return r===null?mem[k]:r}localStorage.setItem(k,v)}catch(e){if(v===undefined)return mem[k];mem[k]=v}}
+try{user=JSON.parse(ls('cc_user')||'null')}catch(e){user=null}
+try{entries=JSON.parse(ls('cc_j')||'[]');if(!Array.isArray(entries))entries=[]}catch(e){entries=[]}
+var gated={chat:1,explain:1,visit:1,journal:1};
+var tabs=[['home','Home'],['chat','Copilot'],['explain','Explain'],['visit','Visit Prep'],['journal','Journal'],['contact','Contact'],['about','Safety']];
+var cur='home';
+function go(v){
+  if(gated[v]&&!user){cur='login';v='login'}
+  cur=v;location.hash=v;
+  document.querySelectorAll('.v').forEach(function(s){s.classList.toggle('on',s.id==='v-'+v)});
+  $('nav').innerHTML='';
+  tabs.forEach(function(t){var b=document.createElement('button');b.textContent=t[1];if(t[0]===v)b.className='on';b.onclick=function(){go(t[0])};$('nav').appendChild(b)});
+  $('authBtn').textContent=user?'Log out ('+user.name+')':'Log in';
+  window.scrollTo(0,0);
+}
+window.go=go;
+$('authBtn').onclick=function(){if(user){user=null;ls('cc_user','null');go('home')}else go('login')};
+$('tgl').onclick=function(){
+  var d=document.documentElement;
+  var currentTheme=d.getAttribute('data-theme');
+  var bg=getComputedStyle(d).getPropertyValue('--bg').trim();
+  var isDark = currentTheme==='dark' || (!currentTheme && (bg==='#0d1b20'||bg==='rgb(13, 27, 32)'||(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches)));
+  d.setAttribute('data-theme',isDark?'light':'dark');
+};
+
+// auth
+var reg=false;
+$('sw').onclick=function(e){e.preventDefault();reg=!reg;$('lt').textContent=reg?'Create your account':'Welcome back';$('nm').style.display=$('nml').style.display=reg?'block':'none';$('lsub').textContent=reg?'Sign up':'Log in';$('sw').textContent=reg?'Have an account? Log in':'New here? Create an account'};
+function login(n){user={name:n};ls('cc_user',JSON.stringify(user));$('lerr').textContent='';go('chat')}
+$('lsub').onclick=function(){
+  var e=$('em').value.trim(),p=$('pw').value;
+  if(!/^\S+@\S+\.\S+$/.test(e)){$('lerr').textContent='Enter a valid email.';return}
+  if(p.length<6){$('lerr').textContent='Password must be at least 6 characters.';return}
+  login((reg&&$('nm').value.trim())||e.split('@')[0]);
+};
+$('pw').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
+$('em').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
+$('nm').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
+$('guest').onclick=function(){login('Guest')};
+
+// chat
+var starters=['Explain my lab results','Prepare me for my doctor visit','What does high cholesterol mean?','Help me sleep better'];
+starters.forEach(function(s){var b=document.createElement('button');b.className='chip';b.textContent=s;b.onclick=function(){ask(s)};$('chips').appendChild(b)});
+var emerg=/chest pain|can'?t breathe|cannot breathe|trouble breathing|shortness of breath|stroke|face droop|slurred speech|severe bleeding|overdose|anaphyla|unconscious|seizure/i;
+var selfharm=/suicid|kill myself|end my life|want to die|self[- ]?harm|hurt myself/i;
+var WD='\n\n🩺 When to see a doctor: if symptoms are severe, persistent, getting worse, or you are worried, contact a licensed clinician. This is general information, not a diagnosis.';
+var kb=[
+[/cholesterol|ldl|hdl/i,'Cholesterol is a fatty substance in your blood. LDL is often called "bad" cholesterol because high levels can build up in artery walls over time; HDL is "good" because it helps clear it. A high reading is a risk factor, not a diagnosis. Diet, activity, and sleep influence it, and your doctor can interpret it with your age and history. Ask: "What is my overall heart risk, and what should my target be?"'],
+[/sleep|insomnia|tired/i,'General sleep habits that help many people: keep a regular bedtime and wake time, get morning daylight, limit caffeine after midday, keep screens dim before bed, and keep the room cool and dark. If poor sleep lasts more than a few weeks, ask your doctor about it. Tracking sleep in the Journal tab can reveal patterns.'],
+[/lab|report|blood test|result/i,'Open the Lab Explainer tab and load the sample report to see each value explained: what it measures, the typical range, what high or low may mean, and a question to ask your doctor. Values outside range are common and need context.'],
+[/visit|doctor|appointment|prepare/i,'To prepare: write down your main concern, when it started, what makes it better or worse, all medications and supplements, and your top 3 questions. The Visit Prep tab turns this into a one-page summary you can print or copy.'],
+[/medicat|tablet|pill|drug|dose/i,'I can explain what a medication is generally used for, but I cannot give dosages or advise starting, stopping, or changing a medicine. Please check with your pharmacist or prescriber, and keep your medication list handy for visits.']
+];
+function bub(c,t){var d=document.createElement('div');d.className='m '+c;d.textContent=t;$('chat').appendChild(d);$('chat').scrollTop=1e9;return d}
+function ask(q){
+  q=(q||$('ci').value).trim();if(!q)return;if(q.length>2000)q=q.slice(0,2000);
+  $('ci').value='';bub('u',q);
+  if(selfharm.test(q)){bub('e','💙 I\'m really sorry you\'re hurting, and I\'m glad you reached out. You deserve support right now. Please contact Tele-MANAS 14416 (India) or 988 (US), or call your local emergency number (112 / 911 / 999). If you can, reach out to someone near you and stay with them.');return}
+  if(emerg.test(q)){bub('e','🚨 This could be a medical emergency. Call your local emergency services NOW: India 112 / 108, US 911, UK 999. Do not drive yourself. Stay on the line and follow their instructions.');return}
+  var t=bub('b','…');
+  var ans='I can share general information on that, but I\'m not able to diagnose. Could you tell me more about what you\'re experiencing, how long it has lasted, and any medicines you take? That will help you prepare a useful conversation with your clinician.';
+  for(var i=0;i<kb.length;i++)if(kb[i][0].test(q)){ans=kb[i][1];break}
+  ans+=WD;var k=0;t.textContent='';
+  var iv=setInterval(function(){k+=4;t.textContent=ans.slice(0,k)+(k<ans.length?'▌':'');$('chat').scrollTop=1e9;if(k>=ans.length){clearInterval(iv);t.textContent=ans+'\n\n✅ Safety checks passed'}},18);
+}
+$('cs').onclick=function(){ask()};
+$('ci').onkeydown=function(e){if(e.key==='Enter')ask()};
+
+// explain
+var labs=[['Hemoglobin','13.8 g/dL','12-16','ok','Carries oxygen in red blood cells. In range.','Anything to monitor over time?'],
+['Fasting glucose','112 mg/dL','70-99','hi','Slightly above the usual fasting range; one reading is not a diagnosis.','Should I repeat this or check HbA1c?'],
+['LDL cholesterol','148 mg/dL','< 100','hi','Higher than the typical target; relates to long-term heart risk.','What is my target given my history?'],
+['HDL cholesterol','52 mg/dL','> 40','ok','The protective type. In range.','How can I keep it healthy?'],
+['TSH','2.1 mIU/L','0.4-4.0','ok','Reflects thyroid function. In range.','Is repeat testing needed?'],
+['Vitamin D','19 ng/mL','30-100','hi','Lower than typical; common and often addressed with sunlight or diet changes.','Do I need supplements, and what amount?']];
+$('ld').onclick=function(){
+  var h='<table class="tbl"><tr><th>Test</th><th>Your value</th><th>Typical</th><th>Status</th><th>What it means</th><th>Ask your doctor</th></tr>';
+  labs.forEach(function(r){h+='<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td><span class="tag '+(r[3]==='ok'?'t-ok">In range':'t-hi">Review')+'</span></td><td>'+r[4]+'</td><td>'+r[5]+'</td></tr>'});
+  $('lab').innerHTML=h+'</table><p class="sm">Sample data. Ranges vary by lab. Not a diagnosis; discuss results with your clinician.</p>';
+};
+
+// visit
+function esc(s){return (s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+$('vg').onclick=function(){
+  var f=function(i){var val=$(i).value.trim();return val?esc(val).replace(/\n/g,'<br>'):'<i>Not provided</i>'};
+  var txt=['Reason: '+$('vr').value,'Symptoms: '+$('vs').value,'Duration: '+$('vd').value,'Medications: '+$('vm').value,'Questions: '+$('vq').value].join('\n');
+  $('vout').innerHTML='<h3 style="margin-top:0">Visit summary</h3><p><b>Reason:</b> '+f('vr')+'</p><p><b>Symptoms:</b> '+f('vs')+'</p><p><b>Duration:</b> '+f('vd')+'</p><p><b>Medications:</b> '+f('vm')+'</p><p><b>My questions:</b> '+f('vq')+'</p><div class="row noprint"><button class="btn" id="cp">Copy</button><button class="btn" onclick="window.print()">Print</button></div>';
+  $('cp').onclick=function(){
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){$('cp').textContent='Copied ✓'}).catch(function(){$('cp').textContent='Copy not available'});
+    }else{
+      try{var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);$('cp').textContent='Copied ✓'}catch(err){$('cp').textContent='Copy not available'}
+    }
+  };
+};
+
+// journal
+function save(){ls('cc_j',JSON.stringify(entries))}
+function draw(){
+  var e=entries.slice(-14);
+  if(!e.length){$('chart').innerHTML='<p class="sm">No entries yet. Add one or load demo data.</p>';$('jl2').textContent='';return}
+  var W=320,H=140,bw=W/e.length,s='<svg viewBox="0 0 '+W+' '+(H+20)+'" width="100%" role="img" aria-label="Severity and sleep trend">';
+  e.forEach(function(x,i){var h1=(+x.sev||0)*12,h2=(+x.sleep||0)*7;
+    s+='<rect x="'+(i*bw+2)+'" y="'+(H-h2)+'" width="'+(bw/2-3)+'" height="'+h2+'" fill="#2563eb" rx="2"/><rect x="'+(i*bw+bw/2)+'" y="'+(H-h1)+'" width="'+(bw/2-3)+'" height="'+h1+'" fill="#c62828" rx="2"/>'});
+  s+='<text x="0" y="'+(H+15)+'" font-size="10" fill="currentColor">Blue: sleep (h) · Red: symptom severity</text></svg>';
+  $('chart').innerHTML=s;
+  var avg=function(k){return(e.reduce(function(a,x){return a+(+x[k]||0)},0)/e.length).toFixed(1)};
+  $('jl2').innerHTML='Last '+e.length+' entries · avg severity <b>'+avg('sev')+'</b> · avg sleep <b>'+avg('sleep')+'h</b> · avg water <b>'+avg('water')+'</b><br>Latest: '+esc(e[e.length-1].sym)+' ('+e[e.length-1].mood+')';
+}
+$('ja').onclick=function(){entries.push({sym:$('js').value||'none',sev:+$('jv').value||1,sleep:+$('jl').value||0,water:+$('jw').value||0,mood:$('jm').value});save();draw()};
+$('jd').onclick=function(){var sy=['Headache','none','Fatigue','Headache','none','Back pain','Fatigue'],m=['😄 Great','🙂 Okay','😕 Low','🙂 Okay'];entries=[];for(var i=0;i<14;i++)entries.push({sym:sy[i%7],sev:1+(i*3)%7,sleep:5+((i*5)%4)+0.5,water:4+(i%5),mood:m[i%4]});save();draw()};
+$('jc').onclick=function(){entries=[];save();draw()};
+
+// contact
+$('cb').onclick=function(){
+  if(!$('cn').value.trim()||!/^\S+@\S+\.\S+$/.test($('ce').value)||!$('cm').value.trim()){$('cok').style.color='var(--rd)';$('cok').textContent='Please fill in your name, a valid email and a message.';return}
+  $('cok').style.color='var(--ok)';$('cok').textContent='Thanks '+$('cn').value.trim()+'! (Demo: your message was not actually sent.)';
+};
+
+window.addEventListener('hashchange',function(){var h=location.hash.slice(1);if(h&&h!==cur&&$('v-'+h))go(h)});
+var h0=location.hash.slice(1);go($('v-'+h0)?h0:'home');draw();
+})();
+</script>
 </body>
 </html>
