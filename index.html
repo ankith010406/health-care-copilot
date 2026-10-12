@@ -1264,12 +1264,14 @@ function displayRecord(rec){
 function updateAiSummaryLang(){
   if(!currentActiveRecord)return;
   var sData=currentActiveRecord.summaries[currentLang]||currentActiveRecord.summaries.en;
-  $('sumLangBadge').textContent='Language: '+$('langSel').selectedOptions[0].textContent;
-  $('aiSumTitle').textContent=sData.title;
-  $('aiSumText').textContent=sData.body;
-  $('aiAbnormalText').textContent=sData.abnormal||'All measured biomarkers are within normal expected reference limits.';
-  $('aiMedsText').textContent=sData.meds||'Maintain current schedule as advised by your physician.';
-  $('aiQuestionsText').textContent=sData.questions||'Ask your doctor if repeat testing is needed in 3-6 months.';
+  var sel=$('langSel');
+  var langText = (sel && sel.selectedOptions && sel.selectedOptions[0]) ? sel.selectedOptions[0].textContent : (sel && sel.options && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].textContent : 'English');
+  if($('sumLangBadge')) $('sumLangBadge').textContent='Language: '+langText;
+  if($('aiSumTitle')) $('aiSumTitle').textContent=sData.title;
+  if($('aiSumText')) $('aiSumText').textContent=sData.body;
+  if($('aiAbnormalText')) $('aiAbnormalText').textContent=sData.abnormal||'All measured biomarkers are within normal expected reference limits.';
+  if($('aiMedsText')) $('aiMedsText').textContent=sData.meds||'Maintain current schedule as advised by your physician.';
+  if($('aiQuestionsText')) $('aiQuestionsText').textContent=sData.questions||'Ask your doctor if repeat testing is needed in 3-6 months.';
 }
 
 function triggerOCRAnimation(rec){

@@ -429,11 +429,9 @@ input:focus, select:focus, textarea:focus {
 @keyframes alertPulse {
   0%, 100% {
     box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
-    border-color: var(--rd);
   }
   50% {
-    box-shadow: 0 0 22px rgba(239, 68, 68, 0.45);
-    border-color: rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.55);
   }
 }
 
