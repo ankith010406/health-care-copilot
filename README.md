@@ -2,8 +2,6 @@
 
 CareCompass is a lightweight, responsive, privacy-focused single-file AI health copilot web application designed to help users understand lab reports, prepare for doctor visits, and log wellness trends in plain language.
 
-> **Disclaimer**: Educational information only. Not medical advice. In an emergency, always call local emergency services immediately (112 India / 911 US / 999 UK).
-
 ---
 
 ## 🌟 Key Features
