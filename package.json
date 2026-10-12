@@ -1,0 +1,22 @@
+{
+  "name": "carecompass",
+  "version": "1.0.0",
+  "description": "CareCompass - Multilingual AI Health Copilot & ABDM Record Intelligence",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "serve": "node server.js",
+    "build": "echo Static build ready",
+    "test": "node test.js",
+    "py": "python -m http.server 3000"
+  },
+  "keywords": [
+    "healthcare",
+    "copilot",
+    "abdm",
+    "fhir",
+    "ocr"
+  ],
+  "author": "CareCompass Team",
+  "license": "MIT"
+}

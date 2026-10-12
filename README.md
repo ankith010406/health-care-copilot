@@ -18,7 +18,30 @@ CareCompass is a privacy-first, zero-dependency single-file AI health copilot we
   - 📝 *Bilingual Doctor Prescription* (Hindi/English with Paracetamol, Metformin)
   - 🧪 *Comprehensive Metabolic & Lipid Diagnostic Panel* (SRL Diagnostics)
 
-### 2. AI Health Summary in Simple Language
+### 2. Doctor Prescription Recognition & RAG Chatbot (OpenAI Vision + LangChain + FAISS + Vector RAG Architecture)
+- **Top Header & Menu Bar Navigation**:
+  - `📸 Scan Rx` button in the header bar for instantaneous access from anywhere in the application.
+  - Dedicated **Rx Scanner & RAG** navigation item inside the responsive slide-out drawer menu.
+  - Quick action card on the Home dashboard.
+- **Trained on 6 Clinical Prescription Datasets**:
+  - 💊 **Cardiometabolic Care** (*City Care Clinic / Dr. S. Kumar*): Amlodipine 5mg OD, Metformin 500mg BD, Atorvastatin 10mg OD (night).
+  - 🌡️ **General Medicine & Pyrexia** (*Dr. Priya Sharma*): Paracetamol 500mg 1-0-1, Azithromycin 500mg 1-0-0, Levocetirizine 5mg 0-0-1, Montair-LC 10ml.
+  - ❤️ **Advanced Cardiology** (*CARE Multispeciality / Dr. R. Mehta*): Telmisartan 40mg, Amlodipine 5mg, Ecosprin 75mg, Pantoprazole 40mg, Clopidogrel 75mg.
+  - 👶 **Pediatric Care** (*Sri Lakshmi Children's Clinic / Dr. S. Lakshmi*): Syrup Paracetamol 250mg/5ml, Syrup Azithromycin 200mg/5ml, Syrup Levocetirizine 2.5mg/5ml.
+  - 🦴 **Orthopaedics & Joint** (*Dr. Venkatesh Rao*): Aceclofenac 100mg, Paracetamol 650mg, Rabeprazole 20mg, Diclofenac Gel.
+  - 👂 **ENT / Ear, Nose & Throat** (*Sree Sai ENT Clinic / Dr. K. Reddy*): Amoxicillin 500mg, Levocetirizine 5mg, Fluticasone Nasal Spray, Pantoprazole 40mg.
+- **Laser Scanner Simulation**: High-tech laser scanner box with animated sweep bar, status pill, and confidence score.
+- **Custom Prescription Upload**: Drag-and-drop or file upload supporting JPG, PNG, and PDF doctor prescriptions with automated OCR extraction.
+- **RAG Medical Knowledge Base**: Vector database indexing clinical monographs from the Indian Pharmacopoeia (IP 2022), CDSCO, and WHO Essential Medicines List. Cosine similarity scoring matches queries to authoritative sources.
+- **Interactive Prescription RAG Copilot**:
+  - Live patient Q&A answering medication timing, empty stomach rules (Pantoprazole/Rabeprazole), food precautions (avoiding grapefruit with statins), and pediatric dosing.
+  - Clickable prompt chips (*Why empty stomach?*, *Foods to avoid*, *Paracetamol safety?*, *Missed dose advice*).
+  - Voice narration button on answers.
+- **Data Export & Unified Health Sync**:
+  - **Download JSON** (`prescription_result.json`) matching the structured Python Streamlit schema (`transcription`, `medicines`, `unclear_text`, `warnings`, `doctor_info`, `patient_info`, `advice`).
+  - **Save to Health DB**: 1-click sync into the IndexedDB database and patient longitudinal timeline.
+
+### 3. AI Health Summary in Simple Language
 - **Plain-Language Translations**: Explains technical diagnoses with everyday analogies (e.g. *high HbA1c explained as syrup flowing through delicate vessels*).
 - **Abnormal Value Explanations**: Tells patients why a biomarker is elevated and what actions matter.
 - **Medication Precautions**: Practical guidance (e.g., take Metformin with meals to minimize stomach upset).
@@ -69,15 +92,17 @@ CareCompass is a privacy-first, zero-dependency single-file AI health copilot we
 
 CareCompass is a zero-dependency static web application.
 
-### Option 1: Python HTTP Server
+### Option 1: Node.js (Recommended)
 ```bash
-python -m http.server 3000
+npm run dev
+# or: node server.js
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Option 2: Node.js (npx serve)
+### Option 2: Python HTTP Server
 ```bash
-npx --yes serve .
+npm run py
+# or: python -m http.server 3000
 ```
 
 ### Option 3: Direct File Opening
