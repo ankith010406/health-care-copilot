@@ -74,6 +74,16 @@ input,select,textarea{width:100%;font:inherit;padding:10px;border-radius:10px;bo
 .progress-bar{height:6px;width:100%;background:var(--bd);border-radius:99px;overflow:hidden;margin:10px 0}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--pr),var(--pr2));width:0%;transition:width .4s ease}
 .callout{background:rgba(15,157,154,.08);border-left:4px solid var(--pr);padding:12px 16px;border-radius:0 10px 10px 0;margin:12px 0}
+.mic-btn-active{background:var(--rd)!important;color:#fff!important;border-color:var(--rd)!important;animation:pulse-mic 1.2s infinite}
+@keyframes pulse-mic{0%{box-shadow:0 0 0 0 rgba(198,40,40,.6)}70%{box-shadow:0 0 0 10px rgba(198,40,40,0)}100%{box-shadow:0 0 0 0 rgba(198,40,40,0)}}
+.speak-btn{border:0;background:transparent;cursor:pointer;opacity:.7;padding:2px 4px;font-size:.85rem;float:right;margin-left:6px;transition:opacity .2s;color:inherit}
+.speak-btn:hover{opacity:1}
+.mic-wave{display:inline-flex;align-items:center;gap:3px;height:14px}
+.mic-wave span{display:inline-block;width:3px;background:var(--pr);border-radius:2px;animation:wave-bar 1s infinite ease-in-out}
+.mic-wave span:nth-child(1){height:6px;animation-delay:0s}
+.mic-wave span:nth-child(2){height:14px;animation-delay:.2s}
+.mic-wave span:nth-child(3){height:8px;animation-delay:.4s}
+@keyframes wave-bar{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
 </style>
 </head>
 <body>
@@ -436,14 +446,42 @@ input,select,textarea{width:100%;font:inherit;padding:10px;border-radius:10px;bo
   </div>
 </section>
 
-<!-- CHAT -->
+<!-- CHAT & VOICE ASSISTANT -->
 <section class="v" id="v-chat">
-  <h2>Chat Copilot</h2>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+    <h2 style="margin:0">Chat Copilot &amp; Voice Assistant</h2>
+    <div class="row" style="margin:0">
+      <button class="btn on" id="btnVoiceToggle" style="font-size:.82rem;padding:5px 10px" title="Toggle Auto Read-Aloud">🔊 Voice: ON</button>
+      <button class="btn" id="btnStopSpeech" style="font-size:.82rem;padding:5px 10px;display:none;color:var(--rd)" title="Stop Speaking">⏹️ Stop Voice</button>
+    </div>
+  </div>
+
   <div class="card">
-    <div class="chat" id="chat"><div class="m b">Hi! I'm CareCompass. Ask me about a symptom, lab value, medication, or healthy habit. I share general information, never a diagnosis.</div></div>
+    <!-- Voice Status Banner -->
+    <div id="voiceStatusBanner" style="display:none;align-items:center;justify-content:space-between;background:rgba(15,157,154,.1);border:1px solid var(--pr);border-radius:10px;padding:8px 12px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="mic-wave"><span></span><span></span><span></span></span>
+        <span id="voiceStatusText" class="sm" style="font-weight:600;color:var(--pr)">Listening… Speak your health question</span>
+      </div>
+      <button class="btn" id="btnCancelVoice" style="font-size:.75rem;padding:3px 8px">Cancel</button>
+    </div>
+
+    <div class="chat" id="chat">
+      <div class="m b">Hi! I'm CareCompass. Ask me about a symptom, lab value, medication, or healthy habit by typing or clicking the microphone 🎙️. I share general information, never a diagnosis.<button class="speak-btn" onclick="speakText(this.parentElement.innerText.replace('🔊',''))" title="Listen to message">🔊</button></div>
+    </div>
+
     <div class="chips" id="chips"></div>
-    <div class="row"><input id="ci" placeholder="Type your question…" aria-label="Message"><button class="btn p" id="cs">Send</button></div>
-    <p class="sm">Demo mode: answers are pre-written samples with a live emergency safety check.</p>
+
+    <div class="row" style="align-items:center">
+      <button class="btn" id="btnMic" aria-label="Voice Input" style="padding:10px 14px;border-radius:10px;font-size:1.15rem" title="Click to speak your question">🎙️</button>
+      <input id="ci" placeholder="Type or tap 🎙️ to speak your health question…" aria-label="Message" style="flex:1">
+      <button class="btn p" id="cs">Send</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:6px">
+      <p class="sm" style="margin:0">🎙️ Voice Assistant enabled · Voice responses support English, Hindi, Telugu, and Tamil.</p>
+      <span class="pill pill-teal" id="voiceLangIndicator" style="font-size:.72rem">Voice Lang: en-IN</span>
+    </div>
   </div>
 </section>
 
@@ -597,6 +635,7 @@ $('langSel').onchange=function(e){
   $('h-sub').textContent=langMap.sub;
   renderNav();
   updateAiSummaryLang();
+  if($('voiceLangIndicator')) $('voiceLangIndicator').textContent='Voice Lang: '+(langVoiceCodes[currentLang]||'en-IN');
 };
 
 $('authBtn').onclick=function(){if(user){user=null;ls('cc_user','null');go('home')}else go('login')};
@@ -623,7 +662,7 @@ $('em').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
 $('nm').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
 $('guest').onclick=function(){login('Guest')};
 
-// CHAT
+// CHAT & VOICE ASSISTANT
 var starters=['Explain my lab results','Prepare me for my doctor visit','What does high cholesterol mean?','Help me sleep better'];
 starters.forEach(function(s){var b=document.createElement('button');b.className='chip';b.textContent=s;b.onclick=function(){ask(s)};$('chips').appendChild(b)});
 var emerg=/chest pain|can'?t breathe|cannot breathe|trouble breathing|shortness of breath|stroke|face droop|slurred speech|severe bleeding|overdose|anaphyla|unconscious|seizure/i;
@@ -636,17 +675,197 @@ var kb=[
 [/visit|doctor|appointment|prepare/i,'To prepare: write down your main concern, when it started, what makes it better or worse, all medications and supplements, and your top 3 questions. The Visit Prep tab turns this into a one-page summary you can print or copy.'],
 [/medicat|tablet|pill|drug|dose/i,'I can explain what a medication is generally used for, but I cannot give dosages or advise starting, stopping, or changing a medicine. Please check with your pharmacist or prescriber, and keep your medication list handy for visits.']
 ];
-function bub(c,t){var d=document.createElement('div');d.className='m '+c;d.textContent=t;$('chat').appendChild(d);$('chat').scrollTop=1e9;return d}
+
+var voiceAutoRead=true;
+var recognition=null;
+var isListening=false;
+var langVoiceCodes={
+  en:'en-IN',
+  hi:'hi-IN',
+  te:'te-IN',
+  ta:'ta-IN'
+};
+
+function speakText(text){
+  if(!('speechSynthesis' in window))return;
+  window.speechSynthesis.cancel();
+  var clean=(text||'')
+    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu,'')
+    .replace(/[*_#`~>]/g,'')
+    .replace(/✅|🚨|💙|🩺|🔊/g,'')
+    .replace(/Safety checks passed/g,'')
+    .trim();
+  if(!clean)return;
+
+  var utter=new SpeechSynthesisUtterance(clean);
+  utter.lang=langVoiceCodes[currentLang]||'en-IN';
+  utter.rate=0.96;
+  utter.pitch=1.0;
+
+  var voices=window.speechSynthesis.getVoices();
+  var target=utter.lang.slice(0,2);
+  var voice=voices.find(function(v){return v.lang&&v.lang.toLowerCase().startsWith(target)});
+  if(voice)utter.voice=voice;
+
+  utter.onstart=function(){if($('btnStopSpeech'))$('btnStopSpeech').style.display='inline-block'};
+  utter.onend=function(){if($('btnStopSpeech'))$('btnStopSpeech').style.display='none'};
+  utter.onerror=function(){if($('btnStopSpeech'))$('btnStopSpeech').style.display='none'};
+
+  window.speechSynthesis.speak(utter);
+}
+window.speakText=speakText;
+
+function stopSpeech(){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+  }
+  if($('btnStopSpeech'))$('btnStopSpeech').style.display='none';
+}
+
+function initSpeechRecognition(){
+  var SpeechRec=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRec)return false;
+  try{
+    recognition=new SpeechRec();
+    recognition.continuous=false;
+    recognition.interimResults=true;
+    recognition.onstart=function(){
+      isListening=true;
+      if($('btnMic'))$('btnMic').classList.add('mic-btn-active');
+      if($('voiceStatusBanner'))$('voiceStatusBanner').style.display='flex';
+      if($('voiceStatusText'))$('voiceStatusText').textContent='Listening… Speak your question ('+(langVoiceCodes[currentLang]||'en-IN')+')';
+    };
+    recognition.onresult=function(e){
+      var transcript='';
+      for(var i=e.resultIndex;i<e.results.length;++i){
+        transcript+=e.results[i][0].transcript;
+      }
+      $('ci').value=transcript;
+    };
+    recognition.onerror=function(e){
+      isListening=false;
+      if($('btnMic'))$('btnMic').classList.remove('mic-btn-active');
+      if($('voiceStatusBanner'))$('voiceStatusBanner').style.display='none';
+    };
+    recognition.onend=function(){
+      isListening=false;
+      if($('btnMic'))$('btnMic').classList.remove('mic-btn-active');
+      if($('voiceStatusBanner'))$('voiceStatusBanner').style.display='none';
+      if($('ci').value.trim()){
+        ask();
+      }
+    };
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function toggleVoiceInput(){
+  if(isListening){
+    stopVoiceInput();
+    return;
+  }
+  var ready=recognition?true:initSpeechRecognition();
+  if(!ready){
+    simulateVoiceInput();
+    return;
+  }
+  try{
+    recognition.lang=langVoiceCodes[currentLang]||'en-IN';
+    recognition.start();
+  }catch(err){
+    simulateVoiceInput();
+  }
+}
+
+function stopVoiceInput(){
+  if(recognition){
+    try{recognition.stop()}catch(e){}
+  }
+  isListening=false;
+  if($('btnMic'))$('btnMic').classList.remove('mic-btn-active');
+  if($('voiceStatusBanner'))$('voiceStatusBanner').style.display='none';
+}
+
+function simulateVoiceInput(){
+  if($('voiceStatusBanner'))$('voiceStatusBanner').style.display='flex';
+  if($('voiceStatusText'))$('voiceStatusText').textContent='🎙️ Simulated Voice Dictation: "Explain my lab results"';
+  setTimeout(function(){
+    $('ci').value='Explain my lab results';
+    if($('voiceStatusBanner'))$('voiceStatusBanner').style.display='none';
+    ask();
+  },1200);
+}
+
+$('btnMic').onclick=function(){toggleVoiceInput()};
+$('btnCancelVoice').onclick=function(){stopVoiceInput()};
+$('btnStopSpeech').onclick=function(){stopSpeech()};
+$('btnVoiceToggle').onclick=function(){
+  voiceAutoRead=!voiceAutoRead;
+  $('btnVoiceToggle').textContent=voiceAutoRead?'🔊 Voice: ON':'🔇 Voice: OFF';
+  $('btnVoiceToggle').classList.toggle('on',voiceAutoRead);
+  if(!voiceAutoRead)stopSpeech();
+};
+
+function bub(c,t){
+  var d=document.createElement('div');
+  d.className='m '+c;
+  d.textContent=t;
+  if(c==='b'||c==='e'){
+    var spk=document.createElement('button');
+    spk.className='speak-btn';
+    spk.title='Listen to this response';
+    spk.textContent='🔊';
+    spk.onclick=function(e){
+      e.stopPropagation();
+      speakText(d.innerText.replace('🔊',''));
+    };
+    d.appendChild(spk);
+  }
+  $('chat').appendChild(d);
+  $('chat').scrollTop=1e9;
+  return d;
+}
+
 function ask(q){
   q=(q||$('ci').value).trim();if(!q)return;if(q.length>2000)q=q.slice(0,2000);
   $('ci').value='';bub('u',q);
-  if(selfharm.test(q)){bub('e','💙 I\'m really sorry you\'re hurting, and I\'m glad you reached out. You deserve support right now. Please contact Tele-MANAS 14416 (India) or 988 (US), or call your local emergency number (112 / 911 / 999). If you can, reach out to someone near you and stay with them.');return}
-  if(emerg.test(q)){bub('e','🚨 This could be a medical emergency. Call your local emergency services NOW: India 112 / 108, US 911, UK 999. Do not drive yourself. Stay on the line and follow their instructions.');return}
+  if(selfharm.test(q)){
+    var emMsg='💙 I\'m really sorry you\'re hurting, and I\'m glad you reached out. You deserve support right now. Please contact Tele-MANAS 14416 (India) or 988 (US), or call your local emergency number (112 / 911 / 999). If you can, reach out to someone near you and stay with them.';
+    bub('e',emMsg);
+    if(voiceAutoRead)speakText(emMsg);
+    return;
+  }
+  if(emerg.test(q)){
+    var emMsg='🚨 This could be a medical emergency. Call your local emergency services NOW: India 112 / 108, US 911, UK 999. Do not drive yourself. Stay on the line and follow their instructions.';
+    bub('e',emMsg);
+    if(voiceAutoRead)speakText(emMsg);
+    return;
+  }
   var t=bub('b','…');
   var ans='I can share general information on that, but I\'m not able to diagnose. Could you tell me more about what you\'re experiencing, how long it has lasted, and any medicines you take? That will help you prepare a useful conversation with your clinician.';
   for(var i=0;i<kb.length;i++)if(kb[i][0].test(q)){ans=kb[i][1];break}
   ans+=WD;var k=0;t.textContent='';
-  var iv=setInterval(function(){k+=4;t.textContent=ans.slice(0,k)+(k<ans.length?'▌':'');$('chat').scrollTop=1e9;if(k>=ans.length){clearInterval(iv);t.textContent=ans+'\n\n✅ Safety checks passed'}},18);
+  var iv=setInterval(function(){
+    k+=4;
+    t.textContent=ans.slice(0,k)+(k<ans.length?'▌':'');
+    $('chat').scrollTop=1e9;
+    if(k>=ans.length){
+      clearInterval(iv);
+      t.textContent=ans+'\n\n✅ Safety checks passed';
+      var spk=document.createElement('button');
+      spk.className='speak-btn';
+      spk.title='Listen to this response';
+      spk.textContent='🔊';
+      spk.onclick=function(e){
+        e.stopPropagation();
+        speakText(t.innerText.replace('🔊',''));
+      };
+      t.appendChild(spk);
+      if(voiceAutoRead)speakText(ans);
+    }
+  },18);
 }
 $('cs').onclick=function(){ask()};
 $('ci').onkeydown=function(e){if(e.key==='Enter')ask()};

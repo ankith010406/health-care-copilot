@@ -24,12 +24,20 @@ CareCompass is a privacy-first, zero-dependency single-file AI health copilot we
 - **Medication Precautions**: Practical guidance (e.g., take Metformin with meals to minimize stomach upset).
 - **Doctor Questions**: High-yield questions prepared for the next appointment.
 
-### 3. Unified Health Profile & Longitudinal Timeline
+### 3. Voice Assistant at the Chat Copilot
+- **Speech-to-Text (Voice Dictation)**: Tap the `🎙️` button to speak your health queries naturally. Uses the browser Web Speech API with interim transcript streaming and live waveform indicator.
+- **Text-to-Speech (Speaking Assistant)**:
+  - Toggle `🔊 Voice: ON/OFF` for automatic speech readout of clinical answers.
+  - Per-message `🔊` listen button on every response bubble.
+  - Native multi-lingual speech synthesis matching English, Hindi, Telugu, and Tamil.
+  - Emergency audio warnings for critical phrases (e.g., chest pain, stroke signs).
+
+### 4. Unified Health Profile & Longitudinal Timeline
 - **Comprehensive Patient Profile**: Demographics, verified ABHA ID badge, blood group (`B+`), allergies (`Penicillin`), active problem list, and active medication schedule.
 - **Interactive Chronological Timeline**: Unified feed of hospital discharges, diagnostic labs, prescriptions, and health check-ins with filterable categories (*All, Discharges, Labs, Prescriptions*).
 - **1-Click Sync**: Add any newly analyzed record directly into your longitudinal timeline.
 
-### 4. Multi-Language Support (Bonus Feature)
+### 5. Multi-Language Support (Bonus Feature)
 - Instant switcher supporting 4 languages across navigation, interface, and AI health summaries:
   - 🌐 **English**
   - 🇮🇳 **हिन्दी (Hindi)**
@@ -37,14 +45,14 @@ CareCompass is a privacy-first, zero-dependency single-file AI health copilot we
   - 🇮🇳 **தமிழ் (Tamil)**
 - Bilingual OCR pipeline handling mixed Hindi/English prescriptions.
 
-### 5. ABDM / ABHA Readiness & FHIR R4 Standards (Bonus Feature)
+### 6. ABDM / ABHA Readiness & FHIR R4 Standards (Bonus Feature)
 - **14-digit ABHA ID Integration**: Link and verify your ABHA ID (e.g., `91-8472-9102-3841`) with mock OTP verification and digital health card generation.
 - **Consent Manager Simulator**: Patient-mediated HIU (Health Information User) / HIP (Health Information Provider) exchange consent artifact.
 - **Standardized HL7 FHIR R4 Bundle**:
   - Interactive JSON viewer for `Patient`, `Condition`, `Observation` (mapped to LOINC), `MedicationRequest` (mapped to RxNorm), and `DiagnosticReport`.
   - **Download FHIR JSON** and **Copy to Clipboard** buttons for seamless national health exchange integration.
 
-### 6. Architecture & Presentation Slide Deck
+### 7. Architecture & Presentation Slide Deck
 - **Interactive Pipeline Diagram**: Interactive click-to-inspect flowchart covering Document Ingestion, Vision OCR, Clinical NER, Multilingual Generation, FHIR R4 transformation, and on-device encrypted storage.
 - **Interactive 5-Slide Hackathon Pitch Deck**: Slide-by-slide presentation directly inside the app for judges.
 - Comprehensive written architecture specification available in [`ARCHITECTURE_AND_DEMO.md`](./ARCHITECTURE_AND_DEMO.md).
