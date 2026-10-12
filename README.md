@@ -24,7 +24,13 @@ CareCompass is a privacy-first, zero-dependency single-file AI health copilot we
 - **Medication Precautions**: Practical guidance (e.g., take Metformin with meals to minimize stomach upset).
 - **Doctor Questions**: High-yield questions prepared for the next appointment.
 
-### 3. Voice Assistant at the Chat Copilot
+### 3. Dedicated Personal Health Profile Page
+- **Comprehensive Patient Metrics**: Input & edit vital information including **Full Name**, **Age**, **Gender**, **Blood Group** (A+, B+, O+, AB+, etc.), **Weight (kg)**, **Height (cm)**, and **Emergency Contact**.
+- **Live BMI Calculator**: Automatically computes Body Mass Index with colored category indicators (*Normal, Overweight, Obese, Underweight*).
+- **Health Status & Known Issues**: Enter chronic conditions, allergies, or current issues (*Type 2 Diabetes, Hypertension, Dyslipidemia*), rendered as dynamic clinical status badges.
+- **Digital Health Card**: Real-time profile card preview with initials avatar, exportable/printable view, and instant sync with ABHA and Health Timeline.
+
+### 4. Voice Assistant at the Chat Copilot
 - **Speech-to-Text (Voice Dictation)**: Tap the `🎙️` button to speak your health queries naturally. Uses the browser Web Speech API with interim transcript streaming and live waveform indicator.
 - **Text-to-Speech (Speaking Assistant)**:
   - Toggle `🔊 Voice: ON/OFF` for automatic speech readout of clinical answers.
@@ -32,12 +38,12 @@ CareCompass is a privacy-first, zero-dependency single-file AI health copilot we
   - Native multi-lingual speech synthesis matching English, Hindi, Telugu, and Tamil.
   - Emergency audio warnings for critical phrases (e.g., chest pain, stroke signs).
 
-### 4. Unified Health Profile & Longitudinal Timeline
+### 5. Unified Health Profile & Longitudinal Timeline
 - **Comprehensive Patient Profile**: Demographics, verified ABHA ID badge, blood group (`B+`), allergies (`Penicillin`), active problem list, and active medication schedule.
 - **Interactive Chronological Timeline**: Unified feed of hospital discharges, diagnostic labs, prescriptions, and health check-ins with filterable categories (*All, Discharges, Labs, Prescriptions*).
 - **1-Click Sync**: Add any newly analyzed record directly into your longitudinal timeline.
 
-### 5. Multi-Language Support (Bonus Feature)
+### 6. Multi-Language Support (Bonus Feature)
 - Instant switcher supporting 4 languages across navigation, interface, and AI health summaries:
   - 🌐 **English**
   - 🇮🇳 **हिन्दी (Hindi)**

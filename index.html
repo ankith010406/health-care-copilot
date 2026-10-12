@@ -112,12 +112,14 @@ input,select,textarea{width:100%;font:inherit;padding:10px;border-radius:10px;bo
     <h1 id="h-title">Your AI health copilot</h1>
     <p id="h-sub">Understand prescriptions &amp; lab reports with instant OCR, follow a unified health timeline, and track your wellness in plain language. ABDM compliant. Never a diagnosis.</p>
     <div class="row" style="justify-content:center">
-      <button class="btn p" onclick="go('records')">Try Medical OCR &amp; Intelligence</button>
+      <button class="btn p" onclick="go('profile')">👤 My Health Profile</button>
+      <button class="btn" onclick="go('records')">Try Medical OCR</button>
       <button class="btn" onclick="go('timeline')">View Health Timeline</button>
       <button class="btn" onclick="go('arch')">Architecture &amp; Slides</button>
     </div>
   </div>
   <div class="grid">
+    <div class="card clk" onclick="go('profile')"><div class="ic">👤</div><h3>Health Profile</h3><p>Manage personal metrics: age, gender, blood group, weight, and health status.</p></div>
     <div class="card clk" onclick="go('records')"><div class="ic">📄</div><h3>Record OCR &amp; Intelligence</h3><p>Extract medicines, dosages, test values and diagnoses from prescriptions and reports.</p></div>
     <div class="card clk" onclick="go('timeline')"><div class="ic">📅</div><h3>Unified Health Profile</h3><p>Consolidate your patient journey, active medications and chronic conditions timeline.</p></div>
     <div class="card clk" onclick="go('abha')"><div class="ic">🆔</div><h3>ABDM &amp; ABHA Link</h3><p>Connect your ABHA ID and export standardized HL7 FHIR R4 clinical bundles.</p></div>
@@ -146,6 +148,151 @@ input,select,textarea{width:100%;font:inherit;padding:10px;border-radius:10px;bo
     <button class="btn" style="width:100%;margin-top:8px" id="guest">Continue as guest</button>
     <p class="sm" style="text-align:center"><a href="#" id="sw">New here? Create an account</a></p>
     <p class="sm">Demo login: any email and a password of 6+ characters. Nothing is sent to a server.</p>
+  </div>
+</section>
+
+<!-- PROFILE PAGE -->
+<section class="v" id="v-profile">
+  <h2>Personal Health Profile</h2>
+  <p class="sm">Manage personal demographics, blood group, vital weight, BMI, and active clinical health status. Stored securely and privately on your device.</p>
+
+  <div class="two">
+    <div class="card">
+      <h3 style="margin-top:0">Edit Personal Health Information</h3>
+      
+      <label for="pf-name">Full Name</label>
+      <input id="pf-name" placeholder="e.g. Kavita Sharma" value="Kavita Sharma">
+
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:0">
+        <div>
+          <label for="pf-age">Age</label>
+          <input id="pf-age" type="number" min="1" max="120" value="42" placeholder="e.g. 42">
+        </div>
+        <div>
+          <label for="pf-gender">Gender</label>
+          <select id="pf-gender">
+            <option value="Female" selected>Female</option>
+            <option value="Male">Male</option>
+            <option value="Other">Other</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:0">
+        <div>
+          <label for="pf-blood">Blood Group</label>
+          <select id="pf-blood">
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+" selected>B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+        <div>
+          <label for="pf-weight">Weight (kg)</label>
+          <input id="pf-weight" type="number" step="0.5" min="20" max="250" value="64.5" placeholder="e.g. 64.5">
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:0">
+        <div>
+          <label for="pf-height">Height (cm)</label>
+          <input id="pf-height" type="number" step="1" min="80" max="250" value="162" placeholder="e.g. 162">
+        </div>
+        <div>
+          <label>Calculated BMI</label>
+          <div class="stat-box" style="padding:7px 12px;height:42px;display:flex;align-items:center;justify-content:space-between">
+            <b id="pf-bmi-val">24.6</b>
+            <span class="pill pill-green" id="pf-bmi-badge">Normal</span>
+          </div>
+        </div>
+      </div>
+
+      <label for="pf-status">Health Status &amp; Known Health Issues</label>
+      <textarea id="pf-status" rows="3" placeholder="e.g. Type 2 Diabetes Mellitus, Essential Hypertension, Penicillin Allergy">Type 2 Diabetes Mellitus, Essential Hypertension, Dyslipidemia</textarea>
+      <p class="sm" style="margin-top:2px;color:var(--mu)">Separate multiple health conditions with commas</p>
+
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:0">
+        <div>
+          <label for="pf-emcontact">Emergency Contact Name</label>
+          <input id="pf-emcontact" value="Rahul Sharma (Spouse)">
+        </div>
+        <div>
+          <label for="pf-emphone">Emergency Phone</label>
+          <input id="pf-emphone" value="+91 98765 43210">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:16px">
+        <button class="btn p" id="btnSaveProfile">💾 Save Profile</button>
+        <button class="btn" id="btnResetProfile">Reset Defaults</button>
+      </div>
+      <p id="pfSaveMsg" class="sm" style="color:var(--ok);margin-top:6px"></p>
+    </div>
+
+    <!-- DIGITAL PROFILE CARD PREVIEW -->
+    <div>
+      <div class="card" style="border-top:4px solid var(--pr)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div id="pfAvatar" style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800">KS</div>
+            <div>
+              <h3 style="margin:0" id="cardPfName">Kavita Sharma</h3>
+              <p class="sm" style="margin:0" id="cardPfSub">42 yrs · Female · Blood Group: <b>B+</b></p>
+            </div>
+          </div>
+          <span class="pill pill-teal" id="cardPfActiveBadge">Verified Profile ✓</span>
+        </div>
+
+        <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+          <div class="stat-box" style="text-align:center">
+            <div class="stat-val" id="cardPfWeight">64.5 <span style="font-size:.8rem;font-weight:400">kg</span></div>
+            <div class="stat-lbl">Weight</div>
+          </div>
+          <div class="stat-box" style="text-align:center">
+            <div class="stat-val" id="cardPfHeight">162 <span style="font-size:.8rem;font-weight:400">cm</span></div>
+            <div class="stat-lbl">Height</div>
+          </div>
+          <div class="stat-box" style="text-align:center">
+            <div class="stat-val" id="cardPfBmi" style="color:var(--ok)">24.6</div>
+            <div class="stat-lbl" id="cardPfBmiCat">BMI (Normal)</div>
+          </div>
+        </div>
+
+        <h4 style="margin:12px 0 6px">Current Health Status &amp; Diagnoses</h4>
+        <div id="cardPfIssues" class="badge-group">
+          <!-- Dynamically generated badges -->
+        </div>
+
+        <h4 style="margin:14px 0 6px">Emergency Information</h4>
+        <div class="stat-box">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <b id="cardPfContact">Rahul Sharma (Spouse)</b>
+              <div class="sm" id="cardPfPhone">📞 +91 98765 43210</div>
+            </div>
+            <span class="pill pill-red" style="font-size:.72rem">Emergency Contact</span>
+          </div>
+        </div>
+
+        <div class="row noprint" style="margin-top:16px">
+          <button class="btn" onclick="window.print()">🖨️ Print Profile</button>
+          <button class="btn" onclick="go('timeline')">📅 Health Timeline</button>
+          <button class="btn" onclick="go('abha')">🆔 Sync with ABHA</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;background:var(--bg)">
+        <h4 style="margin:0 0 6px">🔒 On-Device Privacy</h4>
+        <p class="sm" style="margin:0">Your name, age, blood group, weight, and health status are saved strictly within your browser's local sandbox (LocalStorage). Nothing is shared with advertisers or third parties.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -567,6 +714,7 @@ try{entries=JSON.parse(ls('cc_j')||'[]');if(!Array.isArray(entries))entries=[]}c
 var gated={chat:1,explain:1,visit:1,journal:1};
 var tabs=[
   ['home','Home'],
+  ['profile','Profile'],
   ['records','OCR & Records'],
   ['timeline','Timeline'],
   ['abha','ABHA & FHIR'],
@@ -580,25 +728,25 @@ var tabs=[
 
 var translations={
   en:{
-    home:'Home',records:'OCR & Records',timeline:'Timeline',abha:'ABHA & FHIR',chat:'Copilot',
+    home:'Home',profile:'Profile',records:'OCR & Records',timeline:'Timeline',abha:'ABHA & FHIR',chat:'Copilot',
     explain:'Explain',visit:'Visit Prep',journal:'Journal',arch:'Architecture & Slides',about:'Safety',
     title:'Your AI health copilot',
     sub:'Understand prescriptions & lab reports with instant OCR, follow a unified health timeline, and track your wellness in plain language. ABDM compliant. Never a diagnosis.'
   },
   hi:{
-    home:'होम',records:'मेडिकल ओसीआर',timeline:'हेल्थ टाइमलाइन',abha:'आभा और FHIR',chat:'कॉपायलट',
+    home:'होम',profile:'प्रोफ़ाइल',records:'मेडिकल ओसीआर',timeline:'हेल्थ टाइमलाइन',abha:'आभा और FHIR',chat:'कॉपायलट',
     explain:'लैब रिपोर्ट',visit:'डॉक्टर विज़िट',journal:'जर्नल',arch:'आर्किटेक्चर व स्लाइड्स',about:'सुरक्षा',
     title:'आपका एआई हेल्थ कॉपायलट',
     sub:'प्रिस्क्रिप्शन और लैब रिपोर्ट को तुरंत ओसीआर से समझें, संपूर्ण स्वास्थ्य टाइमलाइन देखें, और सरल हिंदी में सलाह पाएं। पूर्णतः सुरक्षित।'
   },
   te:{
-    home:'హోమ్',records:'వైద్య రికార్డులు',timeline:'టైమ్‌లైన్',abha:'ఆభా & FHIR',chat:'కోపైలట్',
+    home:'హోమ్',profile:'ప్రొఫైల్',records:'వైద్య రికార్డులు',timeline:'టైమ్‌లైన్',abha:'ఆభా & FHIR',chat:'కోపైలట్',
     explain:'ల్యాబ్ విశ్లేషణ',visit:'డాక్టర్ ప్రిపరేషన్',journal:'జర్నల్',arch:'ఆర్కిటెక్చర్ & స్లైడ్స్',about:'భద్రత',
     title:'మీ AI హెల్త్ కోపైలట్',
     sub:'ప్రిస్క్రిప్షన్లు మరియు ల్యాబ్ రిపోర్టులను సులభంగా అర్థం చేసుకోండి, మీ ఆరోగ్య ప్రయాణాన్ని ట్రాక్ చేయండి.'
   },
   ta:{
-    home:'முகப்பு',records:'மருத்துவ ஆவணங்கள்',timeline:'காலவரிசை',abha:'ஆபா & FHIR',chat:'துணைவி',
+    home:'முகப்பு',profile:'சுயவிவரம்',records:'மருத்துவ ஆவணங்கள்',timeline:'காலவரிசை',abha:'ஆபா & FHIR',chat:'துணைவி',
     explain:'ஆய்வக விளக்கம்',visit:'மருத்துவர் சந்திப்பு',journal:'குறிப்பேடு',arch:'கட்டமைப்பு & ஸ்லைடுகள்',about:'பாதுகாப்பு',
     title:'உங்கள் AI சுகாதார வழிகாட்டி',
     sub:'மருத்துவச் சீட்டுகள் மற்றும் ஆய்வக அறிக்கைகளை எளிய தமிழில் புரிந்து கொள்ளுங்கள். பாதுகாப்பானது.'
@@ -661,6 +809,132 @@ $('pw').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
 $('em').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
 $('nm').onkeydown=function(e){if(e.key==='Enter')$('lsub').click()};
 $('guest').onclick=function(){login('Guest')};
+
+// PROFILE MANAGEMENT
+var defaultProfile={
+  name:'Kavita Sharma',
+  age:42,
+  gender:'Female',
+  blood:'B+',
+  weight:64.5,
+  height:162,
+  status:'Type 2 Diabetes Mellitus, Essential Hypertension, Dyslipidemia',
+  emContact:'Rahul Sharma (Spouse)',
+  emPhone:'+91 98765 43210'
+};
+var profile=null;
+try{profile=JSON.parse(ls('cc_profile')||'null')}catch(e){}
+if(!profile||typeof profile!=='object')profile=Object.assign({},defaultProfile);
+
+function calcBmi(w,h){
+  if(!w||!h||h<=0)return{bmi:'--',cat:'--',pill:'pill-teal'};
+  var hm=h/100;
+  var b=+(w/(hm*hm)).toFixed(1);
+  if(b<18.5)return{bmi:b,cat:'Underweight',pill:'pill-blue'};
+  if(b<25)return{bmi:b,cat:'Normal',pill:'pill-green'};
+  if(b<30)return{bmi:b,cat:'Overweight',pill:'pill-teal'};
+  return{bmi:b,cat:'Obese',pill:'pill-red'};
+}
+
+function updateBmiLive(){
+  var w=+$('pf-weight').value||0;
+  var h=+$('pf-height').value||0;
+  var res=calcBmi(w,h);
+  $('pf-bmi-val').textContent=res.bmi;
+  $('pf-bmi-badge').textContent=res.cat;
+  $('pf-bmi-badge').className='pill '+res.pill;
+}
+
+$('pf-weight').oninput=updateBmiLive;
+$('pf-height').oninput=updateBmiLive;
+
+function renderProfileUI(){
+  if(!profile)return;
+  $('pf-name').value=profile.name||'';
+  $('pf-age').value=profile.age||'';
+  $('pf-gender').value=profile.gender||'Female';
+  $('pf-blood').value=profile.blood||'B+';
+  $('pf-weight').value=profile.weight||'';
+  $('pf-height').value=profile.height||'';
+  $('pf-status').value=profile.status||'';
+  $('pf-emcontact').value=profile.emContact||'';
+  $('pf-emphone').value=profile.emPhone||'';
+  updateBmiLive();
+
+  $('cardPfName').textContent=profile.name||'Unnamed Patient';
+  $('cardPfSub').innerHTML=(profile.age||'--')+' yrs · '+(profile.gender||'--')+' · Blood Group: <b>'+(profile.blood||'--')+'</b>';
+  $('cardPfWeight').innerHTML=(profile.weight||'--')+' <span style="font-size:.8rem;font-weight:400">kg</span>';
+  $('cardPfHeight').innerHTML=(profile.height||'--')+' <span style="font-size:.8rem;font-weight:400">cm</span>';
+  
+  var bmiInfo=calcBmi(profile.weight,profile.height);
+  $('cardPfBmi').textContent=bmiInfo.bmi;
+  $('cardPfBmiCat').textContent='BMI ('+bmiInfo.cat+')';
+  $('cardPfBmi').style.color=bmiInfo.cat==='Normal'?'var(--ok)':'var(--rd)';
+
+  var parts=(profile.name||'Care Compass').trim().split(/\s+/);
+  var initials=(parts[0]?parts[0][0]:'')+(parts[1]?parts[1][0]:'');
+  $('pfAvatar').textContent=initials.toUpperCase()||'CC';
+
+  var rawIssues=(profile.status||'').split(',').map(function(s){return s.trim()}).filter(Boolean);
+  var issuesH='';
+  if(!rawIssues.length){
+    issuesH='<span class="sm">No chronic health conditions listed</span>';
+  }else{
+    rawIssues.forEach(function(iss,idx){
+      var p=idx===0?'pill-red':(idx===1?'pill-teal':'pill-blue');
+      issuesH+='<span class="pill '+p+'">'+iss+'</span> ';
+    });
+  }
+  $('cardPfIssues').innerHTML=issuesH;
+  $('cardPfContact').textContent=profile.emContact||'Not specified';
+  $('cardPfPhone').textContent='📞 '+(profile.emPhone||'Not specified');
+
+  if($('profName'))$('profName').textContent=profile.name;
+  if($('profConditions'))$('profConditions').innerHTML=issuesH;
+  if($('abhaCardHolder'))$('abhaCardHolder').textContent=profile.name;
+}
+
+function saveProfileData(){
+  var name=$('pf-name').value.trim();
+  if(!name){
+    $('pfSaveMsg').style.color='var(--rd)';
+    $('pfSaveMsg').textContent='Please enter your name.';
+    return;
+  }
+  profile={
+    name:name,
+    age:+$('pf-age').value||40,
+    gender:$('pf-gender').value,
+    blood:$('pf-blood').value,
+    weight:+$('pf-weight').value||0,
+    height:+$('pf-height').value||0,
+    status:$('pf-status').value.trim(),
+    emContact:$('pf-emcontact').value.trim(),
+    emPhone:$('pf-emphone').value.trim()
+  };
+  ls('cc_profile',JSON.stringify(profile));
+  
+  if(user){
+    user.name=name;
+    ls('cc_user',JSON.stringify(user));
+    $('authBtn').textContent='Log out ('+name+')';
+  }
+
+  renderProfileUI();
+  $('pfSaveMsg').style.color='var(--ok)';
+  $('pfSaveMsg').textContent='✓ Health Profile saved successfully!';
+  setTimeout(function(){$('pfSaveMsg').textContent=''},3000);
+}
+
+$('btnSaveProfile').onclick=saveProfileData;
+$('btnResetProfile').onclick=function(){
+  profile=Object.assign({},defaultProfile);
+  ls('cc_profile',JSON.stringify(profile));
+  renderProfileUI();
+  $('pfSaveMsg').style.color='var(--ok)';
+  $('pfSaveMsg').textContent='Reset to default profile values.';
+  setTimeout(function(){$('pfSaveMsg').textContent=''},2500);
+};
 
 // CHAT & VOICE ASSISTANT
 var starters=['Explain my lab results','Prepare me for my doctor visit','What does high cholesterol mean?','Help me sleep better'];
@@ -1534,6 +1808,7 @@ $('cb').onclick=function(){
 window.addEventListener('hashchange',function(){var h=location.hash.slice(1);if(h&&h!==cur&&$('v-'+h))go(h)});
 var h0=location.hash.slice(1);
 go($('v-'+h0)?h0:'home');
+renderProfileUI();
 draw();
 displayRecord(sampleRecords.discharge);
 renderTimeline('all');
