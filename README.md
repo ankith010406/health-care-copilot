@@ -1,25 +1,53 @@
-# 🩺 CareCompass – AI Health Copilot
+# 🩺 CareCompass – Multilingual AI Health Copilot & ABDM Record Intelligence
 
-CareCompass is a lightweight, responsive, privacy-focused single-file AI health copilot web application designed to help users understand lab reports, prepare for doctor visits, and log wellness trends in plain language.
+CareCompass is a privacy-first, zero-dependency single-file AI health copilot web application designed to help patients understand complex prescriptions, lab reports, and discharge summaries with automated Vision OCR, plain-language summaries, a unified health timeline, 4-language regional support, and Ayushman Bharat Digital Mission (ABDM) FHIR R4 interoperability.
 
 ---
 
-## 🌟 Key Features
+## 🌟 Core Scope & Deliverables
 
-1. **Safety-First Chat Copilot**:
-   - Live emergency detection (e.g., chest pain, shortness of breath, stroke signs) and self-harm keywords trigger immediate crisis response cards.
-   - Pre-written educational answers for common health and wellness inquiries.
-2. **Lab Report Explainer**:
-   - Understand common blood test values (Hemoglobin, Glucose, LDL, HDL, TSH, Vitamin D) with clinical status badges and doctor question prompts.
-3. **Doctor Visit Prep**:
-   - Convert symptoms, timeline, and current medications into a concise, exportable one-page summary ready for print or clipboard copy.
-4. **Wellness & Symptom Journal**:
-   - Track symptom severity, sleep hours, mood, and water intake.
-   - Interactive SVG dual-metric trend chart calculating rolling averages.
-5. **Contact & Safety Guides**:
-   - Hackathon feedback form and quick-reference crisis support hotlines.
-6. **Dark & Light Mode**:
-   - Adaptive system color-scheme detection with manual instant toggle.
+### 1. Medical Record Intelligence & OCR
+- **Ingestion**: Supports image uploads (JPG, PNG), clinical PDFs, or formatted medical text across prescriptions, discharge summaries, and lab panels.
+- **Clinical Entity Extraction**: Automatically recognizes:
+  - **Medications & Dosages**: Drug names, strength, timing, and frequencies (*OD, BD, TDS*).
+  - **Biomarkers & Test Values**: Numerical values, reference ranges, and clinical interpretation flags (*HbA1c, LDL, Glucose, Creatinine*).
+  - **Diagnoses**: ICD-10 coded clinical conditions (*Type 2 Diabetes [E11.9], Hypertension [I10], Dyslipidemia [E78.5]*).
+  - **Encounter Details**: Hospital facility, attending clinician, and admission/discharge dates.
+- **Realistic Sample Presets**:
+  - 📄 *Apollo Hospitals Discharge Summary* (Cardiometabolic)
+  - 📝 *Bilingual Doctor Prescription* (Hindi/English with Paracetamol, Metformin)
+  - 🧪 *Comprehensive Metabolic & Lipid Diagnostic Panel* (SRL Diagnostics)
+
+### 2. AI Health Summary in Simple Language
+- **Plain-Language Translations**: Explains technical diagnoses with everyday analogies (e.g. *high HbA1c explained as syrup flowing through delicate vessels*).
+- **Abnormal Value Explanations**: Tells patients why a biomarker is elevated and what actions matter.
+- **Medication Precautions**: Practical guidance (e.g., take Metformin with meals to minimize stomach upset).
+- **Doctor Questions**: High-yield questions prepared for the next appointment.
+
+### 3. Unified Health Profile & Longitudinal Timeline
+- **Comprehensive Patient Profile**: Demographics, verified ABHA ID badge, blood group (`B+`), allergies (`Penicillin`), active problem list, and active medication schedule.
+- **Interactive Chronological Timeline**: Unified feed of hospital discharges, diagnostic labs, prescriptions, and health check-ins with filterable categories (*All, Discharges, Labs, Prescriptions*).
+- **1-Click Sync**: Add any newly analyzed record directly into your longitudinal timeline.
+
+### 4. Multi-Language Support (Bonus Feature)
+- Instant switcher supporting 4 languages across navigation, interface, and AI health summaries:
+  - 🌐 **English**
+  - 🇮🇳 **हिन्दी (Hindi)**
+  - 🇮🇳 **తెలుగు (Telugu)**
+  - 🇮🇳 **தமிழ் (Tamil)**
+- Bilingual OCR pipeline handling mixed Hindi/English prescriptions.
+
+### 5. ABDM / ABHA Readiness & FHIR R4 Standards (Bonus Feature)
+- **14-digit ABHA ID Integration**: Link and verify your ABHA ID (e.g., `91-8472-9102-3841`) with mock OTP verification and digital health card generation.
+- **Consent Manager Simulator**: Patient-mediated HIU (Health Information User) / HIP (Health Information Provider) exchange consent artifact.
+- **Standardized HL7 FHIR R4 Bundle**:
+  - Interactive JSON viewer for `Patient`, `Condition`, `Observation` (mapped to LOINC), `MedicationRequest` (mapped to RxNorm), and `DiagnosticReport`.
+  - **Download FHIR JSON** and **Copy to Clipboard** buttons for seamless national health exchange integration.
+
+### 6. Architecture & Presentation Slide Deck
+- **Interactive Pipeline Diagram**: Interactive click-to-inspect flowchart covering Document Ingestion, Vision OCR, Clinical NER, Multilingual Generation, FHIR R4 transformation, and on-device encrypted storage.
+- **Interactive 5-Slide Hackathon Pitch Deck**: Slide-by-slide presentation directly inside the app for judges.
+- Comprehensive written architecture specification available in [`ARCHITECTURE_AND_DEMO.md`](./ARCHITECTURE_AND_DEMO.md).
 
 ---
 
@@ -39,7 +67,7 @@ npx --yes serve .
 ```
 
 ### Option 3: Direct File Opening
-Double-click `index.html` or open it directly in any modern web browser.
+Open `index.html` directly in any modern browser.
 
 ---
 
@@ -49,18 +77,16 @@ Double-click `index.html` or open it directly in any modern web browser.
 1. Push this repository to GitHub:
    ```bash
    git add .
-   git commit -m "feat: CareCompass single-file AI health copilot"
+   git commit -m "feat: CareCompass Medical Record Intelligence, OCR & ABDM integration"
    git push origin main
    ```
 2. Navigate to [vercel.com](https://vercel.com) and log in.
 3. Click **Add New** → **Project**.
 4. Import your `health-care-copilot` repository.
-5. Keep default settings (Vercel automatically serves `index.html` with `vercel.json` clean URLs).
+5. Keep default settings (`vercel.json` provides cleanUrls with no build step required).
 6. Click **Deploy**.
 
 ### Method 2: Vercel CLI
-If you have the Vercel CLI authenticated:
 ```bash
 vercel --prod
 ```
-Follow the interactive prompts to deploy directly.
