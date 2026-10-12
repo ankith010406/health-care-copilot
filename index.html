@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseAI — Next-Gen AI Healthcare Copilot & Clinical Triage</title>
+  <meta name="description" content="AI-Powered Healthcare Copilot for real-time symptom triage, clinical diagnostic decision support, lab report analysis, drug-interaction safety, and ambient SOAP scribing.">
+  <meta name="keywords" content="healthcare ai, clinical copilot, medical ai, triage assistant, lab analyzer, drug interaction, ambient scribe, hackathon">
+  <meta name="author" content="PulseAI Health Labs">
+  <meta name="theme-color" content="#07090e">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PulseAI — Intelligent Healthcare Copilot">
+  <meta property="og:description" content="Hackathon-winning AI Medical Assistant with real-time ECG telemetry, vision lab report analyzer, and clinical triage.">
+  <meta property="og:image" content="assets/hero-badge.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/hero-badge.jpg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-container">
+      <div class="brand-section">
+        <img src="assets/hero-badge.jpg" alt="PulseAI Hologram Logo" class="brand-logo-img" id="brandLogo">
+        <div>
+          <div class="brand-title">
+            <span>Pulse<span class="gradient-text">AI</span></span>
+            <span class="brand-badge">Clinical Copilot</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-dim);">AI-Powered Clinical Decision Support</div>
+        </div>
+      </div>
+
+      <!-- Live Engine Status -->
+      <div class="system-status-pill">
+        <span class="status-dot"></span>
+        <span id="systemStatusText">Clinical Intelligence Engine Online • Latency 18ms</span>
+      </div>
+
+      <!-- Header Action Controls -->
+      <div class="header-actions">
+        <!-- Persona Mode Switcher -->
+        <div class="persona-toggle-container" title="Switch between Patient Friendly Mode and Clinician Scribe Mode">
+          <button class="persona-btn active" id="personaPatientBtn" onclick="setPersonaMode('patient')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Patient Mode
+          </button>
+          <button class="persona-btn" id="personaDoctorBtn" onclick="setPersonaMode('doctor')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Clinician / MD
+          </button>
+        </div>
+
+        <!-- Emergency SOS Button -->
+        <button class="btn-emergency" id="sosTriggerBtn" onclick="openModal('emergencyModal')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Emergency SOS
+        </button>
+
+        <!-- Settings Modal Trigger -->
+        <button class="btn-icon" id="settingsBtn" onclick="openModal('settingsModal')" title="System Settings & Gemini API Key">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Real-Time ECG & Biometric Telemetry Banner -->
+  <section class="telemetry-banner" id="telemetryBanner">
+    <div class="telemetry-grid">
+      <!-- Animated Canvas ECG Monitor -->
+      <div class="ecg-card">
+        <div class="ecg-header">
+          <div class="ecg-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Lead II Live Rhythm
+            <span class="ecg-lead-tag" id="currentRhythmLabel">NSR • 72 BPM</span>
+          </div>
+          <div class="ecg-controls">
+            <button class="ecg-btn-sm active" onclick="setECGRhythm('normal')" id="ecgNormalBtn">Normal</button>
+            <button class="ecg-btn-sm" onclick="setECGRhythm('tachycardia')" id="ecgTachyBtn">Tachycardia</button>
+            <button class="ecg-btn-sm" onclick="setECGRhythm('arrhythmia')" id="ecgArrhythmiaBtn">Arrhythmia</button>
+            <button class="ecg-btn-sm" onclick="toggleECGSound()" id="ecgSoundBtn" title="Toggle Beep Tone">🔊</button>
+          </div>
+        </div>
+        <canvas id="ecgCanvas" width="600" height="90"></canvas>
+      </div>
+
+      <!-- Real-Time Vitals Cards -->
+      <div class="vitals-row">
+        <div class="vital-metric-card heart">
+          <div class="vital-label">
+            <span>Heart Rate</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="vital-value-wrap">
+            <span class="vital-val" id="vitalHR">72</span>
+            <span class="vital-unit">BPM</span>
+          </div>
+          <div class="vital-status normal" id="vitalHRStatus">Normal Sinus Rhythm</div>
+        </div>
+
+        <div class="vital-metric-card spo2">
+          <div class="vital-label">
+            <span>Oxygen Saturation</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          </div>
+          <div class="vital-value-wrap">
+            <span class="vital-val" id="vitalSpO2">98</span>
+            <span class="vital-unit">% SpO2</span>
+          </div>
+          <div class="vital-status normal">Adequate Perfusion</div>
+        </div>
+
+        <div class="vital-metric-card bp">
+          <div class="vital-label">
+            <span>Blood Pressure</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="vital-value-wrap">
+            <span class="vital-val" id="vitalBP">118/76</span>
+            <span class="vital-unit">mmHg</span>
+          </div>
+          <div class="vital-status normal">Optimal MAP</div>
+        </div>
+
+        <div class="vital-metric-card temp">
+          <div class="vital-label">
+            <span>Core Temp</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+          </div>
+          <div class="vital-value-wrap">
+            <span class="vital-val" id="vitalTemp">98.6</span>
+            <span class="vital-unit">°F</span>
+          </div>
+          <div class="vital-status normal">Normothermic</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Application Body -->
+  <main class="main-wrapper">
+    <!-- Primary Navigation Tabs -->
+    <nav class="module-tabs-nav" id="moduleNav">
+      <button class="nav-tab-btn active" onclick="switchTab('triageTab')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        AI Triage & Clinical Chat
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchTab('labsTab')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.2 18.2a2 2 0 0 0 1.6 2.8h12.4a2 2 0 0 0 1.6-2.8L14 9.31V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
+        Lab & Report Vision Analyzer
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchTab('rxTab')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+        Drug Interaction & Rx Safety
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchTab('scribeTab')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        Ambient AI Clinical Scribe
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchTab('handoverTab')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Doctor Handover Packet
+      </button>
+    </nav>
+
+    <!-- ====================================================================
+         MODULE 1: AI Clinical Triage & Conversational Diagnostic Assistant
+         ==================================================================== -->
+    <section class="tab-panel active" id="triageTab">
+      <div class="chat-layout-grid">
+        <!-- Main Chat Box -->
+        <div class="chat-card">
+          <div class="chat-card-header">
+            <div class="chat-header-info">
+              <div class="chat-bot-avatar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <div>
+                <div class="chat-header-title" id="chatTitle">PulseAI Clinical Diagnostic Copilot</div>
+                <div class="chat-header-subtitle" id="chatSubtitle">Emergency Severity Index (ESI) Triage Engine</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn-icon" onclick="clearChatHistory()" title="Restart Conversation">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              </button>
+              <button class="btn-icon" onclick="exportChatTranscript()" title="Download Consultation Transcript">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Scenario Prompt Chips -->
+          <div class="prompt-chips-wrap">
+            <span class="chips-label">Quick Scenarios:</span>
+            <button class="chip-btn" onclick="sendQuickPrompt('I have crushing chest tightness and pain radiating down my left arm')">🚨 Chest Pressure & Arm Pain</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('Severe throbbing migraine with flashing lights in my vision and nausea')">⚡ Migraine with Aura</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('My 4-year-old has a 102.8°F fever, lethargy, and a red rash')">👶 Pediatric High Fever</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('Acute right lower abdomen pain that hurts when I press or walk')">🩺 RLQ Abdominal Pain</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('Fasting blood sugar is 260 mg/dL and feeling extreme thirst')">🩸 Hyperglycemia Episode</button>
+          </div>
+
+          <!-- Chat Conversation Stream -->
+          <div class="chat-messages-container" id="chatMessages">
+            <div class="chat-msg bot">
+              <div class="msg-avatar">AI</div>
+              <div class="msg-bubble">
+                <h4>Welcome to PulseAI Clinical Copilot</h4>
+                <p>Hello! I am your AI clinical triage assistant. Describe your symptoms, when they started, and any existing medical conditions or medications you take.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #94a3b8;">
+                  💡 <em>You can speak naturally, type your symptoms, or click one of the quick scenario chips above for immediate clinical triage evaluation.</em>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Bar -->
+          <form class="chat-input-bar" id="chatForm" onsubmit="handleUserChatSubmit(event)">
+            <input type="text" id="chatInput" class="chat-input-field" placeholder="Describe symptoms, severity (1-10), duration, medical history..." autocomplete="off">
+            <button type="button" class="btn-icon" id="chatMicBtn" onclick="toggleChatVoiceInput()" title="Voice Dictation">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            </button>
+            <button type="submit" class="btn-send" id="chatSubmitBtn">
+              <span>Analyze</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right Side: Real-Time Clinical Triage & Differential Decision Matrix -->
+        <aside class="triage-side-panel">
+          <!-- Triage Assessment Card -->
+          <div class="triage-card">
+            <div class="triage-header">
+              <h3 style="font-size: 1rem;">Clinical Risk Triage</h3>
+              <span class="triage-badge badge-low" id="triageBadge">Routine Care</span>
+            </div>
+
+            <div class="triage-gauge-box">
+              <div class="triage-score-num" id="triageScoreVal">12</div>
+              <div class="triage-score-sub" id="triageScoreDesc">Clinical Urgency Index (0-100)</div>
+              <div class="triage-meter-bar">
+                <div class="triage-meter-fill" id="triageMeterFill" style="width: 12%;"></div>
+              </div>
+            </div>
+
+            <div style="font-size: 0.82rem; margin-top: 0.5rem; line-height: 1.5;" id="triageSummaryBox">
+              Awaiting symptoms input for automated triage stratification.
+            </div>
+          </div>
+
+          <!-- Differential Diagnosis Prediction -->
+          <div class="triage-card">
+            <div class="triage-header">
+              <h3 style="font-size: 1rem;">Differential Diagnosis</h3>
+              <span style="font-size: 0.72rem; color: var(--cyan-primary); font-family: var(--font-mono);">AI Model Match</span>
+            </div>
+            <ul class="differential-list" id="differentialList">
+              <li class="diff-item">
+                <span class="diff-name">General Symptom Triage</span>
+                <span class="diff-prob">Baseline</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Recommended Next Clinical Questions -->
+          <div class="triage-card">
+            <div class="triage-header">
+              <h3 style="font-size: 1rem;">Suggested Probing Questions</h3>
+            </div>
+            <div id="suggestedQuestionsList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <div style="font-size: 0.8rem; color: var(--text-muted);">
+                Ask: How long have you felt this? Have you taken any medications today?
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 2: AI Lab Report & Biomarker Vision Analyzer
+         ==================================================================== -->
+    <section class="tab-panel" id="labsTab">
+      <div class="lab-analyzer-grid">
+        <!-- Upload & Presets Panel -->
+        <div class="lab-upload-card">
+          <div>
+            <h2 style="font-size: 1.25rem; margin-bottom: 0.35rem;">Lab & Imaging OCR Analyzer</h2>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">
+              Upload blood tests, pathology sheets, or scan reports for automated biomarker extraction, abnormal value flagging, and plain-English medical translation.
+            </p>
+          </div>
+
+          <!-- Interactive Dropzone -->
+          <div class="dropzone-box" id="labDropzone" onclick="document.getElementById('labFileInput').click()">
+            <input type="file" id="labFileInput" accept=".pdf,image/*,.txt" style="display: none;" onchange="handleLabFileUpload(event)">
+            <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div class="dropzone-text">Drop Lab Report / Pathology Scan Here</div>
+            <div class="dropzone-hint">Supports PDF, PNG, JPG scans (or click to browse)</div>
+          </div>
+
+          <!-- One-Click Hackathon Presets -->
+          <div>
+            <div class="presets-section-title">Or load pre-authenticated clinical reports:</div>
+            <div class="presets-btn-group">
+              <div class="preset-card-btn active" onclick="loadLabPreset('cbc')" id="presetBtn_cbc">
+                <div>
+                  <div class="preset-btn-name">Complete Blood Count (CBC)</div>
+                  <div class="preset-btn-meta">Microcytic Anemia & Reactive Platelets</div>
+                </div>
+                <span style="font-size: 0.75rem; color: #f59e0b; font-weight: 700;">Moderate Risk</span>
+              </div>
+
+              <div class="preset-card-btn" onclick="loadLabPreset('lipid')" id="presetBtn_lipid">
+                <div>
+                  <div class="preset-btn-name">Advanced Lipid Cardio Panel</div>
+                  <div class="preset-btn-meta">Severe Hyperlipidemia (LDL 178 mg/dL)</div>
+                </div>
+                <span style="font-size: 0.75rem; color: #ef4444; font-weight: 700;">High Risk</span>
+              </div>
+
+              <div class="preset-card-btn" onclick="loadLabPreset('metabolic')" id="presetBtn_metabolic">
+                <div>
+                  <div class="preset-btn-name">Metabolic & Renal Panel (CMP)</div>
+                  <div class="preset-btn-meta">Fasting Hyperglycemia (158 mg/dL)</div>
+                </div>
+                <span style="font-size: 0.75rem; color: #f59e0b; font-weight: 700;">Moderate Risk</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lab Results Display Card -->
+        <div class="lab-results-card" id="labReportDisplayArea">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 3: Drug Interaction & Medication Safety Checker
+         ==================================================================== -->
+    <section class="tab-panel" id="rxTab">
+      <div class="rx-checker-grid">
+        <!-- Drug Selector Input Card -->
+        <div class="rx-input-card">
+          <h2 style="font-size: 1.25rem; margin-bottom: 0.35rem;">Prescription Interaction Safety Check</h2>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Add multiple medications to evaluate dangerous pharmacodynamic interactions, CYP450 enzyme conflicts, and dietary warnings.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">Add a medication to check:</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <select id="rxSelectInput" class="form-input" style="flex: 1;">
+                <option value="Warfarin">Warfarin (Anticoagulant / Blood thinner)</option>
+                <option value="Aspirin">Aspirin (Antiplatelet / Salicylate)</option>
+                <option value="Ibuprofen">Ibuprofen (NSAID pain relief)</option>
+                <option value="Lisinopril">Lisinopril (ACE inhibitor / Blood pressure)</option>
+                <option value="Metformin">Metformin (Antidiabetic)</option>
+                <option value="Sertraline">Sertraline (SSRI Antidepressant)</option>
+                <option value="Atorvastatin">Atorvastatin (Cholesterol statin)</option>
+                <option value="Tramadol">Tramadol (Opioid analgesic)</option>
+                <option value="St. John's Wort">St. John's Wort (Herbal supplement)</option>
+              </select>
+              <button class="btn-primary" onclick="addSelectedMedication()">+ Add Rx</button>
+            </div>
+          </div>
+
+          <label class="form-label">Current Regimen for Conflict Analysis:</label>
+          <div class="rx-chips-container" id="currentRxChips">
+            <!-- Dynamically populated -->
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+            <button class="btn-primary" onclick="runDrugInteractionAnalysis()" style="flex: 1;">
+              ⚡ Run Interaction Analysis
+            </button>
+            <button class="btn-secondary" onclick="loadHighRiskRxPreset()">
+              Load Dangerous Combo Preset
+            </button>
+          </div>
+        </div>
+
+        <!-- Drug Results Card -->
+        <div class="rx-results-card" id="rxResultsArea">
+          <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+            <h3>Ready for Interaction Screening</h3>
+            <p style="font-size: 0.85rem; margin-top: 0.4rem;">Select at least two medications on the left and click "Run Interaction Analysis".</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 4: Ambient AI Clinical Scribe (Doctor SOAP Notes)
+         ==================================================================== -->
+    <section class="tab-panel" id="scribeTab">
+      <div class="scribe-container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 1.4rem; margin-bottom: 0.35rem;">Ambient AI Clinical Scribe & SOAP Generator</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Real-time ambient dictation transcribing patient-physician encounter directly into structured SOAP clinical documentation with automated ICD-10 suggestions.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.6rem;">
+            <button class="btn-secondary" onclick="loadSoapTemplate('cardio')">Preset: Cardiology SOAP</button>
+            <button class="btn-secondary" onclick="loadSoapTemplate('neuro')">Preset: Neurology SOAP</button>
+          </div>
+        </div>
+
+        <!-- Ambient Recording Audio Bar -->
+        <div class="scribe-controls-bar">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <button class="btn-mic-record" id="scribeMicBtn" onclick="toggleScribeAudio()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+              <span id="scribeMicBtnText">Start Ambient Listening</span>
+            </button>
+            <span id="scribeAudioStatus" style="font-size: 0.82rem; color: var(--text-muted);">Microphone idle. Ready to transcribe clinical speech.</span>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn-primary" onclick="generateSOAPFromTranscript()">
+              ✨ Synthesize SOAP Note
+            </button>
+            <button class="btn-secondary" onclick="copySOAPToClipboard()">
+              📋 Copy Note
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Audio Transcript Box -->
+        <div style="margin-bottom: 1.5rem;">
+          <label class="form-label" style="display: flex; justify-content: space-between;">
+            <span>Live Encounter Audio Transcript:</span>
+            <span style="font-size: 0.72rem; color: var(--cyan-primary);">Web Speech API Enabled</span>
+          </label>
+          <textarea id="liveSpeechTranscript" class="form-input" style="height: 90px; resize: vertical;" placeholder="Spoken doctor-patient conversation will appear here in real-time, or type conversation notes to synthesize..."></textarea>
+        </div>
+
+        <!-- SOAP Structured Grid -->
+        <div class="soap-grid">
+          <!-- Subjective -->
+          <div class="soap-box">
+            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
+              <span class="soap-letter-badge">S</span> Subjective (History of Present Illness)
+            </h3>
+            <textarea id="soapSubjective" class="soap-text-area" placeholder="Patient's reported symptoms, onset, quality, severity, aggravating factors..."></textarea>
+          </div>
+
+          <!-- Objective -->
+          <div class="soap-box">
+            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
+              <span class="soap-letter-badge">O</span> Objective (Physical Exam & Telemetry)
+            </h3>
+            <textarea id="soapObjective" class="soap-text-area" placeholder="Vital signs, cardiovascular, pulmonary, abdominal exam findings..."></textarea>
+          </div>
+
+          <!-- Assessment -->
+          <div class="soap-box">
+            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
+              <span class="soap-letter-badge">A</span> Assessment & ICD-10 Diagnostics
+            </h3>
+            <textarea id="soapAssessment" class="soap-text-area" placeholder="Differential diagnosis, clinical impression, billing codes..."></textarea>
+          </div>
+
+          <!-- Plan -->
+          <div class="soap-box">
+            <h3 style="font-size: 0.95rem; display: flex; align-items: center;">
+              <span class="soap-letter-badge">P</span> Plan & Care Instructions
+            </h3>
+            <textarea id="soapPlan" class="soap-text-area" placeholder="Diagnostics ordered, pharmacological therapy, specialist referrals, red flag follow-up..."></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 5: Doctor Handover Packet & Export Summary
+         ==================================================================== -->
+    <section class="tab-panel" id="handoverTab">
+      <div class="lab-results-card" style="max-width: 900px; margin: 0 auto;">
+        <div class="report-header-banner">
+          <div>
+            <h2 class="report-title-lg">Clinical Handover Summary Document</h2>
+            <div class="report-meta-text">Prepared by PulseAI Decision Support System for Attending Physician / ER</div>
+          </div>
+          <button class="btn-primary" onclick="window.print()">
+            🖨️ Print / Save PDF
+          </button>
+        </div>
+
+        <div style="background: rgba(10, 16, 30, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; font-size: 0.85rem;">
+            <div><strong>Patient Name:</strong> John Doe (Demo)</div>
+            <div><strong>Triage Severity:</strong> <span id="handoverTriageBadge" style="color: #38bdf8; font-weight: 700;">Level 3 - Urgent</span></div>
+            <div><strong>Timestamp:</strong> <span id="handoverTimestamp">October 12, 2026 13:20</span></div>
+            <div><strong>Telemetry HR:</strong> <span id="handoverHR">72 BPM (NSR)</span></div>
+            <div><strong>SpO2:</strong> <span id="handoverSpO2">98% on RA</span></div>
+            <div><strong>Blood Pressure:</strong> 118/76 mmHg</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #38bdf8;">Chief Complaint & Triage Notes:</h3>
+        <p id="handoverChiefComplaint" style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+          Patient initiated triage session with symptoms of chest heaviness and shortness of breath upon exertion.
+        </p>
+
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #38bdf8;">Top Differential Considerations:</h3>
+        <ul id="handoverDiffList" style="margin-left: 1.5rem; font-size: 0.88rem; margin-bottom: 1.5rem;">
+          <li>Acute Coronary Syndrome (Rule-out)</li>
+          <li>Hypertensive Episode</li>
+        </ul>
+
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #38bdf8;">Physician Action Items Recommended by AI:</h3>
+        <ul id="handoverActionsList" style="margin-left: 1.5rem; font-size: 0.88rem; margin-bottom: 1.5rem;">
+          <li>Obtain stat 12-lead Electrocardiogram</li>
+          <li>Serial Troponin I / T draw</li>
+        </ul>
+
+        <div style="border-top: 1px dashed var(--border-subtle); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-dim);">
+          <span>Digital Verification Hash: SHA256-7E9B41-PULSEAI-2026</span>
+          <span>HIPAA & GDPR Simulated Sandbox Ready</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       MODALS
+       ==================================================================== -->
+
+  <!-- Emergency SOS Modal -->
+  <div class="modal-overlay" id="emergencyModal">
+    <div class="modal-dialog" style="border-color: #ef4444; box-shadow: var(--shadow-red-glow);">
+      <div class="modal-header" style="background: rgba(239, 68, 68, 0.15);">
+        <h3 style="color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
+          🚨 Emergency Medical Dispatch Active
+        </h3>
+        <button class="btn-icon" onclick="closeModal('emergencyModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.95rem; margin-bottom: 1rem;">
+          If you are experiencing life-threatening symptoms (loss of consciousness, acute chest pain, severe stroke signs, uncontrollable bleeding):
+        </p>
+        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-md); padding: 1.25rem; text-align: center; margin-bottom: 1.25rem;">
+          <div style="font-size: 1.75rem; font-weight: 800; color: #ffffff; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+            DIAL 911 / 112 NOW
+          </div>
+          <div style="font-size: 0.82rem; color: #fca5a5;">Your location GPS telemetry simulated: Lat 37.7749, Lng -122.4194</div>
+        </div>
+
+        <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem;">Nearest Emergency Care Facilities:</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem;">
+          <div style="background: rgba(10, 16, 30, 0.7); padding: 0.75rem; border-radius: 6px; display: flex; justify-content: space-between;">
+            <span><strong>Metro General Hospital Trauma ER</strong> (0.8 miles)</span>
+            <span style="color: #34d399;">Wait Time: ~4 mins</span>
+          </div>
+          <div style="background: rgba(10, 16, 30, 0.7); padding: 0.75rem; border-radius: 6px; display: flex; justify-content: space-between;">
+            <span><strong>Apex Heart & Vascular Emergency Unit</strong> (2.1 miles)</span>
+            <span style="color: #34d399;">Wait Time: ~8 mins</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('emergencyModal')">Dismiss</button>
+        <a href="tel:911" class="btn-emergency" style="text-decoration: none;">📞 Dial 911 Directly</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings & API Key Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>PulseAI Configuration & LLM Settings</h3>
+        <button class="btn-icon" onclick="closeModal('settingsModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Google Gemini API Key (Optional for Live Cloud LLM):</label>
+          <input type="password" id="geminiApiKeyInput" class="form-input" placeholder="AIzaSy... (Leave empty to use built-in Offline Clinical Intelligence)">
+          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.35rem;">
+            When provided, requests query Google Gemini 2.0 / 1.5 Flash directly in the browser! When empty, the app runs offline with its built-in clinical triage rule engine.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Clinical Reasoning Rigor:</label>
+          <select id="reasoningModelSelect" class="form-input">
+            <option value="high">High Rigor (Strict Emergency Screening)</option>
+            <option value="balanced" selected>Balanced (Standard Primary Care)</option>
+            <option value="patient">Empathetic (Patient-Friendly Plain English)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Simulated Patient Profile:</label>
+          <input type="text" id="patientNameInput" class="form-input" value="Alex Morgan (34 y/o, No Known Allergies)">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('settingsModal')">Cancel</button>
+        <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Disclaimer -->
+  <footer class="site-footer">
+    <div class="footer-disclaimer-box">
+      <strong>⚠️ Medical Disclaimer:</strong> PulseAI is an advanced AI clinical decision support tool developed for hackathons and educational demonstrations. It is not a certified medical device and does not replace professional clinical evaluation or emergency medical care. Always consult a licensed physician for acute health symptoms.
+    </div>
+    <div>
+      © 2026 PulseAI Health Labs. Built with HTML5, CSS3 & Modern JavaScript. Designed for instant deployment on Vercel.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="medical-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
