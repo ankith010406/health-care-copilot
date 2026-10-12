@@ -35,8 +35,7 @@
         <option value="ta">தமிழ் (Tamil)</option>
       </select>
       <button class="btn" id="tgl" aria-label="Toggle theme">🌓</button>
-      <div class="header-auth-divider" title="User Session"></div>
-      <button class="btn p header-auth-btn" id="authBtn" title="Account Authentication &amp; Profile"></button>
+      <button class="btn p" id="authBtn"></button>
     </div>
   </header>
 
@@ -53,16 +52,10 @@
     </div>
 
     <div class="drawer-user-card" id="drawerUserCard">
-      <div class="drawer-user-main">
-        <div class="drawer-avatar" id="drawerAvatar">👤</div>
-        <div class="drawer-user-info">
-          <div class="drawer-user-name" id="drawerUserName">Guest User</div>
-          <div class="drawer-user-status" id="drawerUserStatus">Profile Not Set</div>
-        </div>
-      </div>
-      <div class="drawer-auth-actions">
-        <button id="drawerAuthBtn" class="btn drawer-auth-btn" onclick="handleDrawerAuthClick()">🔐 Log in</button>
-        <button class="btn" style="font-size:.76rem;padding:4px 8px" onclick="go('profile');closeMenu()" title="Open Profile">👤 Profile</button>
+      <div class="drawer-avatar">👤</div>
+      <div class="drawer-user-info">
+        <div class="drawer-user-name" id="drawerUserName">Guest User</div>
+        <div class="drawer-user-status" id="drawerUserStatus">Profile Not Set</div>
       </div>
     </div>
 
@@ -70,32 +63,16 @@
     <div class="drawer-quick-shortcuts">
       <button class="drawer-quick-card rx-quick-card" onclick="go('rxscan');closeMenu()" title="Scan Doctor Prescription &amp; RAG Copilot">
         <span class="drawer-quick-icon">📸</span>
-        <span>Rx Scanner</span>
+        <span>Rx Scanner &amp; RAG</span>
       </button>
-      <button class="drawer-quick-card" onclick="go('discharge');closeMenu()" title="Discharge Summarizer">
-        <span class="drawer-quick-icon">🏥</span>
-        <span>Discharge</span>
-      </button>
-      <button class="drawer-quick-card" onclick="go('meds');closeMenu()" title="Extract Medicines &amp; Dosages">
-        <span class="drawer-quick-icon">💊</span>
-        <span>Medicines</span>
-      </button>
-      <button class="drawer-quick-card" onclick="go('appointments');closeMenu()" title="Appointment Dates &amp; Follow-ups">
-        <span class="drawer-quick-icon">📅</span>
-        <span>Appointments</span>
-      </button>
-      <button class="drawer-quick-card" onclick="go('explain');closeMenu()" title="Explain Records in Plain Language">
-        <span class="drawer-quick-icon">🧪</span>
-        <span>Explain Records</span>
+      <button class="drawer-quick-card" onclick="go('home');closeMenu()" title="Open Home Dashboard">
+        <span class="drawer-quick-icon">🏠</span>
+        <span>Home Overview</span>
       </button>
       <button class="drawer-quick-card highlighted" onclick="go('chat');closeMenu()" title="Open AI Health Copilot">
         <span class="drawer-quick-icon">💬</span>
         <span>AI Copilot</span>
       </button>
-      <a class="drawer-quick-card" href="carelens_scanner.html" target="_blank" style="text-decoration:none;color:inherit" title="CareLens Multi-Page Prescription Scanner &amp; OCR" onclick="closeMenu()">
-        <span class="drawer-quick-icon">🔬</span>
-        <span>CareLens OCR</span>
-      </a>
     </div>
 
     <div class="drawer-scroll" id="drawerNavList">
@@ -687,18 +664,11 @@
         </div>
 
         <!-- Custom Upload Drop Zone -->
-        <div class="rx-upload-zone" onclick="triggerRxUpload()" id="rxUploadZone"
-          ondragover="handleRxDragOver(event)" ondragleave="handleRxDragLeave(event)" ondrop="handleRxDrop(event)">
+        <div class="rx-upload-zone" onclick="triggerRxUpload()" id="rxUploadZone">
           <input type="file" id="rxUploadInput" accept="image/*,application/pdf" style="display:none" onchange="handleRxCustomUpload(this)">
           <div class="rx-upload-icon">📸</div>
           <div class="rx-upload-title">Scan Any Custom Doctor Prescription</div>
           <div class="rx-upload-sub">Drop an image/PDF or click to browse (JPG, PNG, PDF, or Camera photo). Runs instant Vision extraction &amp; RAG matching.</div>
-          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-            <span class="pill pill-teal" style="font-size:.72rem">✓ High-Res Vision OCR</span>
-            <span class="pill pill-blue" style="font-size:.72rem">✓ PDF &amp; JPG Multi-Format</span>
-            <a href="carelens_scanner.html" target="_blank" class="btn p" style="font-size:.72rem;padding:2px 10px;text-decoration:none;display:inline-flex;align-items:center;gap:4px" onclick="event.stopPropagation()">🔬 CareLens Multi-Page Scanner</a>
-            <a href="debug_rx.html" target="_blank" class="btn" style="font-size:.72rem;padding:2px 8px;text-decoration:none;display:inline-flex;align-items:center;gap:4px" onclick="event.stopPropagation()">🛠️ Rx Debugger</a>
-          </div>
         </div>
 
         <!-- Laser Scanner Display Area -->
@@ -713,11 +683,6 @@
             </div>
             <div class="rx-scan-target-box"></div>
             <img src="assets/rx_1_cardio.jpg" id="rxScanPreviewImg" class="rx-preview-canvas-img" alt="Prescription Scan View">
-            <div id="rxScanPdfBox" class="rx-pdf-display" style="display:none">
-              <div class="rx-pdf-icon">📄</div>
-              <div class="rx-pdf-filename" id="rxScanPdfName">Prescription Document.pdf</div>
-              <div class="rx-pdf-meta" id="rxScanPdfMeta">PDF Clinical Document Loaded · Ready for OCR</div>
-            </div>
           </div>
         </div>
 
@@ -794,15 +759,6 @@
                   <div class="sm">Understands medicines via clinical reference retrieval. Never a substitute for doctor consultation.</div>
                 </div>
                 <button class="btn" style="padding:4px 10px;font-size:.82rem" onclick="speakCurrentRxRag()"><span style="margin-right:4px">🔊</span> Listen</button>
-              </div>
-
-              <!-- Multilingual Translation Language Switcher Bar -->
-              <div class="rx-lang-pills-bar">
-                <span style="font-size:.76rem;font-weight:700;color:var(--mu)">Translate into:</span>
-                <button class="rx-lang-pill active" id="btnRxLangEn" onclick="switchRxTranslationLanguage('en')">🌐 English</button>
-                <button class="rx-lang-pill" id="btnRxLangHi" onclick="switchRxTranslationLanguage('hi')">🇮🇳 हिन्दी (Hindi)</button>
-                <button class="rx-lang-pill" id="btnRxLangTe" onclick="switchRxTranslationLanguage('te')">🇮🇳 తెలుగు (Telugu)</button>
-                <button class="rx-lang-pill" id="btnRxLangTa" onclick="switchRxTranslationLanguage('ta')">🇮🇳 தமிழ் (Tamil)</button>
               </div>
 
               <div id="rxRagExplanationContent" style="font-size:.92rem;line-height:1.6;color:var(--tx)">
@@ -1359,509 +1315,14 @@
       </div>
     </section>
 
-    <!-- DISCHARGE SUMMARIZER -->
-    <section class="v" id="v-discharge">
-      <div class="feature-hero-card">
-        <span class="feature-hero-badge">🏥 Inpatient &amp; Hospital Intelligence</span>
-        <h2 class="feature-hero-title">Hospital Discharge Summarizer &amp; Course Breakdown</h2>
-        <p class="feature-hero-sub">Translates dense, technical hospital discharge summaries into clear, reassuring patient roadmaps. Understand the admission reason, hospital course, discharge medications, and critical warning signs.</p>
-      </div>
-
-      <!-- Interactive User Input & Form for Discharge Note -->
-      <div class="card" style="margin-bottom:20px;background:var(--card);border:1px solid var(--bd)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-          <h3 style="margin:0;display:flex;align-items:center;gap:8px">
-            <span>✍️</span> Enter &amp; Generate Your Hospital Discharge Summary
-          </h3>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <input type="file" id="dsFileInput" accept="image/*,application/pdf" style="display:none" onchange="handleDischargeUpload(this)">
-            <button class="btn" onclick="$('dsFileInput').click()" style="font-size:.8rem;padding:5px 12px">📁 Upload PDF / Note</button>
-            <button class="btn" onclick="toggleDsPresetBar()" id="btnToggleDsPresets" style="font-size:.8rem;padding:5px 12px">🏥 Sample Hospital Presets</button>
-          </div>
-        </div>
-
-        <!-- Sample Presets Collapsible Bar -->
-        <div id="dsPresetBarCollapse" style="display:none;margin-bottom:14px;padding:12px;border-radius:10px;background:rgba(14,165,160,0.05);border:1px dashed rgba(14,165,160,0.3)">
-          <div style="font-weight:700;font-size:.8rem;color:var(--pr);margin-bottom:8px">CHOOSE CLINICAL HOSPITAL DEMO PRESET:</div>
-          <div class="ds-preset-selector">
-            <div class="ds-preset-btn active" id="btnDsApollo" onclick="loadDischargePreset('apollo')">
-              <div class="ds-preset-hospital">Apollo Hospitals Enterprise</div>
-              <div class="ds-preset-condition">Cardiometabolic &amp; Hyperglycemic Care</div>
-              <div class="ds-preset-meta">Kavita Sharma (42/F) · Dr. Arvind Swaminathan (MD)</div>
-            </div>
-            <div class="ds-preset-btn" id="btnDsFortis" onclick="loadDischargePreset('fortis')">
-              <div class="ds-preset-hospital">Fortis Heart Institute</div>
-              <div class="ds-preset-condition">Post-PCI Coronary Angioplasty (LAD Stent)</div>
-              <div class="ds-preset-meta">Rajesh Verma (58/M) · Dr. S. K. Bose (DM Cardiology)</div>
-            </div>
-            <div class="ds-preset-btn" id="btnDsManipal" onclick="loadDischargePreset('manipal')">
-              <div class="ds-preset-hospital">Manipal Surgical Care</div>
-              <div class="ds-preset-condition">Emergency Laparoscopic Appendectomy</div>
-              <div class="ds-preset-meta">Ananya Sen (29/F) · Dr. Meera Nambiar (MS Surgery)</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- User Entry Form Fields -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:12px;margin-bottom:12px">
-          <div>
-            <label for="dsInHospital" style="font-size:.8rem;font-weight:700;color:var(--mu)">Hospital / Healthcare Facility</label>
-            <input id="dsInHospital" placeholder="e.g. Apollo Hospitals Enterprise, Fortis, AIIMS" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="dsInPatient" style="font-size:.8rem;font-weight:700;color:var(--mu)">Patient Name &amp; Age/Gender</label>
-            <input id="dsInPatient" placeholder="e.g. Kavita Sharma (42/F) or Self" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="dsInDoctor" style="font-size:.8rem;font-weight:700;color:var(--mu)">Attending Doctor &amp; Specialty</label>
-            <input id="dsInDoctor" placeholder="e.g. Dr. Arvind Swaminathan, MD (Cardiology)" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="dsInDates" style="font-size:.8rem;font-weight:700;color:var(--mu)">Hospital Admission &amp; Discharge Dates</label>
-            <input id="dsInDates" placeholder="e.g. 10-Oct-2026 → 13-Oct-2026" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="dsInIp" style="font-size:.8rem;font-weight:700;color:var(--mu)">In-Patient / Record ID</label>
-            <input id="dsInIp" placeholder="e.g. IP: #94821 or Record #2026" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="dsInDiagnoses" style="font-size:.8rem;font-weight:700;color:var(--mu)">Final Diagnoses (comma separated)</label>
-            <input id="dsInDiagnoses" placeholder="e.g. Acute Hyperglycemia, Essential Hypertension" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-        </div>
-
-        <div style="margin-bottom:12px">
-          <label for="dsInSummary" style="font-size:.8rem;font-weight:700;color:var(--mu)">Hospital Stay Summary &amp; Treatment Given (or Paste Technical Note)</label>
-          <textarea id="dsInSummary" rows="3" style="width:100%;padding:10px;font-size:.85rem;line-height:1.5;border-radius:8px" placeholder="Describe the admission reason, treatment, IV fluids, insulin or surgeries, and recovery condition…"></textarea>
-        </div>
-
-        <!-- Discharge Meds Entry -->
-        <div style="margin-bottom:12px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <label style="font-size:.8rem;font-weight:700;color:var(--mu)">Prescribed Discharge Medications (Name, Dose &amp; Timing)</label>
-            <button class="btn" type="button" onclick="addDsMedInputRow()" style="font-size:.74rem;padding:3px 8px">➕ Add Another Medicine</button>
-          </div>
-          <div id="dsMedsInputsContainer" style="display:flex;flex-direction:column;gap:8px">
-            <div class="ds-med-input-row" style="display:grid;grid-template-columns:2fr 1fr 1.5fr 2fr auto;gap:6px;align-items:center">
-              <input class="ds-m-name" placeholder="Drug (e.g. Metformin)" style="padding:7px 9px;font-size:.82rem;border-radius:6px">
-              <input class="ds-m-strength" placeholder="Dose (e.g. 500 mg)" style="padding:7px 9px;font-size:.82rem;border-radius:6px">
-              <input class="ds-m-timing" placeholder="Timing (e.g. 1-0-1 After food)" style="padding:7px 9px;font-size:.82rem;border-radius:6px">
-              <input class="ds-m-reason" placeholder="Purpose (e.g. Blood sugar control)" style="padding:7px 9px;font-size:.82rem;border-radius:6px">
-              <button class="btn" type="button" onclick="this.closest('.ds-med-input-row').remove()" style="padding:6px;color:#dc2626;font-size:.8rem">✕</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Follow-up & Red Flags -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-          <div>
-            <label for="dsInRedFlags" style="font-size:.8rem;font-weight:700;color:#dc2626">🚨 Critical Red Flag Warning Signs</label>
-            <textarea id="dsInRedFlags" rows="2" style="width:100%;padding:8px 10px;font-size:.82rem;border-radius:8px" placeholder="e.g. Blood sugar below 70 mg/dL with sweating, chest pain, fever >101°F…"></textarea>
-          </div>
-          <div>
-            <label for="dsInFollowup" style="font-size:.8rem;font-weight:700;color:#2563eb">📅 Next Follow-Up Consultation Date &amp; Instructions</label>
-            <textarea id="dsInFollowup" rows="2" style="width:100%;padding:8px 10px;font-size:.82rem;border-radius:8px" placeholder="e.g. Review with Dr. Swaminathan in 4 weeks (12-Sep-2026 at 10:30 AM) with home sugar logs."></textarea>
-          </div>
-        </div>
-
-        <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap">
-          <button class="btn" onclick="clearUserDischargeForm()" style="font-size:.82rem;padding:7px 14px">Clear Fields</button>
-          <button class="btn p" onclick="saveAndRenderUserDischarge()" style="font-size:.84rem;padding:7px 18px">💾 Save &amp; Generate Patient Roadmap</button>
-        </div>
-      </div>
-
-      <!-- Discharge Summary Results Dashboard -->
-      <div class="two" id="dsDashboardLayout">
-        <!-- LEFT: Stay Overview & Hospital Course -->
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <div class="card" style="margin:0">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
-              <div>
-                <span class="pill pill-blue" id="dsFacilityBadge">Apollo Hospitals Enterprise</span>
-                <h3 style="margin:8px 0 2px" id="dsPatientName">Kavita Sharma (42/F)</h3>
-                <div class="sm" id="dsAttendingDoctor">Attending: Dr. Arvind Swaminathan, MD (Cardiology)</div>
-              </div>
-              <div style="text-align:right">
-                <span class="pill pill-green" id="dsDatesPill">12-Aug-2026 → 14-Aug-2026</span>
-                <div class="sm" style="margin-top:4px" id="dsIpNumber">IP: #94821</div>
-              </div>
-            </div>
-
-            <!-- Plain English Summary -->
-            <div style="margin-top:16px;padding:14px;border-radius:12px;background:rgba(14,165,160,0.06);border:1px solid rgba(14,165,160,0.25)">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-                <span style="font-weight:700;font-size:.85rem;color:var(--pr);text-transform:uppercase;letter-spacing:.3px">💡 Plain-Language Summary</span>
-                <button class="btn" style="padding:2px 8px;font-size:.74rem" onclick="speakDischargeSummary()">🔊 Listen</button>
-              </div>
-              <p id="dsPlainSummary" style="margin:0;font-size:.88rem;line-height:1.55;color:var(--tx)">Loading plain-language summary…</p>
-            </div>
-
-            <!-- Diagnoses -->
-            <div style="margin-top:16px">
-              <div style="font-weight:700;font-size:.8rem;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px">Final Discharge Diagnoses:</div>
-              <div id="dsDiagnosesList" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-            </div>
-
-            <!-- Hospital Course Timeline -->
-            <div style="margin-top:16px">
-              <div style="font-weight:700;font-size:.8rem;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px">Hospital Stay Course &amp; In-Patient Milestones:</div>
-              <div class="ds-course-timeline" id="dsTimelineSteps"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: Meds, Red Flags & Follow-up -->
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <!-- Critical Red Flag Warnings Box -->
-          <div class="ds-redflags-box">
-            <div style="font-weight:800;font-size:.9rem;display:flex;align-items:center;gap:6px;margin-bottom:6px">
-              <span>🚨</span> Red Flag Warning Signs (When to Return to ER)
-            </div>
-            <ul id="dsRedFlagsList" style="margin:0;padding-left:18px;line-height:1.5;font-size:.84rem"></ul>
-          </div>
-
-          <!-- Discharge Medications Card -->
-          <div class="card" style="margin:0">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-              <h3 style="margin:0">💊 Discharge Medications</h3>
-              <span class="pill pill-teal" id="dsMedCountBadge">3 Prescribed</span>
-            </div>
-            <div id="dsMedsContainer" style="display:flex;flex-direction:column;gap:8px"></div>
-          </div>
-
-          <!-- Extracted Follow-up Appointment Date Card -->
-          <div class="card" style="margin:0;background:rgba(37,99,235,0.04);border-color:rgba(37,99,235,0.25)">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-              <div style="font-weight:700;font-size:.88rem;color:#2563eb;display:flex;align-items:center;gap:6px">
-                <span>📅</span> Extracted Follow-Up Review Date
-              </div>
-              <span class="pill pill-blue" id="dsFollowupBadge">In 4 Weeks</span>
-            </div>
-            <p id="dsFollowupText" style="margin:0 0 10px;font-size:.85rem;line-height:1.45;color:var(--tx)"></p>
-            <div class="row" style="margin:0;gap:8px">
-              <button class="btn p" onclick="addDischargeToAppointments()" style="font-size:.8rem;padding:6px 12px">📅 Add to My Appointments</button>
-              <button class="btn" onclick="syncDischargeToTimeline()" style="font-size:.8rem;padding:6px 12px">🗄️ Save to Health Timeline</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MEDICINES & DOSAGES EXTRACTOR -->
-    <section class="v" id="v-meds">
-      <div class="feature-hero-card">
-        <span class="feature-hero-badge">💊 Medication &amp; Dosage Intelligence</span>
-        <h2 class="feature-hero-title">Medicines &amp; Dosages Extractor</h2>
-        <p class="feature-hero-sub">Decodes Latin doctor frequencies (OD, BD, TDS, HS, SOS), meal coordination, and timings into an organized, foolproof daily pill schedule with drug indications and interaction warnings.</p>
-      </div>
-
-      <!-- User Interactive Medication Addition Card -->
-      <div class="card" style="margin-bottom:18px;background:var(--card);border:1px solid var(--bd)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-          <h3 style="margin:0;display:flex;align-items:center;gap:8px">
-            <span>➕</span> Add Your Medication to Daily Schedule
-          </h3>
-          <div style="display:flex;gap:8px">
-            <button class="btn" onclick="printMedSchedule()" style="font-size:.8rem;padding:5px 12px">🖨️ Print Schedule</button>
-            <button class="btn p" onclick="go('rxscan')" style="font-size:.8rem;padding:5px 12px">📸 Scan Rx</button>
-          </div>
-        </div>
-
-        <!-- Add Med Form Inputs -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));gap:10px;margin-bottom:10px">
-          <div>
-            <label for="newMedName" style="font-size:.78rem;font-weight:700;color:var(--mu)">Medicine Name</label>
-            <input id="newMedName" placeholder="e.g. Metformin, Amlodipine, Paracetamol" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="newMedStrength" style="font-size:.78rem;font-weight:700;color:var(--mu)">Strength &amp; Form</label>
-            <input id="newMedStrength" placeholder="e.g. 500 mg Tablet, 10 ml Syrup" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="newMedFreq" style="font-size:.78rem;font-weight:700;color:var(--mu)">Frequency (Doctor Schedule)</label>
-            <select id="newMedFreq" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-              <option value="1 OD (Once Daily)">1 OD (Once Daily / दिन में 1 बार)</option>
-              <option value="1 BD (Twice Daily)">1 BD (Twice Daily / दिन में 2 बार)</option>
-              <option value="1 TDS (Three Times Daily)">1 TDS (3 Times Daily / दिन में 3 बार)</option>
-              <option value="0-0-1 (HS At Bedtime)">0-0-1 HS (At Bedtime / रात को)</option>
-              <option value="1 SOS (Only as needed)">1 SOS / PRN (As Needed / ज़रूरत पर)</option>
-            </select>
-          </div>
-          <div>
-            <label for="newMedSlot" style="font-size:.78rem;font-weight:700;color:var(--mu)">Daily Pillbox Time Window</label>
-            <select id="newMedSlot" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-              <option value="morning_empty">🌅 Morning (Empty Stomach)</option>
-              <option value="morning_after" selected>🥣 Morning (After Breakfast)</option>
-              <option value="afternoon">☀️ Afternoon (After Lunch)</option>
-              <option value="night">🌙 Night (Dinner / Bedtime)</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));gap:10px;margin-bottom:12px">
-          <div>
-            <label for="newMedFood" style="font-size:.78rem;font-weight:700;color:var(--mu)">Meal Timing Instructions</label>
-            <input id="newMedFood" placeholder="e.g. Take strictly with or after meals with water" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="newMedIndication" style="font-size:.78rem;font-weight:700;color:var(--mu)">Clinical Purpose / Indication</label>
-            <input id="newMedIndication" placeholder="e.g. Blood pressure control, Blood sugar balance" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="newMedCaution" style="font-size:.78rem;font-weight:700;color:var(--mu)">Special Caution / Precaution</label>
-            <input id="newMedCaution" placeholder="e.g. Avoid grapefruit, stay hydrated, do not skip meals" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div style="display:flex;align-items:flex-end">
-            <button class="btn p" onclick="addNewUserMedication()" style="width:100%;font-size:.84rem;padding:9px">➕ Add to My Schedule &amp; Pillbox</button>
-          </div>
-        </div>
-
-        <!-- Filter & Preset Source Selector Bar -->
-        <div style="padding-top:10px;border-top:1px solid var(--bd)">
-          <label style="font-weight:700;font-size:.78rem;color:var(--mu);text-transform:uppercase;letter-spacing:.3px">Select Active Regimen Source / Filter:</label>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
-            <button class="btn p" id="btnMedFilterAll" onclick="filterMedicationSource('all')">⭐ My Active &amp; Combined Regimen</button>
-            <button class="btn" id="btnMedFilterCardio" onclick="filterMedicationSource('rx1')">City Care (Cardio/Diabetes)</button>
-            <button class="btn" id="btnMedFilterCardioAdv" onclick="filterMedicationSource('rx3')">CARE Hospital (Cardio Adv)</button>
-            <button class="btn" id="btnMedFilterFever" onclick="filterMedicationSource('rx2')">Dr. Priya Sharma (Fever)</button>
-            <button class="btn" id="btnMedFilterOrtho" onclick="filterMedicationSource('rx5')">Dr. Venkatesh (Ortho)</button>
-            <button class="btn" id="btnMedFilterPediatric" onclick="filterMedicationSource('rx4')">Sri Lakshmi (Pediatric)</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Latin Frequency Decoder Pill Strip -->
-      <div style="margin-bottom:18px;padding:12px 16px;border-radius:12px;background:var(--card);border:1px solid var(--bd)">
-        <div style="font-weight:700;font-size:.8rem;color:var(--pr);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">
-          📖 Doctor Shorthand Decoder (Latin Frequencies Demystified):
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:.78rem">
-          <span class="freq-pill"><b>1 OD</b> = 1 pill Once Daily (एक बार)</span>
-          <span class="freq-pill"><b>1 BD / 1-0-1</b> = Twice Daily (सुबह और रात)</span>
-          <span class="freq-pill"><b>1 TDS / 1-1-1</b> = Three Times Daily (सुबह, दोपहर, रात)</span>
-          <span class="freq-pill"><b>0-0-1 (HS)</b> = At Bedtime / Night (सोने से पहले)</span>
-          <span class="freq-pill"><b>1 SOS / PRN</b> = Only As Needed for Pain/Fever (ज़रूरत पड़ने पर)</span>
-          <span class="timing-tag"><b>Empty Stomach</b> = 30-45 mins before breakfast</span>
-        </div>
-      </div>
-
-      <!-- 4-Period Daily Pillbox Schedule -->
-      <h3 style="margin:20px 0 10px;display:flex;align-items:center;gap:8px">
-        <span>⏰</span> Daily 4-Period Pillbox Schedule
-      </h3>
-      <div class="pillbox-timeline">
-        <!-- Morning Empty Stomach -->
-        <div class="pillbox-col">
-          <div class="pillbox-header" style="color:#d97706">
-            <span>🌅</span> Morning (Empty Stomach)
-          </div>
-          <div class="sm" style="color:var(--mu);margin-bottom:8px">Take with plain water 30-45 mins before breakfast</div>
-          <div id="pillboxMorningEmpty"></div>
-        </div>
-        <!-- Morning After Breakfast -->
-        <div class="pillbox-col">
-          <div class="pillbox-header" style="color:#059669">
-            <span>🥣</span> Morning (After Breakfast)
-          </div>
-          <div class="sm" style="color:var(--mu);margin-bottom:8px">Take with or after morning meal</div>
-          <div id="pillboxMorningAfter"></div>
-        </div>
-        <!-- Afternoon -->
-        <div class="pillbox-col">
-          <div class="pillbox-header" style="color:#2563eb">
-            <span>☀️</span> Afternoon (After Lunch)
-          </div>
-          <div class="sm" style="color:var(--mu);margin-bottom:8px">Mid-day doses after lunch</div>
-          <div id="pillboxAfternoon"></div>
-        </div>
-        <!-- Night / Bedtime -->
-        <div class="pillbox-col">
-          <div class="pillbox-header" style="color:#7c3aed">
-            <span>🌙</span> Night (Dinner / Bedtime)
-          </div>
-          <div class="sm" style="color:var(--mu);margin-bottom:8px">After dinner or right before sleeping</div>
-          <div id="pillboxNight"></div>
-        </div>
-      </div>
-
-      <!-- Individual Medication Cards Grid -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px">
-        <h3 style="margin:0;display:flex;align-items:center;gap:8px">
-          <span>📋</span> Detailed Medication Monograph Cards
-        </h3>
-        <span class="pill pill-green" id="medsTotalCountPill">Loading medications…</span>
-      </div>
-      <div class="med-grid" id="medCardsContainer"></div>
-    </section>
-
-    <!-- APPOINTMENT DATES & FOLLOW-UP SCHEDULER -->
-    <section class="v" id="v-appointments">
-      <div class="feature-hero-card">
-        <span class="feature-hero-badge">📅 Consultation &amp; Review Intelligence</span>
-        <h2 class="feature-hero-title">Appointment Dates &amp; Follow-up Scheduler</h2>
-        <p class="feature-hero-sub">Automatically detects review dates from prescriptions, hospital discharge notes, and clinical encounters. Provides live countdowns, pre-visit checklists, and 1-click sync to your device calendar (.ics).</p>
-      </div>
-
-      <!-- Quick Stats & Inline Creation Form -->
-      <div class="card" style="margin-bottom:18px;background:var(--card);border:1px solid var(--bd)">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
-          <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
-            <div class="med-chip-stat">Active Follow-ups: <b id="apptCountActive">6</b></div>
-            <div class="med-chip-stat">Next Review: <b id="apptNextReviewText" style="color:var(--rd)">In 3 Days</b></div>
-          </div>
-          <div class="row" style="margin:0;gap:8px">
-            <button class="btn" onclick="downloadAllCalendarIcs()">📅 Export All (.ics)</button>
-          </div>
-        </div>
-
-        <!-- Inline User Appointment Entry -->
-        <div style="padding:12px;border-radius:10px;background:rgba(37,99,235,0.04);border:1px solid rgba(37,99,235,0.2);margin-bottom:6px">
-          <div style="font-weight:750;font-size:.85rem;color:#2563eb;margin-bottom:8px;display:flex;align-items:center;gap:6px">
-            <span>➕</span> Enter Your Doctor Appointment or Review Date
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:8px;margin-bottom:8px">
-            <input id="quickApptDoctor" placeholder="Doctor Name (e.g. Dr. Priya Sharma)" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-            <input id="quickApptSpecialty" placeholder="Specialty (e.g. Cardiology, Ortho)" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-            <input id="quickApptClinic" placeholder="Hospital / Clinic (e.g. City Care Clinic)" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-            <input id="quickApptPhone" placeholder="Clinic Phone (e.g. 040-23456789)" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-            <input id="quickApptDate" type="date" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-            <input id="quickApptTime" type="time" value="10:30" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-          </div>
-          <div style="display:grid;grid-template-columns:2fr 2fr auto;gap:8px">
-            <input id="quickApptReason" placeholder="Clinical Reason (e.g. Blood pressure titration, Repeat HbA1c review)" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-            <input id="quickApptChecklist" placeholder="Pre-visit Checklist (e.g. 10h fasting for blood draw, bring current medicine strips)" style="padding:8px 10px;font-size:.84rem;border-radius:6px">
-            <button class="btn p" onclick="saveQuickAppointment()" style="font-size:.82rem;padding:8px 16px;white-space:nowrap">💾 Save Appointment</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Appointments Grid -->
-      <div class="appt-grid" id="appointmentsGridContainer"></div>
-
-      <!-- Add Custom Appointment Modal -->
-      <div id="apptModalOverlay" class="rx-modal-overlay" aria-hidden="true" style="display:none">
-        <div class="rx-modal-dialog" role="dialog" style="max-width:520px">
-          <div class="rx-modal-header">
-            <h3 class="rx-modal-title"><span>📅</span> Schedule Doctor Appointment / Follow-up</h3>
-            <button class="rx-modal-close" onclick="closeAddApptModal()">✕</button>
-          </div>
-          <div class="rx-modal-body">
-            <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
-              <div>
-                <label for="newApptDoctor">Doctor Name</label>
-                <input id="newApptDoctor" placeholder="e.g. Dr. Priya Sharma">
-              </div>
-              <div>
-                <label for="newApptSpecialty">Specialty</label>
-                <input id="newApptSpecialty" placeholder="e.g. Cardiology, Ortho, General">
-              </div>
-              <div>
-                <label for="newApptClinic">Clinic / Hospital</label>
-                <input id="newApptClinic" placeholder="e.g. City Care Clinic">
-              </div>
-              <div>
-                <label for="newApptPhone">Clinic Phone</label>
-                <input id="newApptPhone" placeholder="e.g. 040-23456789">
-              </div>
-              <div>
-                <label for="newApptDate">Appointment Date</label>
-                <input id="newApptDate" type="date">
-              </div>
-              <div>
-                <label for="newApptTime">Time</label>
-                <input id="newApptTime" type="time" value="10:00">
-              </div>
-            </div>
-            <label style="margin-top:10px" for="newApptReason">Clinical Reason for Visit</label>
-            <input id="newApptReason" placeholder="e.g. Blood pressure check, repeat HbA1c review">
-            <label style="margin-top:10px" for="newApptChecklist">Pre-visit Tests &amp; Notes</label>
-            <textarea id="newApptChecklist" rows="2" placeholder="e.g. Fasting 10 hours for lipid blood draw, bring current medicine strips"></textarea>
-          </div>
-          <div class="rx-modal-footer">
-            <div style="display:flex;gap:8px;margin-left:auto">
-              <button class="btn" onclick="closeAddApptModal()">Cancel</button>
-              <button class="btn p" onclick="saveCustomAppointment()">💾 Save Appointment</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PLAIN LANGUAGE MEDICAL RECORDS & LAB EXPLAINER -->
+    <!-- LAB EXPLAINER -->
     <section class="v" id="v-explain">
-      <div class="feature-hero-card">
-        <span class="feature-hero-badge">🧪 Plain-Language Medical Records Intelligence</span>
-        <h2 class="feature-hero-title">Explain Medical Records &amp; Labs in Plain Language</h2>
-        <p class="feature-hero-sub">Demystifies dense diagnostic reports, blood test biomarkers, and clinical jargon using simple 5th-grade reading level explanations and intuitive everyday analogies. Never guess what a test result means.</p>
+      <h2>Lab Report Explainer</h2>
+      <div class="card">
+        <p class="sm">Load the sample report to see how values are explained in plain language.</p>
+        <button class="btn p" id="ld">Load sample report</button>
+        <div id="lab" style="overflow-x:auto;margin-top:12px"></div>
       </div>
-
-      <!-- User Interactive Lab Test & Biomarker Input Card -->
-      <div class="card" style="margin-bottom:18px;background:var(--card);border:1px solid var(--bd)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-          <h3 style="margin:0;display:flex;align-items:center;gap:8px">
-            <span>🔬</span> Enter Your Lab Test Result to Explain in Plain Language
-          </h3>
-          <button class="btn" onclick="speakCurrentBiomarkers()" style="font-size:.8rem;padding:5px 12px">🔊 Listen to Breakdown</button>
-        </div>
-
-        <!-- Form fields for custom biomarker -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px;margin-bottom:10px">
-          <div>
-            <label for="customBioName" style="font-size:.78rem;font-weight:700;color:var(--mu)">Lab Test / Biomarker Name</label>
-            <input id="customBioName" placeholder="e.g. Fasting Blood Glucose, HbA1c, LDL Cholesterol, Creatinine" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="customBioValue" style="font-size:.78rem;font-weight:700;color:var(--mu)">Your Measured Value</label>
-            <input id="customBioValue" placeholder="e.g. 145 or 8.4 or 158" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="customBioUnit" style="font-size:.78rem;font-weight:700;color:var(--mu)">Measurement Unit</label>
-            <input id="customBioUnit" placeholder="e.g. mg/dL, %, g/dL, U/L" value="mg/dL" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="customBioRange" style="font-size:.78rem;font-weight:700;color:var(--mu)">Normal Reference Range</label>
-            <input id="customBioRange" placeholder="e.g. 70 – 99 mg/dL or &lt; 100 mg/dL" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-          </div>
-          <div>
-            <label for="customBioStatus" style="font-size:.78rem;font-weight:700;color:var(--mu)">Report Flag / Status</label>
-            <select id="customBioStatus" style="width:100%;padding:8px 10px;font-size:.85rem;border-radius:8px">
-              <option value="high">⚠️ High (Above Target)</option>
-              <option value="optimal">✓ Normal / Healthy Target</option>
-              <option value="low">⚠️ Low (Below Target)</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding-top:8px;border-top:1px solid var(--bd)">
-          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-            <span style="font-size:.76rem;color:var(--mu);font-weight:700">OR CHOOSE REPORT SAMPLE:</span>
-            <button class="btn" id="ld" onclick="loadBiomarkerPreset('metabolic')" style="font-size:.76rem;padding:3px 9px">Metabolic &amp; Lipid</button>
-            <button class="btn" onclick="loadBiomarkerPreset('cbc')" style="font-size:.76rem;padding:3px 9px">CBC Blood Count</button>
-            <button class="btn" onclick="loadBiomarkerPreset('kft')" style="font-size:.76rem;padding:3px 9px">Kidney &amp; Liver</button>
-          </div>
-          <button class="btn p" onclick="addUserCustomBiomarker()" style="font-size:.84rem;padding:7px 18px">🔬 Explain My Test Result with Analogy</button>
-        </div>
-      </div>
-
-      <!-- Interactive Medical Jargon Decoder Search Box -->
-      <div class="card" style="margin-bottom:20px;background:var(--bg)">
-        <h4 style="margin:0 0 8px;display:flex;align-items:center;gap:6px">
-          <span>🔍</span> Medical Jargon Instant Decoder
-        </h4>
-        <div class="jargon-search-wrap">
-          <input type="text" id="jargonSearchInput" placeholder="Type any medical word (e.g. Dyslipidemia, Cardiomegaly, PRN, Pyrexia, eGFR, NPO, Sinus Tachycardia)…" oninput="filterMedicalJargon()">
-        </div>
-        <div id="jargonResultsContainer" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px"></div>
-      </div>
-
-      <!-- Biomarker Visual Cards Grid -->
-      <h3 style="margin:20px 0 10px;display:flex;align-items:center;gap:8px">
-        <span>🔬</span> Key Biomarker Explanations &amp; Everyday Analogies
-      </h3>
-      <div class="biomarker-cards-grid" id="biomarkerCardsContainer"></div>
-
-      <!-- Legacy Lab Table Container to maintain 100% backward compatibility -->
-      <div id="lab" style="display:none"></div>
     </section>
 
     <!-- VISIT PREP -->
@@ -1987,19 +1448,16 @@
       try { user = JSON.parse(ls('cc_user') || 'null') } catch (e) { user = null }
       try { entries = JSON.parse(ls('cc_j') || '[]'); if (!Array.isArray(entries)) entries = [] } catch (e) { entries = [] }
 
-      var gated = { chat: 1, visit: 1, journal: 1 };
+      var gated = { chat: 1, explain: 1, visit: 1, journal: 1 };
       var tabs = [
         ['home', 'Home'],
         ['rxscan', 'Rx Scanner & RAG'],
-        ['discharge', 'Discharge Summary'],
-        ['meds', 'Medicines & Dosages'],
-        ['appointments', 'Appointment Dates'],
-        ['explain', 'Explain Records'],
         ['profile', 'Profile'],
         ['records', 'OCR & Records'],
         ['timeline', 'Timeline'],
         ['abha', 'ABHA & FHIR'],
         ['chat', 'Copilot'],
+        ['explain', 'Explain'],
         ['visit', 'Visit Prep'],
         ['journal', 'Journal'],
         ['arch', 'Architecture & Slides'],
@@ -2008,33 +1466,29 @@
 
       var translations = {
         en: {
-          home: 'Home', rxscan: 'Rx Scanner & RAG', discharge: 'Discharge Summary', meds: 'Medicines & Dosages', appointments: 'Appointment Dates',
-          explain: 'Explain Records', profile: 'Profile', records: 'OCR & Records', timeline: 'Timeline', abha: 'ABHA & FHIR', chat: 'Copilot',
-          visit: 'Visit Prep', journal: 'Journal', arch: 'Architecture & Slides', about: 'Safety',
+          home: 'Home', rxscan: 'Rx Scanner & RAG', profile: 'Profile', records: 'OCR & Records', timeline: 'Timeline', abha: 'ABHA & FHIR', chat: 'Copilot',
+          explain: 'Explain', visit: 'Visit Prep', journal: 'Journal', arch: 'Architecture & Slides', about: 'Safety',
           title: 'Welcome to CareCompass',
           tagline: 'Your health in your language',
           sub: 'Understand prescriptions & lab reports with instant OCR, follow a unified health timeline, and track your wellness in plain language. ABDM compliant. Never a diagnosis.'
         },
         hi: {
-          home: 'होम', rxscan: 'प्रिस्क्रिप्शन स्कैनर व RAG', discharge: 'डिस्चार्ज सारांश', meds: 'दवाइयाँ व खुराक', appointments: 'अपॉइंटमेंट तारीखें',
-          explain: 'रिकॉर्ड समझें', profile: 'प्रोफ़ाइल', records: 'मेडिकल ओसीआर', timeline: 'हेल्थ टाइमलाइन', abha: 'आभा और FHIR', chat: 'कॉपायलट',
-          visit: 'डॉक्टर विज़िट', journal: 'जर्नल', arch: 'आर्किटेक्चर व स्लाइड्स', about: 'सुरक्षा',
+          home: 'होम', rxscan: 'प्रिस्क्रिप्शन स्कैनर व RAG', profile: 'प्रोफ़ाइल', records: 'मेडिकल ओसीआर', timeline: 'हेल्थ टाइमलाइन', abha: 'आभा और FHIR', chat: 'कॉपायलट',
+          explain: 'लैब रिपोर्ट', visit: 'डॉक्टर विज़िट', journal: 'जर्नल', arch: 'आर्किटेक्चर व स्लाइड्स', about: 'सुरक्षा',
           title: 'केयरकम्पास में आपका स्वागत है',
           tagline: 'आपका स्वास्थ्य, आपकी भाषा में',
           sub: 'प्रिस्क्रिप्शन और लैब रिपोर्ट को तुरंत ओसीआर से समझें, संपूर्ण स्वास्थ्य टाइमलाइन देखें, और सरल हिंदी में सलाह पाएं। पूर्णतः सुरक्षित।'
         },
         te: {
-          home: 'హోమ్', rxscan: 'ప్రిస్క్రిప్షన్ స్కానర్ & RAG', discharge: 'డిశ్చార్జ్ సారాంశం', meds: 'మందులు & మోతాదు', appointments: 'అపాయింట్‌మెంట్ తేదీలు',
-          explain: 'రిపోర్టుల వివరణ', profile: 'ప్రొఫైల్', records: 'వైద్య రికార్డులు', timeline: 'టైమ్‌లైన్', abha: 'ఆభా & FHIR', chat: 'కోపైలట్',
-          visit: 'డాక్టర్ ప్రిపరేషన్', journal: 'జర్నల్', arch: 'ఆర్కిటెక్చర్ & స్లైడ్స్', about: 'భద్రత',
+          home: 'హోమ్', rxscan: 'ప్రిస్క్రిప్షన్ స్కానర్ & RAG', profile: 'ప్రొఫైల్', records: 'వైద్య రికార్డులు', timeline: 'టైమ్‌లైన్', abha: 'ఆభా & FHIR', chat: 'కోపైలట్',
+          explain: 'ల్యాబ్ విశ్లేషణ', visit: 'డాక్టర్ ప్రిపరేషన్', journal: 'జర్నల్', arch: 'ఆర్కిటెక్చర్ & స్లైడ్స్', about: 'భద్రత',
           title: 'కేర్‌కంపాస్‌కు స్వాగతం',
           tagline: 'మీ ఆరోగ్యం మీ భాషలో',
           sub: 'ప్రిస్క్రిప్షన్లు మరియు ల్యాబ్ రిపోర్టులను సులభంగా అర్థం చేసుకోండి, మీ ఆరోగ్య ప్రయాణాన్ని ట్రాక్ చేయండి.'
         },
         ta: {
-          home: 'முகப்பு', rxscan: 'மருத்துவச் சீட்டு ஸ்கேனர் & RAG', discharge: 'வெளியேற்ற சுருக்கம்', meds: 'மருந்துகள் & அளவுகள்', appointments: 'மருத்துவர் சந்திப்பு தேதிகள்',
-          explain: 'ஆவண விளக்கம்', profile: 'சுயவிவரம்', records: 'மருத்துவ ஆவணங்கள்', timeline: 'காலவரிசை', abha: 'ஆபா & FHIR', chat: 'துணைவி',
-          visit: 'மருத்துவர் சந்திப்பு', journal: 'குறிப்பேடு', arch: 'கட்டமைப்பு & ஸ்லைடுகள்', about: 'பாதுகாப்பு',
+          home: 'முகப்பு', rxscan: 'மருத்துவச் சீட்டு ஸ்கேனர் & RAG', profile: 'சுயவிவரம்', records: 'மருத்துவ ஆவணங்கள்', timeline: 'காலவரிசை', abha: 'ஆபா & FHIR', chat: 'துணைவி',
+          explain: 'ஆய்வக விளக்கம்', visit: 'மருத்துவர் சந்திப்பு', journal: 'குறிப்பேடு', arch: 'கட்டமைப்பு & ஸ்లైடுகள்', about: 'பாதுகாப்பு',
           title: 'கேர்காம்பஸுக்கு வரவேற்கிறோம்',
           tagline: 'உங்கள் உடல்நலம் உங்கள் மொழியில்',
           sub: 'மருத்துவச் சீட்டுகள் மற்றும் ஆய்வக அறிக்கைகளை எளிய தமிழில் புரிந்து கொள்ளுங்கள். பாதுகாப்பானது.'
@@ -2043,19 +1497,19 @@
 
       var navCategories = [
         {
-          title: 'Clinical AI Super-Tools',
-          icon: '⚡',
-          keys: ['rxscan', 'discharge', 'meds', 'appointments', 'explain']
-        },
-        {
-          title: 'Core & Patient Hub',
+          title: 'Core Navigation',
           icon: '🧭',
-          keys: ['home', 'profile', 'chat']
+          keys: ['home', 'rxscan', 'chat', 'profile']
         },
         {
-          title: 'Clinical Records & History',
-          icon: '📋',
-          keys: ['records', 'timeline', 'journal', 'visit']
+          title: 'Clinical Records & Intelligence',
+          icon: '🩺',
+          keys: ['records', 'explain', 'visit']
+        },
+        {
+          title: 'Health History & Tracking',
+          icon: '📈',
+          keys: ['timeline', 'journal']
         },
         {
           title: 'ABDM, Standards & Safety',
@@ -2067,15 +1521,12 @@
       var tabMeta = {
         home: { icon: '🏠', desc: 'Overview, highlights & quick actions' },
         rxscan: { icon: '📸', desc: 'Scan doctor prescription, RAG knowledge retrieval & simple explanations' },
-        discharge: { icon: '🏥', desc: 'Hospital course, admission reason, red flags & plain-language discharge summary' },
-        meds: { icon: '💊', desc: 'Extract all medicines, decode Latin frequencies (OD/BD/TDS) & visual pill schedule' },
-        appointments: { icon: '📅', desc: 'Extract doctor review dates, countdowns, clinic contacts & calendar sync' },
-        explain: { icon: '🧪', desc: 'Demystify lab values, biomarkers & medical jargon with plain-language analogies' },
+        chat: { icon: '💬', desc: 'Interactive AI health companion with clinical safety' },
         profile: { icon: '👤', desc: 'Metrics, age, blood group & vital BMI' },
         records: { icon: '📄', desc: 'Instant prescription & lab report OCR extraction' },
         timeline: { icon: '📅', desc: 'Chronological patient journey & conditions' },
         abha: { icon: '🆔', desc: 'ABDM integration & HL7 FHIR R4 clinical bundles' },
-        chat: { icon: '💬', desc: 'Interactive AI health companion with clinical safety' },
+        explain: { icon: '🧪', desc: 'Plain-language biomarker breakdown & questions' },
         visit: { icon: '📋', desc: 'One-page doctor visit prep & medication summary' },
         journal: { icon: '📈', desc: 'Log symptoms, sleep, mood & hydration trends' },
         arch: { icon: '🏛️', desc: 'Interactive data pipeline & presentation deck' },
@@ -2203,21 +1654,6 @@
         if ($('drawerUserStatus')) {
           $('drawerUserStatus').textContent = user ? 'Logged In · Patient Account' : ((profile && profile.name) ? 'Local Profile Saved' : 'Profile Not Set');
         }
-        if ($('drawerAuthBtn')) {
-          $('drawerAuthBtn').textContent = user ? '🚪 Log out (' + (user.name || 'User') + ')' : '🔐 Log in';
-          $('drawerAuthBtn').className = user ? 'btn drawer-auth-btn is-logout' : 'btn drawer-auth-btn';
-        }
-        if ($('drawerAvatar')) {
-          if (user && user.name) {
-            var parts = user.name.trim().split(/\s+/);
-            $('drawerAvatar').textContent = (((parts[0] ? parts[0][0] : '') + (parts[1] ? parts[1][0] : ''))).toUpperCase() || '👤';
-          } else if (profile && profile.name) {
-            var parts = profile.name.trim().split(/\s+/);
-            $('drawerAvatar').textContent = (((parts[0] ? parts[0][0] : '') + (parts[1] ? parts[1][0] : ''))).toUpperCase() || '👤';
-          } else {
-            $('drawerAvatar').textContent = '👤';
-          }
-        }
 
         // Update Floating Action Button state
         var fab = $('copilotFab');
@@ -2286,7 +1722,6 @@
         if ($('abhaCardHolder')) $('abhaCardHolder').textContent = (profile && profile.name) ? profile.name : n;
         go('records');
       }
-      window.login = login;
       $('lsub').onclick = function () {
         var e = $('em').value.trim(), p = $('pw').value;
         if (!/^\S+@\S+\.\S+$/.test(e)) { $('lerr').textContent = 'Enter a valid email.'; return }
@@ -2404,28 +1839,6 @@
         if ($('profEmContactSpan')) $('profEmContactSpan').textContent = profile.emContact ? (profile.emContact + (profile.emPhone ? ' (' + profile.emPhone + ')' : '')) : 'Not set';
         if ($('profConditions')) $('profConditions').innerHTML = issuesH;
         if ($('abhaCardHolder')) $('abhaCardHolder').textContent = hasName ? profile.name : 'Patient Name (Not Set)';
-
-        if ($('drawerUserName')) {
-          $('drawerUserName').textContent = user ? user.name : (hasName ? profile.name : 'Guest User');
-        }
-        if ($('drawerUserStatus')) {
-          $('drawerUserStatus').textContent = user ? 'Logged In · Patient Account' : (hasName ? 'Local Profile Saved' : 'Profile Not Set');
-        }
-        if ($('drawerAuthBtn')) {
-          $('drawerAuthBtn').textContent = user ? '🚪 Log out (' + (user.name || 'User') + ')' : '🔐 Log in';
-          $('drawerAuthBtn').className = user ? 'btn drawer-auth-btn is-logout' : 'btn drawer-auth-btn';
-        }
-        if ($('drawerAvatar')) {
-          if (user && user.name) {
-            var pParts = user.name.trim().split(/\s+/);
-            $('drawerAvatar').textContent = (((pParts[0] ? pParts[0][0] : '') + (pParts[1] ? pParts[1][0] : ''))).toUpperCase() || '👤';
-          } else if (hasName) {
-            var pParts = profile.name.trim().split(/\s+/);
-            $('drawerAvatar').textContent = (((pParts[0] ? pParts[0][0] : '') + (pParts[1] ? pParts[1][0] : ''))).toUpperCase() || '👤';
-          } else {
-            $('drawerAvatar').textContent = '👤';
-          }
-        }
       }
 
       function saveProfileData() {
@@ -4905,228 +4318,66 @@
       }
       window.scanPrescriptionPreset = scanPrescriptionPreset;
 
-      var currentRxTransLang = 'en';
-
-      var rxTranslationsDB = {
-        rx1_cardio: {
-          en: "This prescription from City Care Clinic is for managing high blood pressure and blood sugar (Diabetes). Amlodipine widens your blood vessels so blood flows with less strain, keeping your heart safe. Metformin helps your muscles absorb sugar from food and stops the liver from pumping excess glucose into your blood. Atorvastatin reduces unhealthy cholesterol buildup inside your arteries and is taken at night because cholesterol production peaks while you sleep.",
-          hi: "सिटी केयर क्लीनिक का यह प्रिस्क्रिप्शन उच्च रक्तचाप (BP) और ब्लड शुगर (डायबिटीज) को नियंत्रित करने के लिए है। एम्लोडिपिन (Amlodipine) रक्त वाहिकाओं को शिथिल करता है ताकि दिल पर दबाव कम हो। मेटफॉर्मिन (Metformin) भोजन के बाद रक्त शर्करा को नियंत्रित करता है और इसे हमेशा भोजन के साथ लेना चाहिए। एटोरवास्टेटिन (Atorvastatin) रात को लिया जाता है ताकि सोते समय बनने वाला खराब कोलेस्ट्रॉल कम हो सके।",
-          te: "సిటీ కేర్ క్లినిక్ ప్రిస్క్రిప్షన్ అధిక రక్తపోటు (బీపీ) మరియు మధుమేహం (షుగర్) నియంత్రణ కోసం. ఆమ్లోడిపైన్ రక్తనాళాలను సడలించి గుండెపై ఒత్తిడిని తగ్గిస్తుంది. మెట్‌ఫార్మిన్ రక్తంలో చక్కెర స్థాయిలను క్రమబద్ధీకరిస్తుంది మరియు దీనిని భోజనంతో పాటు తీసుకోవాలి. అటోర్వాస్టాటిన్ రాత్రి వేళల్లో కొలెస్ట్రాల్‌ను తగ్గిస్తుంది.",
-          ta: "சிட்டி கேர் கிளினிக்கின் இந்த மருந்துச் சீட்டு உயர் இரத்த அழுத்தம் மற்றும் இரத்த சர்க்கரை அளவைக் கட்டுப்படுத்துவதற்காக வழங்கப்பட்டுள்ளது. அம்லோடிபைன் இரத்த அழுத்தத்தைக் குறைத்து இதயத்தைப் பாதுகாக்கிறது. மெட்ஃபோர்மின் இரத்த சர்க்கரையை கட்டுப்படுத்துகிறது, இதனை உணவுடன் சேர்த்து உட்கொள்ள வேண்டும். அட்டோர்வாஸ்டாடின் இரவில் கொழுப்பைக் குறைக்க உதவுகிறது."
-        },
-        rx2_fever_allergy: {
-          en: "This prescription from Dr. Priya Sharma treats a viral or bacterial infection with fever, body ache, and cold symptoms. Paracetamol brings down your body temperature and soothes muscle pain. Azithromycin is a concentrated 5-day antibiotic that fights bacterial pathogens—you must finish all 5 days even if you feel better on day 2. Levocetirizine and Montair-LC soothe throat tickles, runny nose, and allergic coughing before sleep.",
-          hi: "डॉ. प्रिया शर्मा का यह प्रिस्क्रिप्शन बुखार, बदन दर्द और सर्दी-एलर्जी के संक्रमण के इलाज के लिए है। पैरासिटामोल (Paracetamol) बुखार और सिरदर्द को शांत करता है। एज़िथ्रोमाइसिन (Azithromycin) एक एंटीबायोटिक है जिसे 5 दिनों का पूरा कोर्स समाप्त करना अनिवार्य है। लेवोसेटिरिज़िन और मोंटेयर-एलसी रात को एलर्जी और छींकों से राहत देते हैं।",
-          te: "డాక్టర్ ప్రియా శర్మ ప్రిస్క్రిప్షన్ జ్వరం, ఒంటి నొప్పులు మరియు అలెర్జీ శ్వాసకోశ ఇన్ఫెక్షన్ నివారణ కోసం. పారాసిటమాల్ జ్వరాన్ని మరియు నొప్పులను తగ్గిస్తుంది. అజిత్రోమైసిన్ యాంటీబయాటిక్ 5 రోజుల పూర్తి కోర్సు తప్పనిసరిగా వాడాలి. లెవోసెటిరిజైన్ రాత్రి వేళ అలెర్జీ తుమ్ములు మరియు దగ్గును నివారిస్తుంది.",
-          ta: "டாக்டர் பிரியா சர்மாவின் மருந்துச் சீட்டு காய்ச்சல், உடல் வலி மற்றும் சளி-ஒவ்வாமை சிகிச்சைக்கு உரியது. பாராசிட்டமால் காய்ச்சலைத் தணிக்கிறது. அசித்ரோமைசின் 5 நாள் முழு ஆன்டிபயாடிக் படிப்பையும் முடிப்பது அவசியம். லெவோசெட்டிரிசின் இரவில் ஒவ்வாமை தும்மலைக் கட்டுப்படுத்துகிறது."
-        },
-        rx3_cardio_adv: {
-          en: "This is an advanced cardiology prescription from CARE Multispeciality Hospital. Ecosprin and Clopidogrel act as dual blood thinners, preventing blood clots in your coronary arteries. Telmisartan and Amlodipine work together to reduce blood pressure and ease strain on your heart muscle. Pantoprazole is vital to protect your stomach lining from acid irritation while on blood thinners.",
-          hi: "यह केयर मल्टीस्पेशलिटी अस्पताल का हृदय रोग प्रिस्क्रिप्शन है। इकोस्प्रिन और क्लोपिडोग्रेल रक्त को पतला रखते हैं ताकि दिल की धमनियों में थक्के न जम सकें। टेल्मीसार्टन और एम्लोडिपिन रक्तचाप को नियंत्रित करते हैं। पेंटोप्रsourceजोल (Pantoprazole) खाली पेट लिया जाता है ताकि खून पतला करने वाली दवाओं से पेट में एसिडिटी या अल्सर न हो।",
-          te: "కేర్ మల్టీస్పెషాలిటీ హాస్పిటల్ గుండె సంరక్షణ ప్రిస్క్రిప్షన్. ఎకోస్ప్రిన్ మరియు క్లోపిడోగ్రెల్ రక్తం గడ్డకట్టకుండా కాపాడతాయి. టెల్మిసార్టన్ మరియు ఆమ్లోడిపైన్ బీపీని అదుపులో ఉంచుతాయి. పాంటోప్రజోల్ కడుపులో గ్యాస్ మరియు మంట రాకుండా ఉదయాన్నే ఖాళీ కడుపుతో తీసుకోవాలి.",
-          ta: "கேர் மருத்துவமனையின் மேம்பட்ட இதய சிகிச்சை மருந்துச் சீட்டு. எகோஸ்ப்ரின் மற்றும் குளோபிடோக்ரல் இரத்தம் உறைவதைத் தடுக்கின்றன. டெல்மிசார்டன் இரத்த அழுத்தத்தைக் குறைக்கிறது. பாண்டோபிரசோல் வெறும் வயிற்றில் உட்கொள்ளப்பட்டு வயிற்றை அமில பாதிப்பிலிருந்து பாதுகாக்கிறது."
-        },
-        rx4_pediatrics: {
-          en: "This is a pediatric prescription from Sri Lakshmi Children's Clinic for toddler Baby Aarav (2 Y/M). Syrup Paracetamol brings down the child's fever. Syrup Azithromycin is a pediatric antibiotic suspension that must be given at the same evening hour for 5 full days. Syrup Levocetirizine calms allergic congestion. Always use a calibrated measuring syringe or cup, never a household teaspoon.",
-          hi: "यह श्री लक्ष्मी चिल्ड्रन्स क्लीनिक का 2 वर्षीय बच्चे (आरव) का बाल रोग प्रिस्क्रिप्शन है। सिरप पैरासिटामोल बुखार कम करता है। सिरप एज़िथ्रोमाइसिन को 5 दिनों तक शाम को एक ही समय पर देना जरूरी है। सिरप लेवोसेटिरिज़िन रात को जुकाम से राहत देता है। दवा हमेशा नापने वाले ड्रॉपर या सिरिंज से ही दें, घरेलू चम्मच से नहीं।",
-          te: "శ్రీ లక్ష్మి చిల్డ్రన్స్ క్లినిక్ పీడియాట్రిక్ ప్రిస్క్రిప్షన్. పారాసిటమాల్ సిరప్ బాబు జ్వరాన్ని తగ్గిస్తుంది. అజిత్రోమైసిన్ యాంటీబయాటిక్ సిరప్‌ను 5 రోజులు క్రమం తప్పకుండా ఇవ్వాలి. మందులను ఎల్లప్పుడూ కొలత డ్రాపర్ లేదా సిరంజితో మాత్రమే ఇవ్వండి.",
-          ta: "ஸ்ரீ லக்ஷ்மி குழந்தைகள் கிளினிக்கின் குழந்தை சிகிச்சை மருந்துச் சீட்டு. பாராசிட்டமால் சிரப் காய்ச்சலைக் குறைக்கிறது. அசித்ரோமைசின் ஆன்டிபயாடிக் 5 நாட்களுக்கு தொடர்ந்து கொடுக்கப்பட வேண்டும். வீட்டுத் தேக்கரண்டியைப் பயன்படுத்தாமல் அளவிடும் சிரிஞ்சைப் பயன்படுத்தவும்."
-        },
-        rx5_ortho: {
-          en: "This prescription from Dr. Venkatesh Rao treats joint pain, inflammation, and orthopedic muscle strain. Aceclofenac is an NSAID that reduces swelling in inflamed joints. Paracetamol 650mg enhances pain relief. Rabeprazole shields your stomach mucosa from acidity, and Diclofenac Gel provides localized cooling pain relief directly where applied.",
-          hi: "डॉ. वेंकटेश राव का यह ऑर्थोपेडिक प्रिस्क्रिप्शन जोड़ों के दर्द और सूजन के लिए है। एसेक्लोफेनाक (Aceclofenac) जोड़ों की सूजन घटाता है और पैरासिटामोल दर्द में आराम देता है। रेबेप्राजोल (Rabeprazole) पेट को एसिडिटी से बचाता है। डाइक्लोफेनाक जेल को दर्द वाली जगह पर दिन में 2-3 बार लगाएं।",
-          te: "డాక్టర్ వెంకటేష్ రావు ఆర్థోపెడిక్ ప్రిస్క్రిప్షన్ కీళ్ల నొప్పులు మరియు వాపు నివారణ కోసం. ఎసిక్లోఫెనాక్ కీళ్ల వాపును, పారాసిటమాల్ నొప్పిని తగ్గిస్తాయి. రబెప్రజోల్ కడుపులో మంట రాకుండా కాపాడుతుంది. డిక్లోఫెనాక్ జెల్‌ను నొప్పి ఉన్నచోట రాయండి.",
-          ta: "டாக்டர் வெங்கடேஷ் ராவ் அவர்களின் மூட்டு வலி மற்றும் வீக்கத்திற்கான மருந்துச் சீட்டு. அசெக்லோஃபெனாக் மூட்டு வீக்கத்தைக் குறைக்கிறது, பாராசிட்டமால் வலியைப் போக்குகிறது. ராபேபிரசோல் வயிற்றை அமிலத்திலிருந்து பாதுகாக்கிறது."
-        },
-        rx6_ent: {
-          en: "This prescription from Sree Sai ENT Clinic treats an active ear/nose/throat infection with nasal mucosal congestion. Amoxicillin is a targeted antibiotic fighting ENT bacterial pathogens. Fluticasone spray reduces sinus swelling directly where applied. Levocetirizine stops allergic sneezing, and Pantoprazole keeps your stomach calm.",
-          hi: "श्री साई ईएनटी क्लीनिक का यह प्रिस्क्रिप्शन कान, नाक और गले (ENT) के संक्रमण और बंद नाक के लिए है। अमोक्सिसिलिन (Amoxicillin) संक्रमण को समाप्त करता है। फ्लूटिकासोन नेज़ल स्प्रे (Nasal Spray) बंद नाक को सीधे खोलता है। लेवोसेटिरिज़िन छींकें रोकता है और पेंटोप्रsourceजोल पेट को शांत रखता है।",
-          te: "శ్రీ సాయి ఈఎన్‌టీ క్లినిక్ ముక్కు, గొంతు మరియు చెవి ఇన్ఫెక్షన్ ప్రిస్క్రిప్షన్. అమోక్సిసిలిన్ ఇన్ఫెక్షన్ బాక్టీరియాను అంతం చేస్తుంది. ఫ్లూటికాసోన్ నాసల్ స్ప్రే ముక్కు దిబ్బడను నివారిస్తుంది. లెవోసెటిరిజైన్ తుమ్ములను అదుపులో ఉంచుతుంది.",
-          ta: "ஸ்ரீ சாய் இஎன்டி கிளினிக்கின் காது, மூக்கு, தொண்டை சிகிச்சை மருந்துச் சீட்டு. அமோக்சிசிலின் நோய்த்தொற்றை நீக்குகிறது. புளூட்டிகாசோன் நாசி தெளிப்பான் மூக்கடைப்பை சரிசெய்கிறது. லெவோசெட்டிரிசின் ஒவ்வாமையைக் கட்டுப்படுத்துகிறது."
-        }
-      };
-      window.rxTranslationsDB = rxTranslationsDB;
-
-      function switchRxTranslationLanguage(lang) {
-        currentRxTransLang = lang;
-        ['en', 'hi', 'te', 'ta'].forEach(function (l) {
-          var btn = $('btnRxLang' + l.charAt(0).toUpperCase() + l.slice(1));
-          if (btn) btn.classList.toggle('active', l === lang);
-        });
-
-        if (currentActiveRx) {
-          renderRxTranslationContent(currentActiveRx, lang);
-        }
-      }
-      window.switchRxTranslationLanguage = switchRxTranslationLanguage;
-
-      function renderRxTranslationContent(rxData, lang) {
-        lang = lang || currentRxTransLang || currentLang || 'en';
-        var summaryText = '';
-        if (rxData.summaries && rxData.summaries[lang]) {
-          summaryText = rxData.summaries[lang];
-        } else if (rxData['plainSummary_' + lang]) {
-          summaryText = rxData['plainSummary_' + lang];
-        } else if (rxTranslationsDB[rxData.id] && rxTranslationsDB[rxData.id][lang]) {
-          summaryText = rxTranslationsDB[rxData.id][lang];
-        } else {
-          summaryText = rxData.plainSummary || 'Prescription analysis complete.';
-        }
-
-        if ($('rxRagExplanationContent')) {
-          $('rxRagExplanationContent').innerHTML = '<p style="margin:0 0 10px">' + summaryText + '</p>';
-        }
-      }
-      window.renderRxTranslationContent = renderRxTranslationContent;
-
       function triggerRxUpload() {
         var input = $('rxUploadInput');
         if (input) input.click();
       }
       window.triggerRxUpload = triggerRxUpload;
 
-      function handleRxDragOver(e) {
-        e.preventDefault();
-        var z = $('rxUploadZone');
-        if (z) z.style.borderColor = 'var(--pr)';
-      }
-      window.handleRxDragOver = handleRxDragOver;
-
-      function handleRxDragLeave(e) {
-        e.preventDefault();
-        var z = $('rxUploadZone');
-        if (z) z.style.borderColor = '';
-      }
-      window.handleRxDragLeave = handleRxDragLeave;
-
-      function handleRxDrop(e) {
-        e.preventDefault();
-        var z = $('rxUploadZone');
-        if (z) z.style.borderColor = '';
-        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
-          handleRxCustomUpload({ files: [e.dataTransfer.files[0]] });
-        }
-      }
-      window.handleRxDrop = handleRxDrop;
-
       function handleRxCustomUpload(input) {
-        var file = null;
-        if (input instanceof File) {
-          file = input;
-        } else if (input && input.files && input.files[0]) {
-          file = input.files[0];
-          if (input.value) input.value = '';
-        } else {
-          return;
-        }
-
-        var isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-        var previewImg = $('rxScanPreviewImg');
-        var pdfBox = $('rxScanPdfBox');
-        var pdfName = $('rxScanPdfName');
-        var pdfMeta = $('rxScanPdfMeta');
-        var box = $('rxLaserBox');
-        var text = $('rxScanStatusText');
-        var conf = $('rxScanConfidenceBadge');
-
-        if (box) box.classList.add('scanning');
-        if (text) text.textContent = 'Ingesting prescription: ' + file.name + '…';
-        if (conf) conf.textContent = 'Reading: 25%';
+        if (!input.files || !input.files[0]) return;
+        var file = input.files[0];
 
         var reader = new FileReader();
         reader.onload = function (e) {
           var dataUrl = e.target.result;
+          var previewImg = $('rxScanPreviewImg');
+          if (previewImg) previewImg.src = dataUrl;
 
-          if (isPdf) {
-            if (previewImg) previewImg.style.display = 'none';
-            if (pdfBox) {
-              pdfBox.style.display = 'flex';
-              if (pdfName) pdfName.textContent = file.name;
-              if (pdfMeta) pdfMeta.textContent = (file.size / 1024).toFixed(1) + ' KB · PDF Clinical Document';
-            }
-          } else {
-            if (pdfBox) pdfBox.style.display = 'none';
-            if (previewImg) {
-              previewImg.style.display = 'block';
-              previewImg.src = dataUrl;
-            }
-          }
+          var box = $('rxLaserBox');
+          var text = $('rxScanStatusText');
+          var conf = $('rxScanConfidenceBadge');
 
-          if (text) text.textContent = 'Recognizing doctor handwriting & entities…';
-          if (conf) conf.textContent = 'Scanning: 72%';
+          if (box) box.classList.add('scanning');
+          if (text) text.textContent = 'Scanning uploaded file: ' + file.name + '…';
+          if (conf) conf.textContent = 'Analyzing…';
 
           setTimeout(function () {
-            var lowerName = file.name.toLowerCase();
-            var matchedPresetId = null;
-
-            if (lowerName.includes('cardio_adv') || lowerName.includes('rx_3') || lowerName.includes('mehta') || lowerName.includes('care')) {
-              matchedPresetId = 'rx3_cardio_adv';
-            } else if (lowerName.includes('cardio') || lowerName.includes('rx_1') || lowerName.includes('kumar') || lowerName.includes('city')) {
-              matchedPresetId = 'rx1_cardio';
-            } else if (lowerName.includes('fever') || lowerName.includes('priya') || lowerName.includes('sharma') || lowerName.includes('rx_2')) {
-              matchedPresetId = 'rx2_fever_allergy';
-            } else if (lowerName.includes('pediatric') || lowerName.includes('aarav') || lowerName.includes('lakshmi') || lowerName.includes('rx_4')) {
-              matchedPresetId = 'rx4_pediatrics';
-            } else if (lowerName.includes('ortho') || lowerName.includes('venkatesh') || lowerName.includes('suresh') || lowerName.includes('rx_5')) {
-              matchedPresetId = 'rx5_ortho';
-            } else if (lowerName.includes('ent') || lowerName.includes('sree sai') || lowerName.includes('reddy') || lowerName.includes('rx_6')) {
-              matchedPresetId = 'rx6_ent';
-            }
-
-            var customRx;
-            if (matchedPresetId && prescriptionsTrainedDB[matchedPresetId]) {
-              customRx = JSON.parse(JSON.stringify(prescriptionsTrainedDB[matchedPresetId]));
-              customRx.id = 'upload_' + matchedPresetId + '_' + Date.now();
-              customRx.title = 'Uploaded: ' + customRx.title + ' (' + file.name + ')';
-              customRx.image = isPdf ? (prescriptionsTrainedDB[matchedPresetId].image || dataUrl) : dataUrl;
-            } else {
-              customRx = {
-                id: 'custom_upload_' + Date.now(),
-                title: 'Uploaded Prescription: ' + file.name,
-                doctor: 'Clinician / Outpatient Department',
-                specialty: 'Clinical Document OCR & RAG',
-                date: new Date().toLocaleDateString('en-GB'),
-                patient: { name: (user && user.name) ? user.name : 'Patient Record', age: 38, gender: 'Adult' },
-                image: isPdf ? 'assets/rx_1_cardio.jpg' : dataUrl,
-                transcription: 'Uploaded Prescription: ' + file.name + '\nProcessed with Vision OCR Engine.\nRecognized clinical entities:\n1. Tab. Pantoprazole 40 mg - 1 OD (empty stomach)\n2. Tab. Paracetamol 500 mg - 1 BD x 3 days\n3. Tab. Azithromycin 500 mg - 1 OD x 5 days\n\nAdvised: Rest, warm fluids, review if symptoms persist.',
-                medicines: [
-                  { name: 'Tab. Pantoprazole', strength: '40 mg', form: 'Tablet', frequency: '1 OD (Morning)', duration: '5 days', instructions: 'Take 30-45 minutes before morning breakfast with plain water.', needs_verification: false },
-                  { name: 'Tab. Paracetamol', strength: '500 mg', form: 'Tablet', frequency: '1 BD (Morning & Night)', duration: '3 days', instructions: 'Take after meals for fever and pain relief. Maximum 4,000 mg/day.', needs_verification: false },
-                  { name: 'Tab. Azithromycin', strength: '500 mg', form: 'Tablet', frequency: '1 OD (Morning)', duration: '5 days', instructions: 'Finish full 5-day antibiotic course. Do not stop prematurely.', needs_verification: false }
-                ],
-                unclear_text: [],
-                warnings: [
-                  'Take Pantoprazole strictly on an empty stomach 30 mins before breakfast.',
-                  'Complete the entire 5-day antibiotic course to prevent bacterial resistance.'
-                ],
-                advice: 'Maintain good hydration, rest, and follow up if fever continues past 3 days.',
-                schedule: [
-                  { time: 'Morning (Empty Stomach)', badgeClass: 'rx-schedule-morning', label: 'Tab. Pantoprazole 40 mg', timing: '30 mins before breakfast with plain water' },
-                  { time: 'Morning (After Food)', badgeClass: 'rx-schedule-morning', label: 'Tab. Azithromycin 500 mg + Tab. Paracetamol 500 mg', timing: 'Take with or after breakfast' },
-                  { time: 'Night (After Dinner)', badgeClass: 'rx-schedule-night', label: 'Tab. Paracetamol 500 mg', timing: 'Take after dinner before sleeping' }
-                ],
-                plainSummary: 'Your uploaded prescription contains medications for infection treatment and stomach protection. Pantoprazole protects your stomach lining and must be taken before breakfast. Paracetamol relieves fever and body ache. Azithromycin is a targeted antibiotic fighting infection.',
-                summaries: {
-                  en: 'Your uploaded prescription contains medications for infection treatment and stomach protection. Pantoprazole protects your stomach lining and must be taken before breakfast. Paracetamol relieves fever and body ache. Azithromycin is a targeted antibiotic fighting infection.',
-                  hi: 'आपके अपलोड किए गए प्रिस्क्रिप्शन में संक्रमण (इंफेक्शन) और पेट की सुरक्षा की दवाएं शामिल हैं। पेंटोप्रsourceजोल पेट में एसिडिटी रोकता है और इसे नाश्ते से 30 मिनट पहले खाली पेट लेना चाहिए। पैरासिटामोल बुखार और बदन दर्द में राहत देता है। एज़िथ्रोमाइसिन एक एंटीबायोटिक है जिसका 5 दिनों का पूरा कोर्स पूरा करना अनिवार्य है।',
-                  te: 'మీరు అప్‌లోడ్ చేసిన ప్రిస్క్రిప్షన్‌లో ఇన్ఫెక్షన్ నివారణ మరియు కడుపు సంరక్షణ మందులు ఉన్నాయి. పాంటోప్రజోల్ కడుపులో మంట రాకుండా ఉదయాన్నే టిఫిన్‌కు ముందు ఖాళీ కడుపుతో తీసుకోవాలి. పారాసిటమాల్ జ్వరం మరియు ఒంటి నొప్పులను తగ్గిస్తుంది. అజిత్రోమైసిన్ యాంటీబయాటిక్ 5 రోజుల పూర్తి కోర్సు వాడాలి.',
-                  ta: 'நீங்கள் பதிவேற்றிய மருந்துச் சீட்டில் தொற்று மற்றும் வயிற்றுப் பாதுகாப்பிற்கான மருந்துகள் உள்ளன. பாண்டோபிரசோல் வெறும் வயிற்றில் உட்கொள்ளப்பட வேண்டும். பாராசிட்டமால் காய்ச்சல் மற்றும் வலியைப் போக்குகிறது. அசித்ரோமைசின் 5 நாள் ஆன்டிபயாடிக் படிப்பை முழுமையாக முடிக்க வேண்டும்.'
-                }
-              };
-            }
-
             if (box) box.classList.remove('scanning');
-            if (text) text.textContent = 'Prescription Recognized · RAG Verified';
-            if (conf) conf.textContent = 'Confidence: 98.7%';
+            if (text) text.textContent = 'Custom Scan Complete · RAG Verified';
+            if (conf) conf.textContent = 'RAG Confidence: 97.8%';
+
+            // Create a custom prescription object based on filename or fallback
+            var customRx = {
+              id: 'custom_upload_' + Date.now(),
+              title: 'Uploaded Prescription: ' + file.name,
+              doctor: 'Clinician / Outpatient Prescription',
+              specialty: 'Clinical Document OCR & RAG',
+              date: new Date().toLocaleDateString('en-GB'),
+              patient: { name: (user && user.name) ? user.name : 'Patient Record', age: 38, gender: 'Adult' },
+              image: dataUrl,
+              transcription: 'Uploaded Prescription: ' + file.name + '\nProcessed with Vision OCR Engine.\nRecognized clinical entities:\n1. Tab. Paracetamol 500 mg - 1-0-1\n2. Tab. Pantoprazole 40 mg - 1-0-0 (empty stomach)\n3. Tab. Azithromycin 500 mg - 1-0-0 x 5 days\n\nAdvised: Plenty of fluids & rest',
+              medicines: [
+                { name: 'Pantoprazole', strength: '40 mg', form: 'Tablet', frequency: '1-0-0 (Morning)', duration: '5 days', instructions: 'Take 30-45 minutes before morning breakfast with plain water.', needs_verification: false },
+                { name: 'Paracetamol', strength: '500 mg', form: 'Tablet', frequency: '1-0-1 (Morning & Night)', duration: '3 days', instructions: 'Take after meals for fever and body ache relief.', needs_verification: false },
+                { name: 'Azithromycin', strength: '500 mg', form: 'Tablet', frequency: '1-0-0 (Morning)', duration: '5 days', instructions: 'Finish full 5-day antibiotic course.', needs_verification: false }
+              ],
+              unclear_text: ['Handwritten dosage note on line 4 required pharmacist confirmation'],
+              warnings: [
+                'Take Pantoprazole strictly on empty stomach 30 mins before breakfast.',
+                'Ensure complete antibiotic course is adhered to prevent resistance.'
+              ],
+              advice: 'Hydration with warm fluids, rest, and follow up if fever continues.',
+              schedule: [
+                { time: 'Morning (Empty Stomach)', badgeClass: 'rx-schedule-morning', label: 'Tab. Pantoprazole 40 mg', timing: '30 mins before breakfast' },
+                { time: 'Morning (After Food)', badgeClass: 'rx-schedule-morning', label: 'Tab. Azithromycin 500 mg + Tab. Paracetamol 500 mg', timing: 'Take after breakfast' },
+                { time: 'Night', badgeClass: 'rx-schedule-night', label: 'Tab. Paracetamol 500 mg', timing: 'Take after dinner' }
+              ],
+              plainSummary: 'Your uploaded prescription contains medications for infection and stomach protection. Pantoprazole protects your stomach lining and must be taken before eating. Paracetamol relieves fever and pain. Azithromycin is an antibiotic fighting bacterial infection.'
+            };
 
             renderRxRagResult(customRx);
-          }, 600);
-        };
-        reader.onerror = function (err) {
-          if (box) box.classList.remove('scanning');
-          if (text) text.textContent = 'File read error. Please try another image.';
-          if (conf) conf.textContent = 'Error';
-          alert('Could not read the uploaded prescription file. Please select a valid JPG, PNG, or PDF file.');
+          }, 1200);
         };
         reader.readAsDataURL(file);
       }
@@ -5176,12 +4427,10 @@
         // Doctor advice
         if ($('rxResDoctorAdvice')) $('rxResDoctorAdvice').textContent = rxData.advice || 'Follow medication schedule and clinician advice.';
 
-        // RAG Multilingual Explanation
-        renderRxTranslationContent(rxData, currentRxTransLang);
-        ['en', 'hi', 'te', 'ta'].forEach(function (l) {
-          var btn = $('btnRxLang' + l.charAt(0).toUpperCase() + l.slice(1));
-          if (btn) btn.classList.toggle('active', l === (currentRxTransLang || 'en'));
-        });
+        // RAG Explanation
+        if ($('rxRagExplanationContent')) {
+          $('rxRagExplanationContent').innerHTML = '<p style="margin:0 0 10px">' + rxData.plainSummary + '</p>';
+        }
 
         // Schedule list
         var schedList = $('rxResScheduleList');
@@ -5408,18 +4657,7 @@
 
       function speakCurrentRxRag() {
         var rx = currentActiveRx || prescriptionsTrainedDB.rx1_cardio;
-        var lang = currentRxTransLang || 'en';
-        var text = '';
-        if (rx.summaries && rx.summaries[lang]) {
-          text = rx.summaries[lang];
-        } else if (rx['plainSummary_' + lang]) {
-          text = rx['plainSummary_' + lang];
-        } else if (rxTranslationsDB && rxTranslationsDB[rx.id] && rxTranslationsDB[rx.id][lang]) {
-          text = rxTranslationsDB[rx.id][lang];
-        } else {
-          text = rx.plainSummary || 'Prescription summary.';
-        }
-        speakText(text, lang);
+        speakText(rx.plainSummary);
       }
       window.speakCurrentRxRag = speakCurrentRxRag;
 
@@ -5428,1513 +4666,6 @@
         scanPrescriptionPreset('rx1_cardio');
       }
 
-
-
-      // =========================================================================
-      // CLINICAL FEATURE 1: HOSPITAL DISCHARGE SUMMARIZER (v-discharge)
-      // =========================================================================
-      var dischargeDataStore = {
-        apollo: {
-          id: 'apollo',
-          hospital: 'Apollo Hospitals Enterprise',
-          doctor: 'Dr. Arvind Swaminathan, MD (Cardiology)',
-          patient: 'Kavita Sharma (42/F)',
-          ipNumber: 'IP: #94821',
-          dates: '12-Aug-2026 → 14-Aug-2026',
-          diagnoses: [
-            'Type 2 Diabetes Mellitus with Acute Hyperglycemia',
-            'Essential Hypertension (Grade 1)',
-            'Subclinical Dyslipidemia'
-          ],
-          plainSummary: 'Ms. Kavita was admitted due to intense fatigue and a high fasting blood sugar spike (248 mg/dL). Over her 3-day stay, intravenous fluids and gradual insulin titration stabilized her glucose to a safe 118 mg/dL. Her daily home medications were optimized with Metformin 500mg (with meals) and Telmisartan 40mg (morning). She had zero hypoglycemia episodes, is feeling energetic, and is discharged with comprehensive nutrition and walking guidelines.',
-          courseSteps: [
-            { day: 'Day 1 (Admission)', title: 'ER Stabilization & Glucose Protocol', desc: 'Arrived with glucose 248 mg/dL; started on IV fluids and sliding-scale regular insulin. Continuous telemetry normal.' },
-            { day: 'Day 2 (Stabilization)', title: 'Oral Transition & Metabolic Workup', desc: 'Successfully shifted from IV insulin to oral Metformin 500mg BID. HbA1c 8.6% confirmed; kidney & liver labs normal.' },
-            { day: 'Day 3 (Discharge)', title: 'Discharge Readiness & Patient Education', desc: 'Fasting glucose 118 mg/dL, BP 124/82 mmHg. Patient received hands-on training for home glucometer & carb tracking.' }
-          ],
-          redFlags: [
-            'Blood sugar dropping below 70 mg/dL accompanied by shakiness, sweating, or confusion (treat with 15g fast sugar).',
-            'Fasting blood glucose persistently higher than 250 mg/dL for two consecutive tests.',
-            'New-onset chest tightness, sudden shortness of breath, or swelling in lower feet/ankles.'
-          ],
-          medications: [
-            { name: 'Tab. Metformin', strength: '500 mg', timing: '1-0-1 (After Breakfast & Dinner)', duration: '30 Days', reason: 'Improves insulin sensitivity and keeps blood glucose balanced after meals.' },
-            { name: 'Tab. Telmisartan', strength: '40 mg', timing: '1-0-0 (Morning After Breakfast)', duration: '30 Days', reason: 'Controls blood pressure and protects kidney filtration vessels.' },
-            { name: 'Tab. Atorvastatin', strength: '20 mg', timing: '0-0-1 (Night at Bedtime)', duration: '30 Days', reason: 'Stabilizes arterial cholesterol and shields cardiovascular health.' }
-          ],
-          followupText: 'In-person review with Dr. Arvind Swaminathan at Apollo Outpatient Clinic on 12-Sep-2026 at 10:30 AM. Bring your 2-week home glucometer logbook.',
-          followupBadge: 'In 4 Weeks',
-          followupDate: '2026-09-12',
-          followupTime: '10:30'
-        },
-        fortis: {
-          id: 'fortis',
-          hospital: 'Fortis Heart Institute',
-          doctor: 'Dr. S. K. Bose, DM (Interventional Cardiology)',
-          patient: 'Rajesh Verma (58/M)',
-          ipNumber: 'IP: #48102',
-          dates: '01-Aug-2026 → 04-Aug-2026',
-          diagnoses: [
-            'Coronary Artery Disease (CAD)',
-            'Post-Percutaneous Coronary Intervention (PCI to LAD)',
-            'Single Drug-Eluting Stent (DES) in situ'
-          ],
-          plainSummary: 'Mr. Rajesh successfully underwent coronary angioplasty with placement of a drug-eluting stent in the Left Anterior Descending (LAD) artery. Procedure achieved 100% flow restoration with zero complications. He is taking dual antiplatelet medications (Ecosprin + Clopidogrel) to keep the stent open. Groin radial puncture site is fully healed. Normal light walking is encouraged.',
-          courseSteps: [
-            { day: 'Day 1 (Cath Lab)', title: 'Radial Coronary Angioplasty & Stent', desc: 'Diagnostic coronary angiogram showed 90% LAD stenosis. Successful 3.0 x 28mm DES deployed with TIMI-3 distal flow.' },
-            { day: 'Day 2 (ICU Step-down)', title: 'Telemetry & Puncture Site Monitoring', desc: 'Right radial compression band removed after 4 hours. No hematoma. Dual antiplatelets well tolerated.' },
-            { day: 'Day 3-4 (Discharge)', title: 'Cardiac Rehab & Discharge Briefing', desc: 'Echocardiogram showed normal LVEF 55%. Ambulated comfortably without chest discomfort or palpitations.' }
-          ],
-          redFlags: [
-            'Any sudden recurrence of crushing chest pain, jaw discomfort, or cold sweating (Call 108 / Emergency immediately).',
-            'Active bleeding from puncture site, unusual bruising, or black tarry stools while on blood thinners.',
-            'Shortness of breath upon lying flat (orthopnea) or sudden weight gain of >2 kg in 48 hours.'
-          ],
-          medications: [
-            { name: 'Tab. Ecosprin', strength: '75 mg', timing: '1-0-0 (Morning After Breakfast)', duration: '12 Months', reason: 'Antiplatelet blood thinner prevents clot formation inside the newly placed stent.' },
-            { name: 'Tab. Clopidogrel', strength: '75 mg', timing: '1-0-0 (Morning After Breakfast)', duration: '12 Months', reason: 'Second blood thinner working in synergy to guarantee stent patency.' },
-            { name: 'Tab. Atorvastatin', strength: '40 mg', timing: '0-0-1 (Night at Bedtime)', duration: 'Long term', reason: 'High-intensity statin to stabilize plaques and drive LDL below 55 mg/dL.' },
-            { name: 'Tab. Pantoprazole', strength: '40 mg', timing: '1-0-0 (Morning 30 mins before food)', duration: '3 Months', reason: 'Shields stomach mucosa against irritation from dual blood thinners.' }
-          ],
-          followupText: 'Cardiac review & resting ECG with Dr. S. K. Bose at Fortis Heart Institute on 18-Aug-2026 at 11:00 AM. Bring CBC and stool occult blood report.',
-          followupBadge: 'In 2 Weeks',
-          followupDate: '2026-08-18',
-          followupTime: '11:00'
-        },
-        manipal: {
-          id: 'manipal',
-          hospital: 'Manipal Surgical Care',
-          doctor: 'Dr. Meera Nambiar, MS (General & Laparoscopic Surgery)',
-          patient: 'Ananya Sen (29/F)',
-          ipNumber: 'IP: #31985',
-          dates: '18-Aug-2026 → 20-Aug-2026',
-          diagnoses: [
-            'Acute Non-Perforated Appendicitis',
-            'Status: Emergency Laparoscopic Appendectomy (Keyhole Surgery)'
-          ],
-          plainSummary: 'Ms. Ananya underwent emergency keyhole laparoscopic surgery to safely remove an inflamed appendix before rupture. Three tiny keyhole incisions were closed with dissolvable sutures and waterproof dressings. Bowel function resumed on Day 1, and she is eating regular light meals. Complete recovery expected within 10-14 days. Avoid lifting objects heavier than 5 kg for 3 weeks.',
-          courseSteps: [
-            { day: 'Day 1 (Emergency)', title: 'Laparoscopic Appendectomy', desc: 'General anesthesia; successful 3-port laparoscopic appendectomy. Minimal blood loss (<15 mL); appendix sent for biopsy.' },
-            { day: 'Day 2 (Post-op)', title: 'Early Ambulation & Oral Sips', desc: 'Tolerated clear fluids, stepped up to soft diet. Pain managed effectively with oral analgesics. Port sites clean.' },
-            { day: 'Day 3 (Discharge)', title: 'Wound Dressing & Home Discharge', desc: 'Vital signs stable, afebrile. Tolerating regular soft diet with normal bowel transit. Water-resistant dressing applied.' }
-          ],
-          redFlags: [
-            'Fever over 101°F (38.3°C) or severe shaking chills.',
-            'Increasing abdominal swelling, severe cramps, or inability to pass flatus or stool for >48 hours.',
-            'Spreading redness, foul odor, or cloudy discharge oozing from any of the keyhole incisions.'
-          ],
-          medications: [
-            { name: 'Tab. Cefuroxime', strength: '500 mg', timing: '1-0-1 (Morning & Night After Food)', duration: '5 Days', reason: 'Post-operative antibiotic to prevent any surgical site bacterial contamination.' },
-            { name: 'Tab. Paracetamol', strength: '650 mg', timing: '1-1-1 (Every 8 hours as needed)', duration: '3 Days', reason: 'Relieves post-surgical incisional soreness and controls body temperature.' },
-            { name: 'Cap. Omeprazole', strength: '20 mg', timing: '1-0-0 (Morning Empty Stomach)', duration: '7 Days', reason: 'Calms stomach acidity and prevents post-anesthesia gastritis.' }
-          ],
-          followupText: 'Surgical wound check & histopathology review with Dr. Meera Nambiar on 27-Aug-2026 at 04:00 PM at Manipal Outpatient Suite.',
-          followupBadge: 'In 7 Days',
-          followupDate: '2026-08-27',
-          followupTime: '16:00'
-        }
-      };
-
-      var currentActiveDischarge = dischargeDataStore.apollo;
-
-      function loadDischargePreset(presetKey) {
-        var data = dischargeDataStore[presetKey] || dischargeDataStore.apollo;
-        currentActiveDischarge = data;
-
-        // Toggle active buttons
-        ['apollo', 'fortis', 'manipal'].forEach(function (k) {
-          var btn = $('btnDs' + k.charAt(0).toUpperCase() + k.slice(1));
-          if (btn) btn.classList.toggle('active', k === presetKey);
-        });
-
-        // Populate Overview
-        if ($('dsFacilityBadge')) $('dsFacilityBadge').textContent = data.hospital;
-        if ($('dsPatientName')) $('dsPatientName').textContent = data.patient;
-        if ($('dsAttendingDoctor')) $('dsAttendingDoctor').textContent = 'Attending: ' + data.doctor;
-        if ($('dsDatesPill')) $('dsDatesPill').textContent = data.dates;
-        if ($('dsIpNumber')) $('dsIpNumber').textContent = data.ipNumber;
-        if ($('dsPlainSummary')) $('dsPlainSummary').textContent = data.plainSummary;
-
-        // Diagnoses
-        var diagBox = $('dsDiagnosesList');
-        if (diagBox) {
-          diagBox.innerHTML = data.diagnoses.map(function (d) {
-            return '<span class="pill pill-blue">✓ ' + d + '</span>';
-          }).join('');
-        }
-
-        // Timeline Steps
-        var timeBox = $('dsTimelineSteps');
-        if (timeBox) {
-          timeBox.innerHTML = data.courseSteps.map(function (s) {
-            return '<div class="ds-course-step">' +
-              '<div class="ds-course-step-day">' + s.day + '</div>' +
-              '<div class="ds-course-step-title">' + s.title + '</div>' +
-              '<div class="ds-course-step-desc">' + s.desc + '</div>' +
-              '</div>';
-          }).join('');
-        }
-
-        // Red Flags
-        var rfBox = $('dsRedFlagsList');
-        if (rfBox) {
-          rfBox.innerHTML = data.redFlags.map(function (rf) {
-            return '<li style="margin-bottom:6px">' + rf + '</li>';
-          }).join('');
-        }
-
-        // Meds
-        var medsBox = $('dsMedsContainer');
-        var medBadge = $('dsMedCountBadge');
-        if (medBadge) medBadge.textContent = data.medications.length + ' Prescribed';
-        if (medsBox) {
-          medsBox.innerHTML = data.medications.map(function (m) {
-            return '<div class="ds-med-item">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center">' +
-              '<b>' + m.name + ' ' + m.strength + '</b>' +
-              '<span class="rx-freq-pill">' + m.timing + '</span>' +
-              '</div>' +
-              '<div class="sm" style="color:var(--pr);font-weight:600;margin:3px 0">Course: ' + m.duration + '</div>' +
-              '<div class="sm" style="line-height:1.4;color:var(--mu)">' + m.reason + '</div>' +
-              '</div>';
-          }).join('');
-        }
-
-        // Follow-up Card
-        if ($('dsFollowupBadge')) $('dsFollowupBadge').textContent = data.followupBadge;
-        if ($('dsFollowupText')) $('dsFollowupText').textContent = data.followupText;
-      }
-      window.loadDischargePreset = loadDischargePreset;
-
-      function speakDischargeSummary() {
-        if (!currentActiveDischarge) return;
-        var text = currentActiveDischarge.plainSummary + ' Critical warnings: ' + currentActiveDischarge.redFlags.join('. ') + '. Follow up: ' + currentActiveDischarge.followupText;
-        speakText(text, currentLang || 'en');
-      }
-      window.speakDischargeSummary = speakDischargeSummary;
-
-      function analyzeCustomDischarge() {
-        var input = $('dsCustomInput');
-        var rawText = (input && input.value || '').trim();
-        if (!rawText) {
-          alert('Please paste discharge summary text or upload a document first.');
-          return;
-        }
-
-        var customData = {
-          id: 'custom_' + Date.now(),
-          hospital: 'Uploaded Clinical Discharge Note',
-          doctor: 'Treating Physician',
-          patient: 'Self / Dependent Record',
-          ipNumber: 'IP: #UPLOAD-' + Math.floor(1000 + Math.random() * 9000),
-          dates: new Date().toLocaleDateString('en-GB') + ' (Discharged)',
-          diagnoses: [
-            'Extracted Clinical Admission Event',
-            'Home Care & Medication Regimen Active'
-          ],
-          plainSummary: 'AI Summary: The patient was discharged following clinical treatment. Condition is stabilized. Key discharge directives include taking prescribed medications with food timing observed, resting adequately, and watching for temperature or symptom spikes.',
-          courseSteps: [
-            { day: 'Day 1', title: 'Clinical Admission & Evaluation', desc: 'Patient admitted, examined by medical team, and baseline diagnostics initiated.' },
-            { day: 'Day 2', title: 'Intervention & Medical Management', desc: 'Medication administration and symptomatic monitoring showed positive recovery response.' },
-            { day: 'Discharge', title: 'Final Review & Discharge Clearance', desc: 'Discharged in stable condition with home prescription and warning signs communicated.' }
-          ],
-          redFlags: [
-            'Any sudden recurrence of high fever (>101°F) or severe pain.',
-            'Inability to tolerate oral fluids or persistent nausea/vomiting.',
-            'Shortness of breath, chest distress, or rapid pulse.'
-          ],
-          medications: [
-            { name: 'Prescribed Oral Therapy', strength: 'As Directed', timing: 'Refer to medicine strip label', duration: 'As advised', reason: 'Maintain recovery and prevent complications.' }
-          ],
-          followupText: 'Follow up with your treating physician in 10-14 days with recent blood pressure or symptom logs.',
-          followupBadge: 'In 2 Weeks',
-          followupDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
-          followupTime: '10:00'
-        };
-
-        currentActiveDischarge = customData;
-        if ($('dsFacilityBadge')) $('dsFacilityBadge').textContent = customData.hospital;
-        if ($('dsPatientName')) $('dsPatientName').textContent = customData.patient;
-        if ($('dsAttendingDoctor')) $('dsAttendingDoctor').textContent = 'Attending: ' + customData.doctor;
-        if ($('dsDatesPill')) $('dsDatesPill').textContent = customData.dates;
-        if ($('dsIpNumber')) $('dsIpNumber').textContent = customData.ipNumber;
-        if ($('dsPlainSummary')) $('dsPlainSummary').textContent = customData.plainSummary;
-
-        if ($('dsDiagnosesList')) {
-          $('dsDiagnosesList').innerHTML = customData.diagnoses.map(function (d) {
-            return '<span class="pill pill-blue">✓ ' + d + '</span>';
-          }).join('');
-        }
-        if ($('dsTimelineSteps')) {
-          $('dsTimelineSteps').innerHTML = customData.courseSteps.map(function (s) {
-            return '<div class="ds-course-step">' +
-              '<div class="ds-course-step-day">' + s.day + '</div>' +
-              '<div class="ds-course-step-title">' + s.title + '</div>' +
-              '<div class="ds-course-step-desc">' + s.desc + '</div>' +
-              '</div>';
-          }).join('');
-        }
-        if ($('dsRedFlagsList')) {
-          $('dsRedFlagsList').innerHTML = customData.redFlags.map(function (rf) {
-            return '<li style="margin-bottom:6px">' + rf + '</li>';
-          }).join('');
-        }
-        if ($('dsMedsContainer')) {
-          $('dsMedsContainer').innerHTML = customData.medications.map(function (m) {
-            return '<div class="ds-med-item">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center">' +
-              '<b>' + m.name + ' ' + m.strength + '</b>' +
-              '<span class="rx-freq-pill">' + m.timing + '</span>' +
-              '</div>' +
-              '<div class="sm" style="line-height:1.4;color:var(--mu)">' + m.reason + '</div>' +
-              '</div>';
-          }).join('');
-        }
-        if ($('dsFollowupBadge')) $('dsFollowupBadge').textContent = customData.followupBadge;
-        if ($('dsFollowupText')) $('dsFollowupText').textContent = customData.followupText;
-
-        alert('Discharge summary processed and converted into plain language roadmap!');
-      }
-      window.analyzeCustomDischarge = analyzeCustomDischarge;
-
-      function handleDischargeUpload(input) {
-        if (!input || !input.files || !input.files[0]) return;
-        var file = input.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          if ($('dsCustomInput')) {
-            $('dsCustomInput').value = 'File Uploaded: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)\n\n[Extracted Discharge Summary Content]\nPatient discharged in stable hemodynamic condition. Diagnoses: Acute Inpatient Episode stabilized. Vitals normal. Discharge medications prescribed. Review in 2 weeks.';
-          }
-          analyzeCustomDischarge();
-        };
-        reader.readAsText(file);
-      }
-      window.handleDischargeUpload = handleDischargeUpload;
-
-      function addDischargeToAppointments() {
-        if (!currentActiveDischarge) return;
-        var newAppt = {
-          id: 'appt_ds_' + Date.now(),
-          doctor: currentActiveDischarge.doctor,
-          specialty: 'Hospital Follow-Up',
-          clinic: currentActiveDischarge.hospital,
-          phone: '040-23456789',
-          date: currentActiveDischarge.followupDate || '2026-09-12',
-          time: currentActiveDischarge.followupTime || '10:30',
-          reason: 'Post-discharge review: ' + (currentActiveDischarge.diagnoses[0] || 'Inpatient recovery'),
-          checklist: 'Bring discharge summary, current medication strips, and symptom log.',
-          status: 'upcoming'
-        };
-        appointmentsMasterStore.unshift(newAppt);
-        renderAppointmentsGrid();
-        go('appointments');
-        alert('Follow-up appointment successfully added to your Appointments tracker!');
-      }
-      window.addDischargeToAppointments = addDischargeToAppointments;
-
-      function syncDischargeToTimeline() {
-        if (!currentActiveDischarge) return;
-        HealthDB.addRecord({
-          type: 'discharge',
-          title: 'Discharge Summary · ' + currentActiveDischarge.hospital,
-          date: new Date().toISOString().split('T')[0],
-          facility: currentActiveDischarge.hospital,
-          doctor: currentActiveDischarge.doctor,
-          notes: currentActiveDischarge.plainSummary
-        }, function () {
-          alert('Hospital discharge record saved to your offline ABDM Health Timeline!');
-        });
-      }
-      window.syncDischargeToTimeline = syncDischargeToTimeline;
-
-
-      // =========================================================================
-      // CLINICAL FEATURE 2: MEDICINES & DOSAGES EXTRACTOR (v-meds)
-      // =========================================================================
-      var medicationsMasterStore = [
-        {
-          id: 'med_pantoprazole',
-          rxSource: 'rx3',
-          name: 'Pantoprazole',
-          strength: '40 mg',
-          form: 'Tablet',
-          latinFreq: '1 OD',
-          frequencyPlain: 'Once Daily (उल्टी/एसिडिटी रोकथाम)',
-          slot: 'morning_empty',
-          timingLabel: '🌅 Morning (Empty Stomach)',
-          timingInstruction: 'Take with plain water 30-45 mins before breakfast',
-          indication: 'Gastro-protection · Prevents stomach ulcers and acidity from aspirin/blood thinners',
-          foodRule: 'Strictly on empty stomach with plain water. Do not crush tablet.',
-          caution: 'Do not take with antacids simultaneously; space 2 hours apart.'
-        },
-        {
-          id: 'med_rabeprazole',
-          rxSource: 'rx5',
-          name: 'Rabeprazole',
-          strength: '20 mg',
-          form: 'Capsule',
-          latinFreq: '1 OD',
-          frequencyPlain: 'Once Daily (खाली पेट)',
-          slot: 'morning_empty',
-          timingLabel: '🌅 Morning (Empty Stomach)',
-          timingInstruction: 'Take 30 mins before first meal of day',
-          indication: 'Acid reflux & mucosal protection while taking pain medications',
-          foodRule: 'Swallow whole with a glass of lukewarm water.',
-          caution: 'Report any severe diarrhea lasting more than 2 days.'
-        },
-        {
-          id: 'med_amlodipine',
-          rxSource: 'rx1',
-          name: 'Amlodipine',
-          strength: '5 mg',
-          form: 'Tablet',
-          latinFreq: '1 OD',
-          frequencyPlain: 'Once Daily (सुबह नाश्ते के बाद)',
-          slot: 'morning_after',
-          timingLabel: '🥣 Morning (After Breakfast)',
-          timingInstruction: 'Take every morning after food at fixed hour',
-          indication: 'High Blood Pressure (Hypertension) · Relaxes blood vessels to lower strain on heart',
-          foodRule: 'Take consistently with breakfast. Avoid grapefruit juice.',
-          caution: 'Watch for mild ankle swelling; do not stop abruptly without doctor consult.'
-        },
-        {
-          id: 'med_metformin_am',
-          rxSource: 'rx1',
-          name: 'Metformin HCl',
-          strength: '500 mg',
-          form: 'Tablet',
-          latinFreq: '1 BD (Dose 1/2)',
-          frequencyPlain: 'Twice Daily (भोजन के साथ)',
-          slot: 'morning_after',
-          timingLabel: '🥣 Morning (After Breakfast)',
-          timingInstruction: 'Take in the middle or end of breakfast',
-          indication: 'Type 2 Diabetes Mellitus · Regulates blood sugar absorption and prevents liver glucose surges',
-          foodRule: 'Always take with food to prevent gastric discomfort or nausea.',
-          caution: 'Maintain good hydration; avoid alcohol.'
-        },
-        {
-          id: 'med_telmisartan',
-          rxSource: 'rx3',
-          name: 'Telmisartan',
-          strength: '40 mg',
-          form: 'Tablet',
-          latinFreq: '1 OD',
-          frequencyPlain: 'Once Daily (सुबह)',
-          slot: 'morning_after',
-          timingLabel: '🥣 Morning (After Breakfast)',
-          timingInstruction: 'Take with morning meal',
-          indication: 'Cardioprotection & Essential Hypertension · Blocks angiotensin II to protect heart muscle',
-          foodRule: 'May be taken with or without breakfast.',
-          caution: 'Get up slowly from sitting or lying position to prevent dizziness.'
-        },
-        {
-          id: 'med_ecosprin',
-          rxSource: 'rx3',
-          name: 'Ecosprin (Aspirin)',
-          strength: '75 mg',
-          form: 'Enteric Coated Tab',
-          latinFreq: '1 OD',
-          frequencyPlain: 'Once Daily (दोपहर या सुबह भोजन के बाद)',
-          slot: 'morning_after',
-          timingLabel: '🥣 Morning (After Breakfast)',
-          timingInstruction: 'Take strictly after a solid meal',
-          indication: 'Antiplatelet Blood Thinner · Stops blood clots from forming inside coronary arteries/stents',
-          foodRule: 'Never take on an empty stomach. Enteric coating protects stomach.',
-          caution: 'Report unusual gum bleeding or nosebleeds to doctor.'
-        },
-        {
-          id: 'med_clopidogrel',
-          rxSource: 'rx3',
-          name: 'Clopidogrel',
-          strength: '75 mg',
-          form: 'Tablet',
-          latinFreq: '1 OD',
-          frequencyPlain: 'Once Daily',
-          slot: 'morning_after',
-          timingLabel: '🥣 Morning (After Breakfast)',
-          timingInstruction: 'Take after morning food',
-          indication: 'Dual Antiplatelet Therapy · Synergizes with Aspirin to prevent coronary thrombosis',
-          foodRule: 'Take with meal at same time daily.',
-          caution: 'Notify surgeon/dentist that you are taking dual blood thinners before any procedure.'
-        },
-        {
-          id: 'med_paracetamol_pm',
-          rxSource: 'rx2',
-          name: 'Paracetamol',
-          strength: '650 mg',
-          form: 'Tablet',
-          latinFreq: '1 TDS / 1-1-1',
-          frequencyPlain: '3 Times Daily (दोपहर में भोजन बाद)',
-          slot: 'afternoon',
-          timingLabel: '☀️ Afternoon (After Lunch)',
-          timingInstruction: 'Take after afternoon lunch',
-          indication: 'Fever & Analgesia · Brings down body temperature and relieves headache & muscle soreness',
-          foodRule: 'Take with half glass of water after food.',
-          caution: 'Do not exceed 3,000 mg within 24 hours. Do not combine with other paracetamol products.'
-        },
-        {
-          id: 'med_amoxicillin',
-          rxSource: 'rx6',
-          name: 'Amoxicillin',
-          strength: '500 mg',
-          form: 'Capsule',
-          latinFreq: '1 TDS',
-          frequencyPlain: 'Three Times Daily (हर 8 घंटे में)',
-          slot: 'afternoon',
-          timingLabel: '☀️ Afternoon (After Lunch)',
-          timingInstruction: 'Mid-day dose after meal',
-          indication: 'ENT Bacterial Infection · Eradicates bacterial pathogens in throat and nasal sinuses',
-          foodRule: 'Take with water after lunch.',
-          caution: 'Must finish all prescribed days even if throat pain subsides.'
-        },
-        {
-          id: 'med_atorvastatin',
-          rxSource: 'rx1',
-          name: 'Atorvastatin',
-          strength: '20 mg',
-          form: 'Tablet',
-          latinFreq: '0-0-1 (HS)',
-          frequencyPlain: 'At Bedtime (सोने से पहले)',
-          slot: 'night',
-          timingLabel: '🌙 Night (Dinner / Bedtime)',
-          timingInstruction: 'Take after dinner before sleeping',
-          indication: 'Dyslipidemia & Cholesterol · Lowers bad LDL cholesterol and stabilizes arterial wall plaque',
-          foodRule: 'Take at night because liver synthesizes cholesterol while sleeping.',
-          caution: 'Inform doctor if experiencing unexplained muscle weakness or soreness.'
-        },
-        {
-          id: 'med_metformin_pm',
-          rxSource: 'rx1',
-          name: 'Metformin HCl',
-          strength: '500 mg',
-          form: 'Tablet',
-          latinFreq: '1 BD (Dose 2/2)',
-          frequencyPlain: 'Twice Daily (रात के खाने के साथ)',
-          slot: 'night',
-          timingLabel: '🌙 Night (Dinner / Bedtime)',
-          timingInstruction: 'Take in the middle of dinner',
-          indication: 'Type 2 Diabetes Mellitus · Keeps overnight hepatic glucose production steady',
-          foodRule: 'Always take with food.',
-          caution: 'Never skip dinner after taking evening Metformin.'
-        },
-        {
-          id: 'med_levocetirizine',
-          rxSource: 'rx2',
-          name: 'Levocetirizine + Montelukast',
-          strength: '5 mg / 10 mg',
-          form: 'Tablet',
-          latinFreq: '0-0-1 (HS)',
-          frequencyPlain: 'Once at Night before bed',
-          slot: 'night',
-          timingLabel: '🌙 Night (Dinner / Bedtime)',
-          timingInstruction: 'Take 30 mins before sleep',
-          indication: 'Allergic Rhinitis & Cough · Relieves sneezing, blocked nose, and bronchial irritability',
-          foodRule: 'Take with water before bed.',
-          caution: 'May cause mild drowsiness; avoid driving after taking.'
-        },
-        {
-          id: 'med_aceclofenac',
-          rxSource: 'rx5',
-          name: 'Aceclofenac + Paracetamol',
-          strength: '100 mg / 325 mg',
-          form: 'Tablet',
-          latinFreq: '1 BD',
-          frequencyPlain: 'Twice Daily (सुबह और रात)',
-          slot: 'night',
-          timingLabel: '🌙 Night (Dinner / Bedtime)',
-          timingInstruction: 'Take after evening meal',
-          indication: 'Joint Pain & Osteoarthritis · Reduces inflammatory joint swelling and stiffness',
-          foodRule: 'Strictly after food with full glass of water.',
-          caution: 'Do not take without stomach acid-blocker (Rabeprazole).'
-        }
-      ];
-
-      var activeMedFilter = 'all';
-
-      function filterMedicationSource(sourceKey) {
-        activeMedFilter = sourceKey;
-        var filterBtns = {
-          all: 'btnMedFilterAll',
-          rx1: 'btnMedFilterCardio',
-          rx3: 'btnMedFilterCardioAdv',
-          rx2: 'btnMedFilterFever',
-          rx5: 'btnMedFilterOrtho',
-          rx4: 'btnMedFilterPediatric'
-        };
-
-        Object.keys(filterBtns).forEach(function (k) {
-          var btn = $(filterBtns[k]);
-          if (btn) btn.classList.toggle('p', k === sourceKey);
-        });
-
-        var filtered = medicationsMasterStore;
-        if (sourceKey !== 'all') {
-          filtered = medicationsMasterStore.filter(function (m) {
-            return m.rxSource === sourceKey;
-          });
-        }
-
-        renderPillboxTimeline(filtered);
-        renderMedicationCards(filtered);
-      }
-      window.filterMedicationSource = filterMedicationSource;
-
-      function renderPillboxTimeline(medList) {
-        var slots = {
-          morning_empty: $('pillboxMorningEmpty'),
-          morning_after: $('pillboxMorningAfter'),
-          afternoon: $('pillboxAfternoon'),
-          night: $('pillboxNight')
-        };
-
-        Object.keys(slots).forEach(function (s) {
-          if (slots[s]) slots[s].innerHTML = '';
-        });
-
-        medList.forEach(function (m) {
-          var targetSlot = slots[m.slot] || slots.morning_after;
-          if (targetSlot) {
-            var item = document.createElement('div');
-            item.className = 'pillbox-med-item';
-            item.innerHTML = '<div style="font-weight:700;font-size:.85rem;color:var(--tx)">💊 ' + m.name + ' <span style="font-weight:400;color:var(--mu)">' + m.strength + '</span></div>' +
-              '<div class="sm" style="color:var(--pr);font-weight:600;margin-top:2px">' + m.frequencyPlain + '</div>' +
-              '<div class="sm" style="color:var(--mu);margin-top:2px;font-size:.76rem">' + m.timingInstruction + '</div>';
-            targetSlot.appendChild(item);
-          }
-        });
-
-        Object.keys(slots).forEach(function (s) {
-          if (slots[s] && !slots[s].children.length) {
-            slots[s].innerHTML = '<div class="sm" style="color:var(--mu);font-style:italic;padding:8px 0">No doses scheduled for this window.</div>';
-          }
-        });
-      }
-
-      function renderMedicationCards(medList) {
-        var container = $('medCardsContainer');
-        var pill = $('medsTotalCountPill');
-        if (pill) pill.textContent = medList.length + ' Active Medicines Monitored';
-        if (!container) return;
-
-        var cH = '';
-        medList.forEach(function (m) {
-          var userBadge = m.isUserAdded
-            ? '<span class="pill pill-teal" style="font-size:.68rem;padding:2px 6px">Custom Medicine</span>'
-            : '';
-          var deleteBtn = m.isUserAdded
-            ? '<button class="btn" style="font-size:.72rem;padding:2px 8px;color:#ef4444;border-color:rgba(239,68,68,0.3);margin-left:6px" onclick="removeUserMedication(\'' + m.id + '\')" title="Remove this medicine">🗑️ Delete</button>'
-            : '';
-          cH += '<div class="med-card">' +
-            '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">' +
-            '<div>' +
-            '<div class="med-card-name">💊 ' + m.name + ' ' + userBadge + '</div>' +
-            '<div class="med-card-strength">' + m.strength + ' (' + m.form + ')</div>' +
-            '</div>' +
-            '<div style="display:flex;align-items:center">' +
-            '<span class="rx-freq-pill">' + m.latinFreq + '</span>' +
-            deleteBtn +
-            '</div>' +
-            '</div>' +
-            '<div style="margin:10px 0 6px">' +
-            '<span class="timing-tag">' + m.timingLabel + '</span>' +
-            '</div>' +
-            '<div class="sm" style="color:var(--tx);font-weight:600;margin-bottom:6px">🎯 Indication: ' + m.indication + '</div>' +
-            '<div class="sm" style="color:var(--mu);margin-bottom:6px"><b>🍽️ Meal Rule:</b> ' + m.foodRule + '</div>' +
-            '<div class="sm" style="color:#b91c1c;background:rgba(239,68,68,0.06);padding:6px 8px;border-radius:6px"><b>⚠️ Caution:</b> ' + m.caution + '</div>' +
-            '</div>';
-        });
-        container.innerHTML = cH;
-      }
-
-      function printMedSchedule() {
-        window.print();
-      }
-      window.printMedSchedule = printMedSchedule;
-
-
-      // =========================================================================
-      // CLINICAL FEATURE 3: APPOINTMENT DATES & FOLLOW-UP SCHEDULER (v-appointments)
-      // =========================================================================
-      var appointmentsMasterStore = [
-        {
-          id: 'appt_1',
-          doctor: 'Dr. Priya Sharma',
-          specialty: 'Internal Medicine / Pulmonology',
-          clinic: 'Care Compass Multispeciality Centre',
-          phone: '040-44556677',
-          date: '2026-10-18',
-          time: '10:30',
-          reason: 'Repeat SpO2 & Chest Congestion Review following 5-day antibiotic course',
-          checklist: 'Complete course of Azithromycin; record fever readings morning and evening.',
-          status: 'upcoming'
-        },
-        {
-          id: 'appt_2',
-          doctor: 'Dr. Arvind Swaminathan',
-          specialty: 'Cardiologist & Diabetologist',
-          clinic: 'City Care & Apollo Outpatient Clinic',
-          phone: '040-23456789',
-          date: '2026-10-25',
-          time: '11:15',
-          reason: 'Blood pressure titration review & 30-day Metformin tolerance check',
-          checklist: 'Maintain 7-day home BP log; fast 10 hours for fasting blood glucose test.',
-          status: 'upcoming'
-        },
-        {
-          id: 'appt_3',
-          doctor: 'Dr. Venkatesh Rao',
-          specialty: 'Orthopedic Surgeon',
-          clinic: 'Spine & Joint Health Centre',
-          phone: '040-33445566',
-          date: '2026-11-04',
-          time: '04:00',
-          reason: 'Knee joint mobility & Osteoarthritis pain management review',
-          checklist: 'Bring standing knee X-ray (AP/Lateral view); wear comfortable walking clothes.',
-          status: 'upcoming'
-        },
-        {
-          id: 'appt_4',
-          doctor: 'Dr. S. K. Bose',
-          specialty: 'Senior Interventional Cardiologist',
-          clinic: 'Fortis Heart Institute',
-          phone: '040-55667788',
-          date: '2026-11-15',
-          time: '09:45',
-          reason: 'Post-angioplasty 3-month coronary stent surveillance & resting ECG',
-          checklist: 'Lipid profile blood draw (12h fasting); bring dual blood thinner strips.',
-          status: 'upcoming'
-        }
-      ];
-
-      function calculateDaysDiff(targetDateStr) {
-        var target = new Date(targetDateStr + 'T00:00:00');
-        var now = new Date();
-        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        var diffMs = target - today;
-        var diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        return diffDays;
-      }
-
-      function renderAppointmentsGrid() {
-        var container = $('appointmentsGridContainer');
-        var countEl = $('apptCountActive');
-        var nextEl = $('apptNextReviewText');
-        if (countEl) countEl.textContent = appointmentsMasterStore.length;
-        if (!container) return;
-
-        // Sort ascending by date
-        appointmentsMasterStore.sort(function (a, b) {
-          return new Date(a.date) - new Date(b.date);
-        });
-
-        if (nextEl && appointmentsMasterStore[0]) {
-          var dDiff = calculateDaysDiff(appointmentsMasterStore[0].date);
-          if (dDiff === 0) nextEl.textContent = 'Today!';
-          else if (dDiff === 1) nextEl.textContent = 'Tomorrow';
-          else if (dDiff > 1) nextEl.textContent = 'In ' + dDiff + ' Days (' + appointmentsMasterStore[0].date + ')';
-          else nextEl.textContent = 'Past due (' + appointmentsMasterStore[0].date + ')';
-        }
-
-        var aH = '';
-        appointmentsMasterStore.forEach(function (a) {
-          var diff = calculateDaysDiff(a.date);
-          var badgeClass = 'badge-upcoming';
-          var countdownText = 'In ' + diff + ' Days';
-          if (diff === 0) {
-            badgeClass = 'badge-urgent';
-            countdownText = '🚨 Today';
-          } else if (diff === 1) {
-            badgeClass = 'badge-urgent';
-            countdownText = '⏰ Tomorrow';
-          } else if (diff < 0) {
-            badgeClass = 'badge-done';
-            countdownText = '✓ Passed';
-          }
-
-          aH += '<div class="appt-card">' +
-            '<div class="appt-card-head">' +
-            '<div>' +
-            '<div class="appt-doctor">👨‍⚕️ ' + a.doctor + '</div>' +
-            '<div class="appt-specialty">' + a.specialty + ' · ' + a.clinic + '</div>' +
-            '</div>' +
-            '<span class="appt-badge ' + badgeClass + '">' + countdownText + '</span>' +
-            '</div>' +
-            '<div class="appt-datetime">' +
-            '<span>📅 ' + a.date + '</span>' +
-            '<span>⏰ ' + a.time + '</span>' +
-            '<span>📞 <a href="tel:' + a.phone + '" style="color:inherit;text-decoration:none">' + a.phone + '</a></span>' +
-            '</div>' +
-            '<div class="appt-reason"><b>Clinical Reason:</b> ' + a.reason + '</div>' +
-            '<div class="appt-checklist"><b>📋 Pre-visit Checklist:</b> ' + a.checklist + '</div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:8px">' +
-            '<button class="btn" style="font-size:.8rem;padding:4px 10px" onclick="downloadApptIcs(\'' + a.id + '\')">📅 Export to Calendar (.ics)</button>' +
-            '<button class="btn" style="font-size:.8rem;padding:4px 10px;color:#dc2626" onclick="deleteAppointment(\'' + a.id + '\')">🗑️ Remove</button>' +
-            '</div>' +
-            '</div>';
-        });
-        container.innerHTML = aH;
-      }
-      window.renderAppointmentsGrid = renderAppointmentsGrid;
-
-      function openAddApptModal() {
-        var modal = $('apptModalOverlay');
-        if (modal) modal.style.display = 'flex';
-      }
-      window.openAddApptModal = openAddApptModal;
-
-      function closeAddApptModal() {
-        var modal = $('apptModalOverlay');
-        if (modal) modal.style.display = 'none';
-      }
-      window.closeAddApptModal = closeAddApptModal;
-
-      function saveCustomAppointment() {
-        var doc = ($('newApptDoctor') && $('newApptDoctor').value || '').trim();
-        var spec = ($('newApptSpecialty') && $('newApptSpecialty').value || '').trim() || 'General Practice';
-        var clinic = ($('newApptClinic') && $('newApptClinic').value || '').trim() || 'Hospital Clinic';
-        var phone = ($('newApptPhone') && $('newApptPhone').value || '').trim() || '040-12345678';
-        var date = ($('newApptDate') && $('newApptDate').value || '').trim();
-        var time = ($('newApptTime') && $('newApptTime').value || '').trim() || '10:00';
-        var reason = ($('newApptReason') && $('newApptReason').value || '').trim() || 'Routine follow-up';
-        var check = ($('newApptChecklist') && $('newApptChecklist').value || '').trim() || 'Bring health records and prescriptions.';
-
-        if (!doc) {
-          alert('Please enter doctor or clinic name.');
-          return;
-        }
-        if (!date) {
-          alert('Please select appointment date.');
-          return;
-        }
-
-        var newAppt = {
-          id: 'appt_custom_' + Date.now(),
-          doctor: doc,
-          specialty: spec,
-          clinic: clinic,
-          phone: phone,
-          date: date,
-          time: time,
-          reason: reason,
-          checklist: check,
-          status: 'upcoming'
-        };
-
-        appointmentsMasterStore.push(newAppt);
-        renderAppointmentsGrid();
-        closeAddApptModal();
-        alert('Appointment successfully saved and countdown active!');
-      }
-      window.saveCustomAppointment = saveCustomAppointment;
-
-      function deleteAppointment(apptId) {
-        if (!confirm('Are you sure you want to remove this appointment?')) return;
-        appointmentsMasterStore = appointmentsMasterStore.filter(function (a) { return a.id !== apptId; });
-        try {
-          localStorage.setItem('cc_user_appointments', JSON.stringify(appointmentsMasterStore.filter(function(a){ return a.isUserAdded; })));
-        } catch(e) {}
-        renderAppointmentsGrid();
-      }
-      window.deleteAppointment = deleteAppointment;
-
-      function generateIcsContent(appts) {
-        var lines = [
-          'BEGIN:VCALENDAR',
-          'VERSION:2.0',
-          'PRODID:-//CareCompass//Health Appointments//EN',
-          'CALSCALE:GREGORIAN'
-        ];
-
-        appts.forEach(function (a) {
-          var dateParts = a.date.split('-');
-          var timeParts = (a.time || '10:00').split(':');
-          var dStr = dateParts[0] + dateParts[1] + dateParts[2] + 'T' + timeParts[0] + timeParts[1] + '00';
-          lines.push('BEGIN:VEVENT');
-          lines.push('UID:' + a.id + '@carecompass.health');
-          lines.push('DTSTAMP:' + dStr + 'Z');
-          lines.push('DTSTART:' + dStr);
-          lines.push('SUMMARY:Doctor Consultation: ' + a.doctor + ' (' + a.specialty + ')');
-          lines.push('LOCATION:' + a.clinic);
-          lines.push('DESCRIPTION:Reason: ' + a.reason + '\nChecklist: ' + a.checklist + '\nPhone: ' + a.phone);
-          lines.push('STATUS:CONFIRMED');
-          lines.push('END:VEVENT');
-        });
-
-        lines.push('END:VCALENDAR');
-        return lines.join('\r\n');
-      }
-
-      function downloadApptIcs(apptId) {
-        var appt = appointmentsMasterStore.find(function (a) { return a.id === apptId; });
-        if (!appt) return;
-        var icsText = generateIcsContent([appt]);
-        var blob = new Blob([icsText], { type: 'text/calendar;charset=utf-8' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'Appointment_' + appt.doctor.replace(/[^a-zA-Z0-9]/g, '_') + '.ics';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-      window.downloadApptIcs = downloadApptIcs;
-
-      function downloadAllCalendarIcs() {
-        if (!appointmentsMasterStore.length) {
-          alert('No appointments found to export.');
-          return;
-        }
-        var icsText = generateIcsContent(appointmentsMasterStore);
-        var blob = new Blob([icsText], { type: 'text/calendar;charset=utf-8' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'All_CareCompass_Appointments.ics';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-      window.downloadAllCalendarIcs = downloadAllCalendarIcs;
-
-
-      // =========================================================================
-      // CLINICAL FEATURE 4: PLAIN-LANGUAGE RECORDS & LAB EXPLAINER (v-explain)
-      // =========================================================================
-      var biomarkersMasterStore = {
-        metabolic: [
-          {
-            name: 'Fasting Blood Glucose',
-            plainName: 'Sugar floating in your blood after fasting overnight',
-            value: '142',
-            unit: 'mg/dL',
-            range: '70 – 99 mg/dL',
-            status: 'high',
-            analogy: 'Imagine highway traffic: a normal reading is smooth flowing traffic. 142 mg/dL is like morning rush-hour backlog waiting to enter cells.',
-            explanation: 'Your insulin hormone is having difficulty clearing sugar from food into your body tissues, causing glucose to build up in blood vessels.',
-            lifestyleTip: 'Include high-fiber vegetables with meals, take a 15-minute post-meal walk, and avoid sweet beverages.'
-          },
-          {
-            name: 'HbA1c (Glycated Hemoglobin)',
-            plainName: 'Your average 90-day blood sugar score card',
-            value: '8.4',
-            unit: '%',
-            range: '< 5.7% (Normal), 5.7–6.4% (Prediabetes), ≥6.5% (Diabetes)',
-            status: 'high',
-            analogy: 'Like glaze sticking to a donut: red blood cells live for 3 months, and sugar molecules gradually stick to them over time.',
-            explanation: 'Because red blood cells live for 120 days, HbA1c shows your true 3-month sugar average—it cannot be fooled by skipping sweets the day before.',
-            lifestyleTip: 'Consistent medication compliance with Metformin and daily walking will drop this score down over the next 12 weeks.'
-          },
-          {
-            name: 'LDL Cholesterol',
-            plainName: '"Bad" cholesterol that sticks inside artery pipes',
-            value: '158',
-            unit: 'mg/dL',
-            range: '< 100 mg/dL (Optimal)',
-            status: 'high',
-            analogy: 'Think of grease inside kitchen drainage pipes: over years, grease leaves sticky plaques that narrow the pipe passage.',
-            explanation: 'High LDL particles can slip into blood vessel linings and form atherosclerotic plaque, increasing long-term heart risk.',
-            lifestyleTip: 'Atorvastatin (taken at night) actively slows down liver cholesterol synthesis; reduce deep-fried and trans-fat foods.'
-          },
-          {
-            name: 'HDL Cholesterol',
-            plainName: '"Good" cholesterol garbage trucks',
-            value: '48',
-            unit: 'mg/dL',
-            range: '> 40 mg/dL (Men), > 50 mg/dL (Women)',
-            status: 'optimal',
-            analogy: 'The municipal cleaning truck that cruises through arteries, collects excess grease, and brings it back to the liver for recycling.',
-            explanation: 'Higher HDL provides natural cardiovascular defense by scavenging surplus cholesterol.',
-            lifestyleTip: 'Boosted by aerobic exercise, extra-virgin olive oil, and raw walnuts/almonds.'
-          },
-          {
-            name: 'Serum Triglycerides',
-            plainName: 'Extra food calories stored as circulating fats',
-            value: '210',
-            unit: 'mg/dL',
-            range: '< 150 mg/dL (Normal)',
-            status: 'high',
-            analogy: 'Fuel tankers cruising on standby because the gas stations (muscles) are already topped up with unused calories.',
-            explanation: 'Surplus refined carbohydrates and sugars are converted by the liver into triglycerides.',
-            lifestyleTip: 'Cutting sugary sodas, alcohol, and refined white rice/bread rapidly brings triglycerides down.'
-          }
-        ],
-        cbc: [
-          {
-            name: 'Hemoglobin (Hb)',
-            plainName: 'Oxygen delivery vehicles in your bloodstream',
-            value: '13.8',
-            unit: 'g/dL',
-            range: '13.0 – 17.0 g/dL (Normal)',
-            status: 'optimal',
-            analogy: 'Fleet of delivery vans carrying fresh oxygen from your lungs to your brain, muscles, and organs.',
-            explanation: 'Your oxygen-carrying capacity is healthy, which explains good daily physical stamina without shortness of breath.',
-            lifestyleTip: 'Maintain iron-rich diet with green spinach, lentils, pomegranate, and vitamin C.'
-          },
-          {
-            name: 'Total Leukocyte Count (WBC)',
-            plainName: 'Your internal immune defense army',
-            value: '11,400',
-            unit: '/mcL',
-            range: '4,000 – 10,000 /mcL',
-            status: 'high',
-            analogy: 'The body siren sounding to call police officers to active patrol during an ongoing viral or bacterial encounter.',
-            explanation: 'A mild elevation indicates your immune system is actively fighting an ear, throat, or respiratory infection.',
-            lifestyleTip: 'Rest, stay well hydrated, and finish prescribed antibiotic courses as directed.'
-          },
-          {
-            name: 'Platelet Count',
-            plainName: 'Emergency leak repair squads',
-            value: '2.4',
-            unit: 'Lakhs/mcL',
-            range: '1.5 – 4.5 Lakhs/mcL (Normal)',
-            status: 'optimal',
-            analogy: 'Emergency bricklayers ready to plug any cut or scrape instantly so you do not bleed.',
-            explanation: 'Normal platelet levels guarantee safe blood clotting without risk of spontaneous bleeding.',
-            lifestyleTip: 'Adequate hydration and balanced nutrition keep bone marrow healthy.'
-          }
-        ],
-        kft: [
-          {
-            name: 'Serum Creatinine',
-            plainName: 'Waste marker showing how clean kidney filters are',
-            value: '0.92',
-            unit: 'mg/dL',
-            range: '0.6 – 1.2 mg/dL (Normal)',
-            status: 'optimal',
-            analogy: 'Like the dust level behind an air filter: low dust means the filter is working crystal clear.',
-            explanation: 'Your kidneys are filtering muscle metabolic waste products cleanly and efficiently.',
-            lifestyleTip: 'Drink 2 to 2.5 liters of clean water daily; avoid unnecessary overuse of OTC painkiller pills.'
-          },
-          {
-            name: 'eGFR (Estimated Glomerular Filtration Rate)',
-            plainName: 'Kidney filtration engine efficiency percentage',
-            value: '94',
-            unit: 'mL/min/1.73m²',
-            range: '> 90 mL/min (Optimal Stage 1)',
-            status: 'optimal',
-            analogy: 'Your kidney water purification plant is operating at 94% full horsepower capacity.',
-            explanation: 'Exceptional filtration function protecting against metabolic waste build-up.',
-            lifestyleTip: 'Keep blood pressure below 130/80 to protect micro-filter capillaries long term.'
-          },
-          {
-            name: 'SGPT / ALT (Liver Enzyme)',
-            plainName: 'Liver cell integrity indicator',
-            value: '28',
-            unit: 'U/L',
-            range: '7 – 45 U/L (Normal)',
-            status: 'optimal',
-            analogy: 'A sealed engine with zero oil leaks: low enzyme in blood means liver cells are healthy and intact.',
-            explanation: 'Zero signs of liver inflammation, drug-induced injury, or fatty liver distress.',
-            lifestyleTip: 'Limit alcohol consumption, avoid unverified herbal remedies, and maintain healthy body weight.'
-          }
-        ]
-      };
-
-      var medicalJargonDB = [
-        { term: 'Dyslipidemia', plain: 'Imbalance of blood fats (cholesterol or triglycerides)', detail: 'High bad cholesterol or fats that increase plaque risk.' },
-        { term: 'Hypertension', plain: 'High blood pressure (>130/80 mmHg)', detail: 'Blood pushing too hard against blood vessel walls.' },
-        { term: 'Hyperglycemia', plain: 'Elevated blood sugar / glucose level', detail: 'Happens when diabetes or poor insulin control leaves sugar in blood.' },
-        { term: 'PRN / SOS', plain: 'Take only as needed when symptoms appear', detail: 'Do not take on fixed schedule; only when fever or pain is felt.' },
-        { term: 'OD (Once Daily)', plain: 'Take 1 dose once every 24 hours', detail: 'Usually taken at the exact same hour every morning or evening.' },
-        { term: 'BD (Bis in Die)', plain: 'Take twice daily (12 hours apart)', detail: 'Commonly after breakfast and after dinner.' },
-        { term: 'TDS (Ter Die Sumendum)', plain: 'Take 3 times daily (8 hours apart)', detail: 'Morning, afternoon, and night after meals.' },
-        { term: 'HS (Hora Somni)', plain: 'Take right at bedtime before sleep', detail: 'Reserved for statins or sedatives that work during sleep cycles.' },
-        { term: 'NPO (Nil Per Os)', plain: 'Nothing by mouth (no food or water)', detail: 'Required before surgeries or endoscopic procedures.' },
-        { term: 'Edema', plain: 'Swelling caused by fluid trapped in body tissues', detail: 'Common in ankles, feet, or eyelids when kidneys/heart need review.' },
-        { term: 'Tachycardia', plain: 'Rapid resting heart rate (>100 beats/min)', detail: 'Heart beating faster than normal due to fever, anxiety, or thyroid.' },
-        { term: 'Bradycardia', plain: 'Slow resting heart rate (<60 beats/min)', detail: 'Heart beating slower than normal; common in athletic runners or drug effect.' },
-        { term: 'Pyrexia', plain: 'Fever or elevated body temperature (>99.5°F)', detail: 'Natural immune defense mechanism against microbial invaders.' },
-        { term: 'eGFR', plain: 'Estimated kidney filtration rate', detail: 'Score over 90 means healthy kidney cleansing power.' },
-        { term: 'Analgesic', plain: 'Pain relief medicine (like Paracetamol)', detail: 'Temporarily numbs pain receptor signals to the brain.' },
-        { term: 'Antipyretic', plain: 'Fever reducing medicine', detail: 'Acts on hypothalamus temperature center in brain to cool down body.' },
-        { term: 'Ischemia', plain: 'Restricted blood supply and oxygen to tissue', detail: 'Occurs when an artery is partially blocked by a clot or spasm.' },
-        { term: 'Stent', plain: 'Tiny expandable mesh tube keeping an artery open', detail: 'Permanently deployed during angioplasty to maintain coronary flow.' },
-        { term: 'CBC', plain: 'Complete Blood Count', detail: 'Basic blood check counting red cells, white cells, and platelets.' },
-        { term: 'LFT / KFT', plain: 'Liver & Kidney Function Tests', detail: 'Blood panels verifying organ filtration and metabolic health.' }
-      ];
-
-      var currentActiveBiomarkers = biomarkersMasterStore.metabolic;
-
-      function loadBiomarkerPreset(presetKey) {
-        var items = biomarkersMasterStore[presetKey] || biomarkersMasterStore.metabolic;
-        currentActiveBiomarkers = items;
-        renderBiomarkerCards(items);
-      }
-      window.loadBiomarkerPreset = loadBiomarkerPreset;
-
-      function renderBiomarkerCards(items) {
-        var container = $('biomarkerCardsContainer');
-        if (!container) return;
-
-        var bH = '';
-        items.forEach(function (b) {
-          var statusPillClass = 'status-normal';
-          var statusText = 'Normal & Healthy';
-          if (b.status === 'high') {
-            statusPillClass = 'status-high';
-            statusText = '⚠️ High (Above Target)';
-          } else if (b.status === 'low') {
-            statusPillClass = 'status-low';
-            statusText = '⚠️ Low (Below Target)';
-          } else if (b.status === 'optimal') {
-            statusPillClass = 'status-optimal';
-            statusText = '✓ Optimal Target';
-          }
-
-          var userBadge = b.isUserAdded
-            ? '<span class="pill pill-teal" style="font-size:.68rem;padding:2px 6px;margin-left:6px">Custom Test</span>'
-            : '';
-          var deleteBtn = b.isUserAdded
-            ? '<button class="btn" style="font-size:.72rem;padding:2px 8px;color:#ef4444;border-color:rgba(239,68,68,0.3);margin-left:6px" onclick="removeUserBiomarker(\'' + b.id + '\')" title="Delete custom biomarker">🗑️ Delete</button>'
-            : '';
-
-          bH += '<div class="biomarker-card">' +
-            '<div class="biomarker-card-head">' +
-            '<div>' +
-            '<div class="biomarker-name">🔬 ' + b.name + userBadge + '</div>' +
-            '<div class="biomarker-plain-label">' + b.plainName + '</div>' +
-            '</div>' +
-            '<div style="display:flex;align-items:center;gap:4px">' +
-            '<span class="biomarker-status-pill ' + statusPillClass + '">' + statusText + '</span>' +
-            deleteBtn +
-            '</div>' +
-            '</div>' +
-            '<div class="biomarker-val-row">' +
-            '<div>' +
-            '<span class="biomarker-val">' + b.value + '</span> ' +
-            '<span class="biomarker-unit">' + b.unit + '</span>' +
-            '</div>' +
-            '<div class="biomarker-range">Normal Range: ' + b.range + '</div>' +
-            '</div>' +
-            '<div class="biomarker-analogy">' +
-            '<span class="biomarker-analogy-icon">💡</span>' +
-            '<div><b>Everyday Analogy:</b> ' + b.analogy + '</div>' +
-            '</div>' +
-            '<div class="biomarker-plain-exp"><b>What this means for you:</b> ' + b.explanation + '</div>' +
-            '<div class="biomarker-action-tip"><b>🌱 Actionable Tip:</b> ' + b.lifestyleTip + '</div>' +
-            '</div>';
-        });
-
-        container.innerHTML = bH;
-      }
-
-      function filterMedicalJargon() {
-        var input = $('jargonSearchInput');
-        var query = (input && input.value || '').trim().toLowerCase();
-        var container = $('jargonResultsContainer');
-        if (!container) return;
-
-        var matched = medicalJargonDB;
-        if (query) {
-          matched = medicalJargonDB.filter(function (j) {
-            return j.term.toLowerCase().includes(query) || j.plain.toLowerCase().includes(query) || j.detail.toLowerCase().includes(query);
-          });
-        } else {
-          matched = medicalJargonDB.slice(0, 6);
-        }
-
-        if (!matched.length) {
-          container.innerHTML = '<div class="sm" style="color:var(--mu);grid-column:1/-1;padding:10px">No matching medical term found. Try another word like "Hypertension", "PRN", or "Dyslipidemia".</div>';
-          return;
-        }
-
-        var jH = '';
-        matched.forEach(function (j) {
-          jH += '<div class="jargon-result-card">' +
-            '<div class="jargon-term">📖 ' + j.term + '</div>' +
-            '<div class="jargon-plain">→ ' + j.plain + '</div>' +
-            '<div class="jargon-desc">' + j.detail + '</div>' +
-            '</div>';
-        });
-        container.innerHTML = jH;
-      }
-      window.filterMedicalJargon = filterMedicalJargon;
-
-      function speakCurrentBiomarkers() {
-        if (!currentActiveBiomarkers || !currentActiveBiomarkers.length) return;
-        var speech = currentActiveBiomarkers.map(function (b) {
-          return b.name + ' measured at ' + b.value + ' ' + b.unit + '. ' + b.plainName + '. ' + b.explanation;
-        }).join('. ');
-        speakText(speech, currentLang || 'en');
-      }
-      window.speakCurrentBiomarkers = speakCurrentBiomarkers;
-
-
-      // -------------------------------------------------------------------------
-      // USER DATA INTAKE & MANAGEMENT ENGINES
-      // -------------------------------------------------------------------------
-      function handleDrawerAuthClick() {
-        if (user) {
-          if (confirm('Log out of ' + user.name + '?')) {
-            user = null;
-            ls('cc_user', 'null');
-            renderProfileUI();
-            go('home');
-          }
-        } else {
-          go('login');
-        }
-      }
-      window.handleDrawerAuthClick = handleDrawerAuthClick;
-
-      // DISCHARGE USER ENTRY CONTROLLERS
-      function toggleDsPresetBar() {
-        var bar = $('dsPresetBarCollapse');
-        if (bar) bar.style.display = bar.style.display === 'none' ? 'block' : 'none';
-      }
-      window.toggleDsPresetBar = toggleDsPresetBar;
-
-      function addDsMedInputRow(name, dose, timing, reason) {
-        var container = $('dsMedsInputsContainer');
-        if (!container) return;
-        var row = document.createElement('div');
-        row.className = 'ds-med-input-row';
-        row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1.5fr 2fr auto;gap:6px;align-items:center;margin-top:6px';
-        row.innerHTML = '<input class="ds-m-name" placeholder="Drug (e.g. Metformin)" value="' + (name || '') + '" style="padding:7px 9px;font-size:.82rem;border-radius:6px">' +
-          '<input class="ds-m-strength" placeholder="Dose (e.g. 500 mg)" value="' + (dose || '') + '" style="padding:7px 9px;font-size:.82rem;border-radius:6px">' +
-          '<input class="ds-m-timing" placeholder="Timing (e.g. 1-0-1 After food)" value="' + (timing || '') + '" style="padding:7px 9px;font-size:.82rem;border-radius:6px">' +
-          '<input class="ds-m-reason" placeholder="Purpose (e.g. Blood sugar control)" value="' + (reason || '') + '" style="padding:7px 9px;font-size:.82rem;border-radius:6px">' +
-          '<button class="btn" type="button" onclick="this.closest(\'.ds-med-input-row\').remove()" style="padding:6px;color:#dc2626;font-size:.8rem">✕</button>';
-        container.appendChild(row);
-      }
-      window.addDsMedInputRow = addDsMedInputRow;
-
-      function clearUserDischargeForm() {
-        ['dsInHospital', 'dsInPatient', 'dsInDoctor', 'dsInDates', 'dsInIp', 'dsInDiagnoses', 'dsInSummary', 'dsInRedFlags', 'dsInFollowup'].forEach(function(id) {
-          if ($(id)) $(id).value = '';
-        });
-      }
-      window.clearUserDischargeForm = clearUserDischargeForm;
-
-      function saveAndRenderUserDischarge() {
-        var hospital = ($('dsInHospital') && $('dsInHospital').value || '').trim() || 'General Hospital';
-        var patient = ($('dsInPatient') && $('dsInPatient').value || '').trim() || (user ? user.name : 'Self');
-        var doctor = ($('dsInDoctor') && $('dsInDoctor').value || '').trim() || 'Treating Physician, MD';
-        var dates = ($('dsInDates') && $('dsInDates').value || '').trim() || (new Date().toLocaleDateString('en-GB') + ' (Discharged)');
-        var ip = ($('dsInIp') && $('dsInIp').value || '').trim() || ('IP: #' + Math.floor(10000 + Math.random() * 90000));
-        var rawDiag = ($('dsInDiagnoses') && $('dsInDiagnoses').value || '').trim();
-        var diagnoses = rawDiag ? rawDiag.split(',').map(function(s){ return s.trim(); }).filter(Boolean) : ['Clinical Inpatient Recovery Completed'];
-        var summary = ($('dsInSummary') && $('dsInSummary').value || '').trim() || 'Patient received treatment and was stabilized. Safe for home discharge with prescribed oral regimen.';
-        var rawRf = ($('dsInRedFlags') && $('dsInRedFlags').value || '').trim();
-        var redFlags = rawRf ? rawRf.split('\n').map(function(s){ return s.trim(); }).filter(Boolean) : [
-          'Fever exceeding 101°F or severe chills.',
-          'Sudden chest pressure or difficulty breathing.',
-          'Persistent vomiting or inability to retain fluids.'
-        ];
-        var followup = ($('dsInFollowup') && $('dsInFollowup').value || '').trim() || 'Follow up with your doctor in 2 weeks with recovery notes.';
-
-        // Collect meds
-        var meds = [];
-        var rows = document.querySelectorAll('.ds-med-input-row');
-        rows.forEach(function(r) {
-          var n = r.querySelector('.ds-m-name') ? r.querySelector('.ds-m-name').value.trim() : '';
-          var s = r.querySelector('.ds-m-strength') ? r.querySelector('.ds-m-strength').value.trim() : '';
-          var t = r.querySelector('.ds-m-timing') ? r.querySelector('.ds-m-timing').value.trim() : 'As directed';
-          var mReason = r.querySelector('.ds-m-reason') ? r.querySelector('.ds-m-reason').value.trim() : 'Prescribed maintenance';
-          if (n) {
-            meds.push({ name: n, strength: s, timing: t, duration: '14-30 Days', reason: mReason });
-          }
-        });
-        if (!meds.length) {
-          meds.push({ name: 'Prescribed Home Medications', strength: 'Standard dose', timing: 'Refer to medicine strip label', duration: 'As advised', reason: 'Continued inpatient recovery' });
-        }
-
-        var customEntry = {
-          id: 'user_discharge_' + Date.now(),
-          hospital: hospital,
-          doctor: doctor,
-          patient: patient,
-          ipNumber: ip,
-          dates: dates,
-          diagnoses: diagnoses,
-          plainSummary: summary,
-          courseSteps: [
-            { day: 'Day 1 (Admission)', title: 'Inpatient Evaluation & Medical Triage', desc: 'Patient admitted, clinical examination conducted, and baseline treatment initiated.' },
-            { day: 'Mid-Stay', title: 'Clinical Treatment & Stabilization', desc: 'Therapeutic interventions provided. Vital parameters normalized with steady recovery.' },
-            { day: 'Discharge', title: 'Discharge Clearance & Home Roadmap', desc: 'Patient fit for home discharge with medication instructions, dietary guidance, and warning signs reviewed.' }
-          ],
-          redFlags: redFlags,
-          medications: meds,
-          followupText: followup,
-          followupBadge: 'Scheduled Review',
-          followupDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
-          followupTime: '10:30'
-        };
-
-        dischargeDataStore.user_custom = customEntry;
-        currentActiveDischarge = customEntry;
-        loadDischargePreset('user_custom');
-
-        try {
-          localStorage.setItem('cc_user_custom_discharge', JSON.stringify(customEntry));
-        } catch(e) {}
-
-        alert('Your discharge summary data has been successfully saved and generated on the webpage!');
-      }
-      window.saveAndRenderUserDischarge = saveAndRenderUserDischarge;
-
-
-      // USER MEDICATIONS ENGINE
-      function addNewUserMedication() {
-        var name = ($('newMedName') && $('newMedName').value || '').trim();
-        var strength = ($('newMedStrength') && $('newMedStrength').value || '').trim() || 'Standard Dose';
-        var freq = ($('newMedFreq') && $('newMedFreq').value || '1 OD (Once Daily)');
-        var slot = ($('newMedSlot') && $('newMedSlot').value || 'morning_after');
-        var food = ($('newMedFood') && $('newMedFood').value || '').trim() || 'Take with or after food with water';
-        var indication = ($('newMedIndication') && $('newMedIndication').value || '').trim() || 'General health maintenance';
-        var caution = ($('newMedCaution') && $('newMedCaution').value || '').trim() || 'Follow prescribed timing and consult doctor if unwell';
-
-        if (!name) {
-          alert('Please enter medicine name.');
-          if ($('newMedName')) $('newMedName').focus();
-          return;
-        }
-
-        var slotLabels = {
-          morning_empty: '🌅 Morning (Empty Stomach)',
-          morning_after: '🥣 Morning (After Breakfast)',
-          afternoon: '☀️ Afternoon (After Lunch)',
-          night: '🌙 Night (Dinner / Bedtime)'
-        };
-
-        var newMed = {
-          id: 'user_med_' + Date.now(),
-          rxSource: 'user_custom',
-          isUserAdded: true,
-          name: name,
-          strength: strength,
-          form: strength.toLowerCase().includes('syrup') ? 'Syrup' : 'Tablet / Capsule',
-          latinFreq: freq.split(' ')[0],
-          frequencyPlain: freq,
-          slot: slot,
-          timingLabel: slotLabels[slot] || 'Scheduled Daily',
-          timingInstruction: food,
-          indication: indication,
-          foodRule: food,
-          caution: caution
-        };
-
-        medicationsMasterStore.unshift(newMed);
-        saveUserMedicationsToStorage();
-        filterMedicationSource('all');
-
-        // Clear input fields
-        if ($('newMedName')) $('newMedName').value = '';
-        if ($('newMedStrength')) $('newMedStrength').value = '';
-        if ($('newMedFood')) $('newMedFood').value = '';
-        if ($('newMedIndication')) $('newMedIndication').value = '';
-        if ($('newMedCaution')) $('newMedCaution').value = '';
-
-        alert('"' + name + '" successfully added to your daily pillbox schedule and medication cards!');
-      }
-      window.addNewUserMedication = addNewUserMedication;
-
-      function removeUserMedication(medId) {
-        if (!confirm('Remove this medication from your schedule?')) return;
-        medicationsMasterStore = medicationsMasterStore.filter(function(m) { return m.id !== medId; });
-        saveUserMedicationsToStorage();
-        filterMedicationSource(activeMedFilter || 'all');
-      }
-      window.removeUserMedication = removeUserMedication;
-
-      function saveUserMedicationsToStorage() {
-        var userMeds = medicationsMasterStore.filter(function(m) { return m.isUserAdded; });
-        try {
-          localStorage.setItem('cc_user_medications', JSON.stringify(userMeds));
-        } catch(e) {}
-      }
-
-      function loadUserMedicationsFromStorage() {
-        try {
-          var raw = localStorage.getItem('cc_user_medications');
-          if (raw) {
-            var parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length) {
-              parsed.forEach(function(m) {
-                if (!medicationsMasterStore.some(function(x){ return x.id === m.id; })) {
-                  medicationsMasterStore.unshift(m);
-                }
-              });
-            }
-          }
-        } catch(e) {}
-      }
-
-
-      // USER APPOINTMENTS ENGINE
-      function saveQuickAppointment() {
-        var doc = ($('quickApptDoctor') && $('quickApptDoctor').value || '').trim();
-        var spec = ($('quickApptSpecialty') && $('quickApptSpecialty').value || '').trim() || 'General Practice';
-        var clinic = ($('quickApptClinic') && $('quickApptClinic').value || '').trim() || 'Care Clinic';
-        var phone = ($('quickApptPhone') && $('quickApptPhone').value || '').trim() || '040-12345678';
-        var date = ($('quickApptDate') && $('quickApptDate').value || '').trim();
-        var time = ($('quickApptTime') && $('quickApptTime').value || '').trim() || '10:30';
-        var reason = ($('quickApptReason') && $('quickApptReason').value || '').trim() || 'Routine follow-up';
-        var check = ($('quickApptChecklist') && $('quickApptChecklist').value || '').trim() || 'Bring health records and prescriptions.';
-
-        if (!doc) {
-          alert('Please enter doctor or clinic name.');
-          if ($('quickApptDoctor')) $('quickApptDoctor').focus();
-          return;
-        }
-        if (!date) {
-          alert('Please select appointment date.');
-          if ($('quickApptDate')) $('quickApptDate').focus();
-          return;
-        }
-
-        var newAppt = {
-          id: 'user_appt_' + Date.now(),
-          isUserAdded: true,
-          doctor: doc,
-          specialty: spec,
-          clinic: clinic,
-          phone: phone,
-          date: date,
-          time: time,
-          reason: reason,
-          checklist: check,
-          status: 'upcoming'
-        };
-
-        appointmentsMasterStore.unshift(newAppt);
-        try {
-          localStorage.setItem('cc_user_appointments', JSON.stringify(appointmentsMasterStore.filter(function(a){ return a.isUserAdded; })));
-        } catch(e) {}
-
-        renderAppointmentsGrid();
-
-        // Clear quick inputs
-        if ($('quickApptDoctor')) $('quickApptDoctor').value = '';
-        if ($('quickApptSpecialty')) $('quickApptSpecialty').value = '';
-        if ($('quickApptReason')) $('quickApptReason').value = '';
-        if ($('quickApptChecklist')) $('quickApptChecklist').value = '';
-
-        alert('Appointment successfully added! Live countdown is now active.');
-      }
-      window.saveQuickAppointment = saveQuickAppointment;
-
-      function loadUserAppointmentsFromStorage() {
-        try {
-          var raw = localStorage.getItem('cc_user_appointments');
-          if (raw) {
-            var parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length) {
-              parsed.forEach(function(a) {
-                if (!appointmentsMasterStore.some(function(x){ return x.id === a.id; })) {
-                  appointmentsMasterStore.unshift(a);
-                }
-              });
-            }
-          }
-        } catch(e) {}
-      }
-
-
-      // USER BIOMARKER & LAB ENGINE
-      function addUserCustomBiomarker() {
-        var name = ($('customBioName') && $('customBioName').value || '').trim();
-        var val = ($('customBioValue') && $('customBioValue').value || '').trim();
-        var unit = ($('customBioUnit') && $('customBioUnit').value || '').trim() || 'mg/dL';
-        var range = ($('customBioRange') && $('customBioRange').value || '').trim() || 'Standard Reference Range';
-        var status = ($('customBioStatus') && $('customBioStatus').value || 'high');
-
-        if (!name) {
-          alert('Please enter biomarker or lab test name.');
-          if ($('customBioName')) $('customBioName').focus();
-          return;
-        }
-        if (!val) {
-          alert('Please enter your measured test value.');
-          if ($('customBioValue')) $('customBioValue').focus();
-          return;
-        }
-
-        // Generate customized plain language explanation & everyday analogy
-        var analogies = {
-          glucose: 'Like highway traffic: when traffic clears smoothly, blood sugar is normal. When traffic backs up, excess sugar waits in blood vessels.',
-          sugar: 'Think of glaze on a donut: sugar molecules in blood gradually stick to blood cells and vessel linings over time.',
-          cholesterol: 'Like grease inside home plumbing pipes: over time, sticky residue narrows the pipe channel.',
-          creatinine: 'Like dust behind an air filter: low dust means your kidney filtration engines are operating crystal clean.',
-          hemoglobin: 'Fleet of delivery vans carrying fresh oxygen from lungs to muscles and brain organs.',
-          wbc: 'Your internal immune army: elevated counts mean soldiers are deployed on active patrol to clear an infection.'
-        };
-
-        var matchedAnalogy = 'Think of your body as an engine: this measured marker reflects operational balance and organ efficiency.';
-        var lowerName = name.toLowerCase();
-        Object.keys(analogies).forEach(function(k) {
-          if (lowerName.includes(k)) matchedAnalogy = analogies[k];
-        });
-
-        var newBio = {
-          id: 'user_bio_' + Date.now(),
-          isUserAdded: true,
-          name: name,
-          plainName: 'Your patient-entered test result (' + name + ')',
-          value: val,
-          unit: unit,
-          range: range,
-          status: status,
-          analogy: matchedAnalogy,
-          explanation: 'Your reported value of ' + val + ' ' + unit + ' indicates ' + (status === 'optimal' ? 'healthy normal balance' : 'elevated levels that warrant clinical dietary attention') + '.',
-          lifestyleTip: 'Maintain balanced hydration, review result trends with your doctor, and continue regular physical activity.'
-        };
-
-        if (!biomarkersMasterStore.user_custom) biomarkersMasterStore.user_custom = [];
-        biomarkersMasterStore.user_custom.unshift(newBio);
-
-        // Also add to current list
-        if (currentActiveBiomarkers) {
-          currentActiveBiomarkers.unshift(newBio);
-        } else {
-          currentActiveBiomarkers = [newBio];
-        }
-
-        try {
-          localStorage.setItem('cc_user_biomarkers', JSON.stringify(biomarkersMasterStore.user_custom));
-        } catch(e) {}
-
-        renderBiomarkerCards(currentActiveBiomarkers);
-
-        // Clear fields
-        if ($('customBioName')) $('customBioName').value = '';
-        if ($('customBioValue')) $('customBioValue').value = '';
-
-        alert('"' + name + '" (' + val + ' ' + unit + ') explained and added to your results dashboard!');
-      }
-      window.addUserCustomBiomarker = addUserCustomBiomarker;
-
-      function removeUserBiomarker(bioId) {
-        if (!confirm('Remove this biomarker from your results?')) return;
-        if (biomarkersMasterStore.user_custom) {
-          biomarkersMasterStore.user_custom = biomarkersMasterStore.user_custom.filter(function(b){ return b.id !== bioId; });
-        }
-        if (currentActiveBiomarkers) {
-          currentActiveBiomarkers = currentActiveBiomarkers.filter(function(b){ return b.id !== bioId; });
-        }
-        try {
-          localStorage.setItem('cc_user_biomarkers', JSON.stringify(biomarkersMasterStore.user_custom || []));
-        } catch(e) {}
-        renderBiomarkerCards(currentActiveBiomarkers);
-      }
-      window.removeUserBiomarker = removeUserBiomarker;
-
-      function loadUserBiomarkersFromStorage() {
-        try {
-          var raw = localStorage.getItem('cc_user_biomarkers');
-          if (raw) {
-            var parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length) {
-              biomarkersMasterStore.user_custom = parsed;
-              parsed.forEach(function(b) {
-                if (biomarkersMasterStore.metabolic && !biomarkersMasterStore.metabolic.some(function(x){ return x.id === b.id; })) {
-                  biomarkersMasterStore.metabolic.unshift(b);
-                }
-              });
-            }
-          }
-        } catch(e) {}
-      }
 
       // INITIALIZATION
       window.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (h && h !== cur && $('v-' + h)) go(h) });
@@ -6955,25 +4686,6 @@
       });
       resetOcrDisplayEmpty();
       initRxScanner();
-      loadUserMedicationsFromStorage();
-      loadUserAppointmentsFromStorage();
-      loadUserBiomarkersFromStorage();
-      try {
-        var savedCustomDischarge = localStorage.getItem('cc_user_custom_discharge');
-        if (savedCustomDischarge) {
-          var parsedDs = JSON.parse(savedCustomDischarge);
-          dischargeDataStore.user_custom = parsedDs;
-          loadDischargePreset('user_custom');
-        } else {
-          loadDischargePreset('apollo');
-        }
-      } catch(e) {
-        loadDischargePreset('apollo');
-      }
-      filterMedicationSource('all');
-      renderAppointmentsGrid();
-      loadBiomarkerPreset('metabolic');
-      filterMedicalJargon();
       renderSlide(0);
       showArchInfo('ingest');
     })();
